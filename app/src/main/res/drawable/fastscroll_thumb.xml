@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:constantSize="true">
+    <item android:state_pressed="true">
+        <layer-list>
+            <item android:width="28dp" android:height="96dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/lumina_gold" />
+                    <corners android:radius="14dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item android:width="24dp" android:height="84dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/lumina_gold" />
+                    <corners android:radius="12dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

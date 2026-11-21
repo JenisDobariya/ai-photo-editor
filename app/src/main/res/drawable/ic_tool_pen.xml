@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="72dp"
+    android:viewportWidth="36"
+    android:viewportHeight="72">
+  <!-- Pen Body -->
+  <path
+      android:fillColor="#555555"
+      android:pathData="M11,10 L25,10 C27,15 28,30 27,55 L9,55 C8,30 9,15 11,10 Z"/>
+  <!-- Pen Grip / Tip -->
+  <path
+      android:fillColor="#777777"
+      android:pathData="M9,55 L27,55 L23,67 C21,70 15,70 13,67 Z"/>
+  <!-- Red Accent Line on Tip -->
+  <path
+      android:fillColor="#FF3B30"
+      android:pathData="M17,60 L19,60 L19,65 L17,65 Z"/>
+</vector>

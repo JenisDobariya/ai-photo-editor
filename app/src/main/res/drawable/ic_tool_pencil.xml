@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="72dp"
+    android:viewportWidth="36"
+    android:viewportHeight="72">
+  <!-- Pencil Body -->
+  <path
+      android:fillColor="#888888"
+      android:pathData="M10,10 L26,10 L26,50 L10,50 Z"/>
+  <!-- Wooden Taper -->
+  <path
+      android:fillColor="#D2B48C"
+      android:pathData="M10,50 L26,50 L18,65 Z"/>
+  <!-- Graphite Tip -->
+  <path
+      android:fillColor="#222222"
+      android:pathData="M16,61 L20,61 L18,67 Z"/>
+  <!-- Ferrule -->
+  <path
+      android:fillColor="#CCCCCC"
+      android:pathData="M10,7 L26,7 L26,12 L10,12 Z"/>
+  <!-- Eraser -->
+  <path
+      android:fillColor="#E91E63"
+      android:pathData="M11,3 L25,3 L25,7 L11,7 Z"/>
+</vector>

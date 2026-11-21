@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Lumina Theme Colors -->
+    <color name="lumina_bg">#0B0F19</color>
+    <color name="lumina_surface">#1E293B</color>
+    <color name="lumina_search_bg">#334155</color>
+    <color name="lumina_accent">#6366F1</color>
+    <color name="lumina_accent_dim">#336366F1</color>
+    <color name="lumina_gold">#F59E0B</color>
+    <color name="lumina_gold_dim">#33F59E0B</color>
+    <color name="lumina_text_secondary">#94A3B8</color>
+    <color name="lumina_chip_unselected">#1E293B</color>
+    <color name="darkBlue">#1E293B</color>
+    <color name="lightBlue">#F59E0B</color>
+    <color name="blue">#6366F1</color>
+    <color name="app_bg_blue">#101328</color>
+    <color name="lightNevyBlue">#162142</color>
+    <color name="background_app">#141823</color>
+    <color name="logo_color">#8584B1</color>
+
+</resources>

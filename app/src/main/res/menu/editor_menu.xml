@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mode_filter"
+        android:icon="@drawable/ic_studio"
+        android:title="Filter" />
+    <item
+        android:id="@+id/mode_crop"
+        android:icon="@drawable/ic_crop"
+        android:title="Crop" />
+    <item
+        android:id="@+id/mode_adjust"
+        android:icon="@drawable/ic_tune"
+        android:title="Adjust" />
+    <item
+        android:id="@+id/mode_markup"
+        android:icon="@drawable/ic_markup"
+        android:title="Markup" />
+    <item
+        android:id="@+id/mode_text"
+        android:icon="@drawable/ic_text"
+        android:title="Text" />
+    <item
+        android:id="@+id/mode_pixelate"
+        android:icon="@drawable/ic_pixelate"
+        android:title="Pixelate" />
+    <item
+        android:id="@+id/mode_retouch"
+        android:icon="@drawable/ic_retouch"
+        android:title="Retouch" />
+    <item
+        android:id="@+id/mode_stickers"
+        android:icon="@drawable/ic_stickers"
+        android:title="Stickers" />
+    <item
+        android:id="@+id/mode_watermark"
+        android:icon="@drawable/ic_watermark"
+        android:title="Watermark" />
+</menu>

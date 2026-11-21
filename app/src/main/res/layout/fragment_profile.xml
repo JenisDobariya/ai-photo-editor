@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lumina_bg">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Profile Header -->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="vertical"-->
+<!--                android:paddingVertical="24dp">-->
+
+<!--                <com.google.android.material.card.MaterialCardView-->
+<!--                    android:layout_width="100dp"-->
+<!--                    android:layout_height="100dp"-->
+<!--                    app:cardCornerRadius="50dp"-->
+<!--                    app:cardElevation="4dp"-->
+<!--                    app:strokeColor="@color/lumina_gold"-->
+<!--                    app:strokeWidth="2dp">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/ivAvatar"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:scaleType="centerCrop"-->
+<!--                        android:src="@drawable/ic_profile"-->
+<!--                        app:tint="@color/lumina_gold"-->
+<!--                        android:contentDescription="Profile Picture" />-->
+<!--                </com.google.android.material.card.MaterialCardView>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:text="Guest User"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="22sp"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="guest@lumina.com"-->
+<!--                    android:textColor="@color/lumina_text_secondary"-->
+<!--                    android:textSize="14sp" />-->
+<!--            </LinearLayout>-->
+
+            <!-- Settings Section -->
+<!--            <TextView-->
+<!--                style="@style/ProfileSectionHeader"-->
+<!--                android:text="@string/profile_settings" />-->
+
+<!--            <include-->
+<!--                android:id="@+id/itemTheme"-->
+<!--                layout="@layout/view_profile_item" />-->
+
+<!--            <include-->
+<!--                android:id="@+id/itemNotifications"-->
+<!--                layout="@layout/view_profile_item" />-->
+
+            <!-- Support Section -->
+            <TextView
+                style="@style/ProfileSectionHeader"
+                android:layout_marginTop="24dp"
+                android:text="@string/profile_support" />
+
+            <include
+                android:id="@+id/itemRateUs"
+                layout="@layout/view_profile_item" />
+
+            <include
+                android:id="@+id/itemShare"
+                layout="@layout/view_profile_item" />
+
+            <include
+                android:id="@+id/itemFeedback"
+                layout="@layout/view_profile_item" />
+
+            <!-- About Section -->
+            <TextView
+                style="@style/ProfileSectionHeader"
+                android:layout_marginTop="24dp"
+                android:text="@string/profile_about" />
+
+            <include
+                android:id="@+id/itemPrivacy"
+                layout="@layout/view_profile_item" />
+
+            <include
+                android:id="@+id/itemPlayStore"
+                layout="@layout/view_profile_item" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
+
+                <TextView
+                    android:id="@+id/tvVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Version 1.0.0"
+                    android:textColor="@color/lumina_text_secondary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Made with ❤️"
+                    android:textColor="@color/lumina_text_secondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

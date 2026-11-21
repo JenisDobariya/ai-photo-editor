@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fontCardRoot"
+    android:layout_width="105dp"
+    android:layout_height="72dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/bg_font_card_unselected"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <TextView
+        android:id="@+id/tvFontPreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Style"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tvFontName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Classic"
+        android:textColor="@color/lumina_text_secondary"
+        android:textSize="11sp"
+        android:fontFamily="sans-serif-medium" />
+
+</LinearLayout>

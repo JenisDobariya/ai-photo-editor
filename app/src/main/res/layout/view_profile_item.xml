@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="16dp">
+
+    <ImageView
+        android:id="@+id/ivItemIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_settings"
+        app:tint="@color/lumina_gold" />
+
+    <TextView
+        android:id="@+id/tvItemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        tools:text="Settings Item" />
+
+    <TextView
+        android:id="@+id/tvItemValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/lumina_text_secondary"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="Value"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:alpha="0.5"
+        android:src="@drawable/ic_back"
+        android:rotation="180"
+        app:tint="@color/white" />
+
+</LinearLayout>

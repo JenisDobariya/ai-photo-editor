@@ -1,0 +1,14 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="72dp"
+    android:viewportWidth="36"
+    android:viewportHeight="72">
+  <!-- Eraser Bottom (Blue) -->
+  <path
+      android:fillColor="#4A90E2"
+      android:pathData="M8,38 L28,38 L28,58 C28,60 26,62 24,62 L12,62 C10,62 8,60 8,58 Z"/>
+  <!-- Eraser Top (White/Pink) -->
+  <path
+      android:fillColor="#EAEAEA"
+      android:pathData="M8,20 L28,20 L28,38 L8,38 Z"/>
+</vector>

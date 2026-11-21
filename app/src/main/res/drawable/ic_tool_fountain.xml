@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="72dp"
+    android:viewportWidth="36"
+    android:viewportHeight="72">
+  <!-- Pen Body -->
+  <path
+      android:fillColor="#333333"
+      android:pathData="M10,10 L26,10 L25,48 L11,48 Z"/>
+  <!-- Metal Nib Section -->
+  <path
+      android:fillColor="#A0A0A0"
+      android:pathData="M11,48 L25,48 L22,66 C20,69 16,69 14,66 Z"/>
+  <!-- Nib slit -->
+  <path
+      android:fillColor="#222222"
+      android:pathData="M18,52 L18,60 M18,56 C17,56 16,57 16,58 C16,59 17,60 18,60 C19,60 20,59 20,58 C20,57 19,56 18,56 Z"/>
+</vector>

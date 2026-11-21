@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_pill_dark"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:id="@+id/btnEyedropper"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_accent"
+            android:backgroundTint="#333333"
+            android:padding="8dp"
+            android:src="@drawable/ic_studio"
+            android:contentDescription="Eyedropper"
+            app:tint="#FFFFFF" />
+
+        <!-- Tabs -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/bg_pill_dark"
+            android:backgroundTint="#1A1A1A"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <TextView
+                android:id="@+id/tabGrid"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_pill_dark"
+                android:backgroundTint="#444444"
+                android:gravity="center"
+                android:text="Grid"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabRing"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Ring"
+                android:textColor="#888888"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnCloseColorPicker"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_accent"
+            android:backgroundTint="#333333"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            android:rotation="270"
+            android:contentDescription="Close"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- Content Container -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/gridViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Color Palette Grid -->
+            <GridLayout
+                android:id="@+id/colorGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="10"
+                android:alignmentMode="alignMargins"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Opacity Slider -->
+            <SeekBar
+                android:id="@+id/opacitySeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:max="100"
+                android:progress="100"
+                android:progressDrawable="@drawable/bg_opacity_seekbar"
+                android:thumb="@drawable/bg_slider_thumb"
+                android:splitTrack="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ringViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.photo_editor.my_photo_editor.ui.ColorWheelView
+                android:id="@+id/colorWheelView"
+                android:layout_width="200dp"
+                android:layout_height="200dp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Bottom Section: Preview + Presets Grid -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/selectedColorPreview"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_color_swatch"
+            android:backgroundTint="#FF0000"
+            android:layout_marginEnd="16dp" />
+
+        <GridLayout
+            android:id="@+id/presetColorsGrid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:columnCount="5"
+            android:alignmentMode="alignMargins" />
+    </LinearLayout>
+
+</LinearLayout>

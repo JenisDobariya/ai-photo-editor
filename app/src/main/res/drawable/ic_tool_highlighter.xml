@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="72dp"
+    android:viewportWidth="36"
+    android:viewportHeight="72">
+  <!-- Highlighter Body -->
+  <path
+      android:fillColor="#4A4A4A"
+      android:pathData="M8,14 L28,14 C29,20 29,45 28,52 L8,52 C7,45 7,20 8,14 Z"/>
+  <!-- Cap / Tip base -->
+  <path
+      android:fillColor="#666666"
+      android:pathData="M8,52 L28,52 L27,58 L9,58 Z"/>
+  <!-- Yellow Chisel Tip -->
+  <path
+      android:fillColor="#FFEB3B"
+      android:pathData="M11,58 L25,58 L22,67 C21,68 15,68 14,67 Z"/>
+</vector>

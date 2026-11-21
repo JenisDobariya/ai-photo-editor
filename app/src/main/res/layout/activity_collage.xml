@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lumina_bg">
+
+    <!-- Top Navigation Bar -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="Collage Maker"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/lumina_accent"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:cornerRadius="20dp" />
+    </RelativeLayout>
+
+    <!-- Canvas Preview Area -->
+    <FrameLayout
+        android:id="@+id/canvasContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@id/slotToolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <com.photo_editor.my_photo_editor.ui.CollageView
+            android:id="@+id/collageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/lumina_accent"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <!-- Floating Slot Mini Toolbar -->
+    <LinearLayout
+        android:id="@+id/slotToolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_pill_dark"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/controlContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/btnRotateSlot"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_rotate_right"
+            app:tint="@color/white" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="#334155" />
+
+        <ImageView
+            android:id="@+id/btnReplaceSlot"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_replace"
+            app:tint="@color/white" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="#334155" />
+
+        <ImageView
+            android:id="@+id/btnSwapSlot"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_swap_horiz"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <!-- Bottom Controls Area -->
+    <LinearLayout
+        android:id="@+id/controlContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lumina_surface"
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Tool Panels ViewFlipper / FrameLayout -->
+        <FrameLayout
+            android:id="@+id/panelContent"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:paddingVertical="8dp">
+
+            <!-- 1. Layout Panel -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvLayouts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <!-- 2. Ratio Panel -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRatios"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <!-- 3. Border Panel -->
+            <LinearLayout
+                android:id="@+id/borderPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="Border"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp" />
+
+                    <SeekBar
+                        android:id="@+id/sbBorderMargin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="40"
+                        android:progress="8"
+                        android:progressTint="@color/lumina_accent"
+                        android:thumbTint="@color/lumina_accent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="Spacing"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp" />
+
+                    <SeekBar
+                        android:id="@+id/sbSpacing"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="30"
+                        android:progress="6"
+                        android:progressTint="@color/lumina_accent"
+                        android:thumbTint="@color/lumina_accent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="Corner"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp" />
+
+                    <SeekBar
+                        android:id="@+id/sbCornerRadius"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="40"
+                        android:progress="8"
+                        android:progressTint="@color/lumina_accent"
+                        android:thumbTint="@color/lumina_accent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 4. Background Color Panel -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBackgrounds"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </FrameLayout>
+
+        <!-- Tool Tab Bar -->
+        <LinearLayout
+            android:id="@+id/toolTabs"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/tabLayout"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip_selected"
+                android:gravity="center"
+                android:text="Layout"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabRatio"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip_unselected"
+                android:gravity="center"
+                android:text="Ratio"
+                android:textColor="@color/lumina_text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tabBorder"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip_unselected"
+                android:gravity="center"
+                android:text="Border"
+                android:textColor="@color/lumina_text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tabBackground"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip_unselected"
+                android:gravity="center"
+                android:text="Color"
+                android:textColor="@color/lumina_text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

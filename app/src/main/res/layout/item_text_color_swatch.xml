@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/colorSwatchRoot"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_marginEnd="8dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Outer Selection Ring -->
+    <View
+        android:id="@+id/vSelectionRing"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_circle_accent"
+        android:visibility="gone" />
+
+    <!-- Color Circle -->
+    <View
+        android:id="@+id/vColorCircle"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_circle_accent" />
+
+</FrameLayout>

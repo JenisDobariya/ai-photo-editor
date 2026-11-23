@@ -1,9 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Compare (before / after): two rounded frame halves split by a tall divider,
+     the same symbol the phone's gallery uses. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
+    <!-- left half -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M10,21V2H2v19H10zM8,19H4V4h4V19zM22,2h-8v19h8V2zM20,19h-4V4h4V19z" />
+        android:pathData="M9,5.5H6.5A1.25,1.25 0,0 0,5.25 6.75V17.25A1.25,1.25 0,0 0,6.5 18.5H9"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.8" />
+    <!-- right half -->
+    <path
+        android:pathData="M15,5.5H17.5A1.25,1.25 0,0 1,18.75 6.75V17.25A1.25,1.25 0,0 1,17.5 18.5H15"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.8" />
+    <!-- divider -->
+    <path
+        android:pathData="M12,3V21"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeWidth="1.8" />
 </vector>

@@ -43,7 +43,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:alpha="0.5"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/ic_chevron_left"
         android:rotation="180"
         app:tint="@color/white" />
 

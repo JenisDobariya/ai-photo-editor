@@ -12,3 +12,7 @@ app/build
 *.jks
 *.keystore
 *.png
+/release-build
+
+# Play Store listing graphics are part of the project
+!play-store/**/*.png

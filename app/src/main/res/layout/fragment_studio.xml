@@ -16,37 +16,178 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingHorizontal="20dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="20dp">
 
-            <!-- Studio Header -->
+            <!-- Clean up hero: live status of the on-device photo analysis -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardCleanup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="@dimen/radius_l"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_studio_hero"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvCleanupBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_tag"
+                        android:letterSpacing="0.08"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="3dp"
+                        android:text="ON-DEVICE · PRIVATE"
+                        android:textColor="@color/lumina_gold"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <FrameLayout
+                        android:id="@+id/cleanupIconWrap"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/bg_smart_album_icon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_g_cleanup"
+                            app:tint="@color/lumina_teal" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvCleanupTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:fontFamily="sans-serif-black"
+                        android:text="Clean up your gallery"
+                        android:textColor="@color/white"
+                        android:textSize="21sp"
+                        app:layout_constraintEnd_toStartOf="@id/cleanupIconWrap"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvCleanupBadge" />
+
+                    <TextView
+                        android:id="@+id/tvCleanupStats"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:lineSpacingExtra="2dp"
+                        android:text="Finds duplicates, similar shots, blurry photos &amp; big videos"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvCleanupTitle" />
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/progressCleanup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:visibility="gone"
+                        app:indicatorColor="@color/lumina_accent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvCleanupStats"
+                        app:trackColor="#1FFFFFFF"
+                        app:trackCornerRadius="4dp"
+                        app:trackThickness="4dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStartCleanup"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="@color/lumina_accent"
+                        android:text="Start clean up"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="@dimen/radius_m"
+                        app:icon="@drawable/ic_chevron_right"
+                        app:iconGravity="end"
+                        app:iconSize="18dp"
+                        app:iconTint="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/progressCleanup" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Smart tools: one panel, 4 × 2 icon grid -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Smart tools"
+                    android:textColor="@color/lumina_text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="Free · offline · private"
+                    android:textColor="@color/lumina_text_tertiary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSmartTools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_surface"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:padding="6dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
-                android:letterSpacing="0.02"
-                android:text="Creative Studio"
-                android:textColor="@color/white"
-                android:textSize="26sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Design, collage, and transform your photos"
-                android:textColor="@color/lumina_text_secondary"
-                android:textSize="14sp" />
+                android:layout_marginTop="22dp"
+                android:text="Create"
+                android:textColor="@color/lumina_text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <!-- Card 1: Collage Maker (Featured Card) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardCollage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="@dimen/radius_l"
                 app:cardElevation="6dp"
-                app:strokeColor="#6366F1"
+                app:strokeColor="@color/lumina_accent"
                 app:strokeWidth="1.5dp">
 
                 <LinearLayout
@@ -65,11 +206,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_circle_accent"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="4dp"
+                            android:background="@drawable/bg_tag"
+                            android:letterSpacing="0.08"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
                             android:text="POPULAR"
-                            android:textColor="@color/black"
+                            android:textColor="@color/lumina_gold"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
@@ -113,7 +255,7 @@
                         android:text="Create Collage"
                         android:textColor="@color/white"
                         android:textSize="13sp"
-                        app:cornerRadius="21dp"
+                        app:cornerRadius="@dimen/radius_m"
                         app:icon="@drawable/ic_collage_grid"
                         app:iconTint="@color/white" />
                 </LinearLayout>
@@ -127,9 +269,9 @@
                 android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="@dimen/radius_l"
                 app:cardElevation="3dp"
-                app:strokeColor="#334155"
+                app:strokeColor="@color/lumina_outline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -148,9 +290,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_pill_dark"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="4dp"
+                            android:background="@drawable/bg_tag"
+                            android:letterSpacing="0.08"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
                             android:text="AI POWERED"
                             android:textColor="@color/lumina_gold"
                             android:textSize="10sp"
@@ -195,7 +338,7 @@
                         android:text="Try Cutout"
                         android:textColor="@color/white"
                         android:textSize="13sp"
-                        app:cornerRadius="21dp"
+                        app:cornerRadius="@dimen/radius_m"
                         app:icon="@drawable/ic_magic_wand"
                         app:iconTint="@color/white"
                         app:strokeColor="#64748B" />
@@ -210,9 +353,9 @@
                 android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="@dimen/radius_l"
                 app:cardElevation="3dp"
-                app:strokeColor="#334155"
+                app:strokeColor="@color/lumina_outline"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -231,11 +374,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_pill_dark"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="4dp"
+                            android:background="@drawable/bg_tag"
+                            android:letterSpacing="0.08"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
                             android:text="SHOWCASE"
-                            android:textColor="#38BDF8"
+                            android:textColor="@color/lumina_gold"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
@@ -278,7 +422,7 @@
                         android:text="Create Split"
                         android:textColor="@color/white"
                         android:textSize="13sp"
-                        app:cornerRadius="21dp"
+                        app:cornerRadius="@dimen/radius_m"
                         app:icon="@drawable/ic_compare"
                         app:iconTint="@color/white"
                         app:strokeColor="#64748B" />

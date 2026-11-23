@@ -1,5 +1,6 @@
 package com.photo_editor.my_photo_editor
 
+import com.photo_editor.my_photo_editor.ui.AppDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -16,7 +17,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -118,7 +118,7 @@ class CollageActivity : BaseActivity() {
             tabs.forEach { (tabView, panel) ->
                 val isSelected = (tabView == selectedView)
                 tabView.setBackgroundResource(if (isSelected) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                tabView.setTextColor(if (isSelected) Color.WHITE else Color.parseColor("#94A3B8"))
+                tabView.setTextColor(if (isSelected) Color.WHITE else Color.parseColor("#9BA3AF"))
                 panel.isVisible = isSelected
             }
         }
@@ -229,7 +229,7 @@ class CollageActivity : BaseActivity() {
             holder.tvIcon.text = item.name
             val isSelected = (position == selectedPosition)
             holder.tvIcon.setBackgroundResource(if (isSelected) R.drawable.bg_circle_accent else R.drawable.bg_pill_dark)
-            holder.tvIcon.setTextColor(if (isSelected) Color.BLACK else Color.WHITE)
+            holder.tvIcon.setTextColor(Color.WHITE)
 
             holder.view.setOnClickListener {
                 val old = selectedPosition
@@ -245,12 +245,12 @@ class CollageActivity : BaseActivity() {
 
     private fun setupBackgroundColors() {
         val colors = listOf(
-            Color.parseColor("#0B0F19"), // Lumina Dark
+            Color.parseColor("#0F1114"), // App dark
             Color.parseColor("#000000"), // Pure Black
             Color.parseColor("#FFFFFF"), // Pure White
             Color.parseColor("#F8F9FA"), // Off White
-            Color.parseColor("#1E293B"), // Charcoal
-            Color.parseColor("#6366F1"), // Lumina Accent
+            Color.parseColor("#21252B"), // Charcoal
+            Color.parseColor("#3D8BFD"), // App blue
             Color.parseColor("#F59E0B"), // Lumina Gold
             Color.parseColor("#FCE7F3"), // Pastel Pink
             Color.parseColor("#E0F2FE"), // Pastel Blue
@@ -355,6 +355,7 @@ class CollageActivity : BaseActivity() {
         inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
             val card: MaterialCardView = view.findViewById(R.id.cardLayout)
             val tvName: TextView = view.findViewById(R.id.tvLayoutName)
+            val icon: ImageView = view.findViewById(R.id.ivLayoutIcon)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -365,9 +366,11 @@ class CollageActivity : BaseActivity() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = templates[position]
             holder.tvName.text = item.name
+            // Show the real arrangement of this template instead of a generic grid icon.
+            holder.icon.setImageDrawable(com.photo_editor.my_photo_editor.ui.CollagePreviewDrawable(item.slots))
             val isSelected = (position == selectedPosition)
             holder.card.strokeWidth = if (isSelected) 3 else 0
-            holder.card.setCardBackgroundColor(if (isSelected) Color.parseColor("#312E81") else Color.parseColor("#1E293B"))
+            holder.card.setCardBackgroundColor(if (isSelected) Color.parseColor("#17325A") else Color.parseColor("#21252B"))
 
             holder.view.setOnClickListener {
                 val old = selectedPosition
@@ -416,12 +419,17 @@ class CollageActivity : BaseActivity() {
         binding.btnSave.isEnabled = false
 
         lifecycleScope.launch {
-            val exportedBitmap = withContext(Dispatchers.Default) {
-                binding.collageView.exportBitmap(2048)
-            }
-
-            val savedUri = withContext(Dispatchers.IO) {
-                ImageSaver.saveDirectBitmapToMediaStore(this@CollageActivity, exportedBitmap, "COLLAGE")
+            val savedUri = try {
+                val exportedBitmap = withContext(Dispatchers.Default) {
+                    binding.collageView.exportBitmap(2048)
+                }
+                withContext(Dispatchers.IO) {
+                    ImageSaver.saveDirectBitmapToMediaStore(this@CollageActivity, exportedBitmap, "COLLAGE")
+                }
+            } catch (e: Throwable) {
+                // Out of memory / storage errors: report instead of crashing.
+                e.printStackTrace()
+                null
             }
 
             binding.progressBar.isVisible = false
@@ -436,9 +444,11 @@ class CollageActivity : BaseActivity() {
     }
 
     private fun showSaveSuccessDialog(savedUri: Uri) {
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Collage Saved!")
-            .setMessage("Your collage was saved to your gallery in the Pictures/PhotoEditor folder.")
+        val dialog = AppDialog.Builder(this)
+            .setIcon(R.drawable.ic_g_check_circle, R.color.lumina_teal)
+            .setTitle("Collage saved")
+            .setMessage("Your collage is ready in your gallery.")
+            .addRow("Location", "Pictures/PhotoEditor")
             .setPositiveButton("View") { _, _ ->
                 val intent = Intent(this, PhotoDetailActivity::class.java).apply {
                     putExtra("IMAGE_URI", savedUri.toString())

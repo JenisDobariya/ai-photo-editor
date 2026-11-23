@@ -1,34 +1,46 @@
 package com.photo_editor.my_photo_editor
 
+import com.photo_editor.my_photo_editor.ui.AppDialog
 import android.content.ContentUris
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
+import android.view.HapticFeedbackConstants
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.photo_editor.my_photo_editor.databinding.ActivityAlbumDetailBinding
+import com.photo_editor.my_photo_editor.model.GroupBy
 import com.photo_editor.my_photo_editor.model.MediaFile
 import com.photo_editor.my_photo_editor.model.MediaType
-import com.photo_editor.my_photo_editor.ui.FastScrollerView
+import com.photo_editor.my_photo_editor.model.SortOrder
+import com.photo_editor.my_photo_editor.ui.MediaSelectionViewModel
+import com.photo_editor.my_photo_editor.ui.SelectionMoreMenu
+import com.photo_editor.my_photo_editor.ui.gallery.DragSelectTouchListener
+import com.photo_editor.my_photo_editor.ui.gallery.GridItem
+import com.photo_editor.my_photo_editor.ui.gallery.MediaGridAdapter
+import com.photo_editor.my_photo_editor.ui.gallery.MediaGrouping
+import com.photo_editor.my_photo_editor.ui.gallery.PinchToZoomGridListener
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.GalleryPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
 import java.util.*
 
 import com.photo_editor.my_photo_editor.db.AppDatabase
-
-import coil.request.videoFrameMicros
 
 import android.database.ContentObserver
 import android.net.Uri
@@ -37,15 +49,34 @@ import android.os.Looper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
-class AlbumDetailActivity : BaseActivity() {
+class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
 
     override fun getScreenTag(): String = "AlbumDetail"
 
     private lateinit var binding: ActivityAlbumDetailBinding
     private var albumName: String? = null
+    private var smartAlbum: String? = null
+    /** Set for virtual albums (e.g. "Things" like Dogs/Food): only these uris are shown. */
+    private var uriFilter: Set<String>? = null
     private val db by lazy { AppDatabase.getDatabase(this) }
+    private val prefs by lazy { GalleryPreferences(this) }
+    private val selectionViewModel: MediaSelectionViewModel by viewModels()
     private var refreshJob: Job? = null
-    private lateinit var galleryAdapter: GalleryAdapter
+    private lateinit var galleryAdapter: MediaGridAdapter
+    private lateinit var layoutManager: GridLayoutManager
+    private lateinit var dragSelect: DragSelectTouchListener
+    private var albumMedia: List<MediaFile> = emptyList()
+    private var dragBaseSelection: Set<Uri> = emptySet()
+    private var dragSelects = true
+    private var pendingAction: MediaSelectionViewModel.PendingAction? = null
+
+    private val intentSenderLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        val action = pendingAction ?: return@registerForActivityResult
+        pendingAction = null
+        selectionViewModel.onIntentSenderResult(action, result.resultCode == RESULT_OK)
+    }
 
     private val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean, uri: Uri?) {
@@ -57,21 +88,19 @@ class AlbumDetailActivity : BaseActivity() {
         }
     }
 
-    private sealed class GalleryItem {
-        data class Header(val date: String) : GalleryItem()
-        data class Media(val file: MediaFile) : GalleryItem()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAlbumDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         albumName = intent.getStringExtra("ALBUM_NAME")
+        smartAlbum = intent.getStringExtra(PhotoDetailActivity.EXTRA_SMART_ALBUM)
+        uriFilter = intent.getStringArrayListExtra(PhotoDetailActivity.EXTRA_URI_LIST)?.toHashSet()
         
         setupUI()
         setupRecyclerView()
         setupSwipeRefresh()
+        setupSelection()
 
         contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, observer)
         contentResolver.registerContentObserver(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, true, observer)
@@ -83,6 +112,8 @@ class AlbumDetailActivity : BaseActivity() {
     }
 
     private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setColorSchemeResources(R.color.lumina_accent)
+        binding.swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.lumina_surface_high)
         binding.swipeRefresh.setOnRefreshListener {
             loadAlbumMedia()
         }
@@ -99,33 +130,136 @@ class AlbumDetailActivity : BaseActivity() {
             AnalyticsManager.logEvent("AlbumDetail_btnBackHeader_click")
             finish()
         }
+        binding.btnSlideshow.setOnClickListener {
+            AnalyticsManager.logEvent("AlbumDetail_btnSlideshow_click")
+            val first = albumMedia.firstOrNull { it.type == MediaType.IMAGE } ?: return@setOnClickListener
+            startActivity(detailIntent(first).putExtra(PhotoDetailActivity.EXTRA_START_SLIDESHOW, true))
+        }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (selectionViewModel.isSelectionMode) selectionViewModel.clear() else finish()
+            }
+        })
     }
 
     private fun setupRecyclerView() {
-        val layoutManager = GridLayoutManager(this, 5).apply {
+        galleryAdapter = MediaGridAdapter(this)
+        layoutManager = GridLayoutManager(this, prefs.gridColumns).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return if (galleryAdapter.getItemViewType(position) == GalleryAdapter.TYPE_HEADER) 5 else 1
+                    return if (galleryAdapter.isFullSpan(position)) spanCount else 1
                 }
             }
             isItemPrefetchEnabled = true
         }
 
-        galleryAdapter = GalleryAdapter(emptyList()) { media ->
-            val intent = Intent(this, PhotoDetailActivity::class.java).apply {
-                putExtra("IMAGE_URI", media.uri.toString())
-                putExtra("IS_VIDEO", media.type == MediaType.VIDEO)
-                putExtra("ALBUM_NAME", albumName)
-            }
-            startActivity(intent)
-        }
-
         binding.photoRecycler.apply {
-            this.layoutManager = layoutManager
+            this.layoutManager = this@AlbumDetailActivity.layoutManager
             this.adapter = galleryAdapter
             setHasFixedSize(true)
             setItemViewCacheSize(30)
         }
+        dragSelect = DragSelectTouchListener { start, end ->
+            val range = (start..end).mapNotNull { (galleryAdapter.itemAt(it) as? GridItem.Media)?.file?.uri }
+            selectionViewModel.setSelection(
+                if (dragSelects) dragBaseSelection + range else dragBaseSelection - range.toSet()
+            )
+        }
+        dragSelect.attach(binding.photoRecycler)
+        binding.photoRecycler.addOnItemTouchListener(PinchToZoomGridListener(this) { delta ->
+            val columns = (layoutManager.spanCount + delta)
+                .coerceIn(GalleryPreferences.MIN_COLUMNS, GalleryPreferences.MAX_COLUMNS)
+            if (columns != layoutManager.spanCount) {
+                prefs.gridColumns = columns
+                layoutManager.spanCount = columns
+                galleryAdapter.notifyItemRangeChanged(0, galleryAdapter.itemCount)
+            }
+        })
+        binding.fastScroller.attachFastScrollerToRecyclerView(binding.photoRecycler)
+    }
+
+    private fun setupSelection() {
+        binding.selectionHeader.btnCloseSelection.setOnClickListener { selectionViewModel.clear() }
+        binding.selectionHeader.btnSelectAll.setOnClickListener {
+            val all = albumMedia.map { it.uri }.toSet()
+            if (selectionViewModel.selection.value.containsAll(all)) selectionViewModel.clear()
+            else selectionViewModel.setSelection(all)
+        }
+        val actions = binding.selectionActions
+        actions.actionShare.setOnClickListener { selectionViewModel.share(selectedItems()) }
+        actions.actionFavorite.setOnClickListener { selectionViewModel.toggleFavorite(selectedItems()) }
+        actions.actionHide.setOnClickListener {
+            val items = selectedItems()
+            AppDialog.Builder(this)
+                .setIcon(R.drawable.ic_g_lock, R.color.lumina_accent)
+                .setTitle("Move to Locked Folder?")
+                .setMessage("${if (items.size == 1) "This item" else "These ${items.size} items"} will be hidden from Photos and Albums. Open them anytime from Locked Folder.")
+                .setPositiveButton("Move") { _, _ -> selectionViewModel.hide(items) }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+        actions.actionDelete.setOnClickListener {
+            val items = selectedItems()
+            if (selectionViewModel.isRecycleBinSupported) {
+                selectionViewModel.moveToTrash(items)
+            } else {
+                AppDialog.Builder(this)
+                    .setIcon(R.drawable.ic_g_delete, R.color.lumina_danger)
+                    .setTitle(if (items.size == 1) "Delete this item?" else "Delete ${items.size} items?")
+                    .setMessage("This can't be undone on this Android version.")
+                    .setPositiveButton("Delete") { _, _ -> selectionViewModel.moveToTrash(items) }
+                    .setDestructive()
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+        }
+        actions.actionMore.setOnClickListener {
+            SelectionMoreMenu.show(this, it, selectedItems(), selectionViewModel)
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(actions.root) { v, insets ->
+            val nav = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            v.updatePadding(bottom = nav.bottom + (4 * resources.displayMetrics.density).toInt())
+            insets
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    selectionViewModel.selection.collect { selection ->
+                        val active = selection.isNotEmpty()
+                        binding.selectionHeader.root.isVisible = active
+                        binding.selectionActions.root.isVisible = active
+                        binding.header.visibility = if (active) View.INVISIBLE else View.VISIBLE
+                        binding.swipeRefresh.isEnabled = !active
+                        binding.selectionHeader.tvSelectionCount.text =
+                            if (selection.size == 1) "1 selected" else "${selection.size} selected"
+                        val allFav = selectedItems().let { it.isNotEmpty() && it.all { f -> f.isFavorite } }
+                        actions.ivActionFavorite.setImageResource(if (allFav) R.drawable.ic_g_heart else R.drawable.ic_g_heart_outline)
+                        actions.tvActionFavorite.text = if (allFav) "Unfavorite" else "Favorite"
+                        renderGrid()
+                    }
+                }
+                launch {
+                    selectionViewModel.events.collect { event ->
+                        when (event) {
+                            is MediaSelectionViewModel.SelectionEvent.Message ->
+                                Toast.makeText(this@AlbumDetailActivity, event.text, Toast.LENGTH_SHORT).show()
+                            is MediaSelectionViewModel.SelectionEvent.StartIntent -> startActivity(event.intent)
+                            is MediaSelectionViewModel.SelectionEvent.LaunchIntentSender -> {
+                                pendingAction = event.action
+                                intentSenderLauncher.launch(IntentSenderRequest.Builder(event.sender).build())
+                            }
+                            MediaSelectionViewModel.SelectionEvent.Changed -> loadAlbumMedia()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun selectedItems(): List<MediaFile> {
+        val selected = selectionViewModel.selection.value
+        return albumMedia.filter { selected.contains(it.uri) }
     }
 
     private fun loadAlbumMedia() {
@@ -135,36 +269,80 @@ class AlbumDetailActivity : BaseActivity() {
                 val fetched = fetchAlbumMedia()
                 val favorites = db.favoriteDao().getAllFavorites().first().map { it.uri }.toSet()
                 fetched.forEach { it.isFavorite = favorites.contains(it.uri.toString()) }
-                fetched
+                val hidden = db.hiddenDao().getHiddenUris().toSet()
+                fetched.filterNot { hidden.contains(it.uri.toString()) }
             }
             processAndShowPhotos(mediaList)
             binding.swipeRefresh.isRefreshing = false
         }
     }
 
-    private suspend fun processAndShowPhotos(photos: List<MediaFile>) {
-        val galleryItems = withContext(Dispatchers.Default) {
-            val items = mutableListOf<GalleryItem>()
-            val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
-            
-            val grouped = photos.groupBy { 
-                dateFormat.format(Date(it.dateAdded * 1000L))
-            }
+    private fun processAndShowPhotos(photos: List<MediaFile>) {
+        albumMedia = photos
+        val videos = photos.count { it.type == MediaType.VIDEO }
+        val parts = mutableListOf<String>()
+        parts.add(if (photos.size - videos == 1) "1 photo" else "${photos.size - videos} photos")
+        if (videos > 0) parts.add(if (videos == 1) "1 video" else "$videos videos")
+        binding.headerSubtitle.text = parts.joinToString(" · ")
+        binding.btnSlideshow.isVisible = photos.count { it.type == MediaType.IMAGE } > 1
+        binding.emptyStateView.isVisible = photos.isEmpty()
+        renderGrid()
+    }
 
-            grouped.forEach { (date, files) ->
-                items.add(GalleryItem.Header(date))
-                files.forEach { items.add(GalleryItem.Media(it)) }
+    private fun renderGrid() {
+        val photos = albumMedia
+        val selection = selectionViewModel.selection.value
+        lifecycleScope.launch {
+            val galleryItems = withContext(Dispatchers.Default) {
+                MediaGrouping.build(photos, GroupBy.DAY, SortOrder.DATE_DESC, selection)
             }
-            items
+            galleryAdapter.submitList(galleryItems)
         }
+    }
 
-        binding.emptyStateView.isVisible = galleryItems.isEmpty()
-        galleryAdapter.updateItems(galleryItems)
+    private fun detailIntent(media: MediaFile) = Intent(this, PhotoDetailActivity::class.java).apply {
+        putExtra("IMAGE_URI", media.uri.toString())
+        putExtra("IS_VIDEO", media.type == MediaType.VIDEO)
+        putExtra("ALBUM_NAME", albumName)
+        smartAlbum?.let { putExtra(PhotoDetailActivity.EXTRA_SMART_ALBUM, it) }
+        if (uriFilter != null) {
+            // Virtual album: page through exactly what this screen shows.
+            putExtra(PhotoDetailActivity.EXTRA_TITLE, albumName)
+            putStringArrayListExtra(PhotoDetailActivity.EXTRA_URI_LIST, ArrayList(albumMedia.map { it.uri.toString() }))
+        }
+    }
+
+    // ------------------------------------------------------------------ adapter callbacks
+
+    override fun onMediaClick(file: MediaFile, position: Int) {
+        if (selectionViewModel.isSelectionMode) {
+            selectionViewModel.toggle(file.uri)
+        } else {
+            startActivity(detailIntent(file))
+        }
+    }
+
+    override fun onMediaLongClick(file: MediaFile, position: Int) {
+        binding.photoRecycler.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        dragBaseSelection = selectionViewModel.selection.value
+        dragSelects = !dragBaseSelection.contains(file.uri)
+        dragSelect.startDragSelection(position)
+    }
+
+    override fun onHeaderClick(header: GridItem.Header) {
+        selectionViewModel.select(header.uris, !header.allSelected)
     }
 
     private suspend fun fetchAlbumMedia(): List<MediaFile> {
         val list = mutableListOf<MediaFile>()
-        albumName?.let { name ->
+        val filter = uriFilter
+        if (filter != null) {
+            list.addAll(fetchAllDeviceMedia().filter { filter.contains(it.uri.toString()) })
+        } else if (smartAlbum == PhotoDetailActivity.SMART_VIDEOS) {
+            list.addAll(fetchAllDeviceMedia().filter { it.type == MediaType.VIDEO })
+        } else if (smartAlbum == PhotoDetailActivity.SMART_SCREENSHOTS) {
+            list.addAll(fetchAllDeviceMedia().filter { it.isScreenshot })
+        } else albumName?.let { name ->
             if (name == "Favorites") {
                 val favorites = db.favoriteDao().getAllFavorites().first().map { it.uri.toString() }.toSet()
                 val allFetched = fetchAllDeviceMedia()
@@ -245,7 +423,13 @@ class AlbumDetailActivity : BaseActivity() {
             projection.add(MediaStore.Video.Media.DURATION)
         }
 
-        val selection = "bucket_display_name = ?"
+        // The library groups files without a bucket name under "Camera", so include them here too
+        // (otherwise the album card count and the album contents disagree).
+        val selection = if (album == "Camera") {
+            "(bucket_display_name = ? OR bucket_display_name IS NULL OR bucket_display_name = '')"
+        } else {
+            "bucket_display_name = ?"
+        }
         val selectionArgs = arrayOf(album)
 
         try {
@@ -280,98 +464,5 @@ class AlbumDetailActivity : BaseActivity() {
             e.printStackTrace()
         }
         return list
-    }
-
-    private class GalleryAdapter(
-        private var items: List<GalleryItem>,
-        private val onClick: (MediaFile) -> Unit
-    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), FastScrollerView.OnPopupTextUpdate {
-
-        companion object {
-            const val TYPE_HEADER = 0
-            const val TYPE_MEDIA = 1
-        }
-
-        fun updateItems(newItems: List<GalleryItem>) {
-            items = newItems
-            notifyDataSetChanged()
-        }
-
-        override fun onChange(position: Int): CharSequence {
-            return try {
-                when (val item = items.getOrNull(position)) {
-                    is GalleryItem.Header -> item.date
-                    is GalleryItem.Media -> {
-                        val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
-                        dateFormat.format(Date(item.file.dateAdded * 1000L))
-                    }
-                    else -> ""
-                }
-            } catch (_: Exception) {
-                ""
-            }
-        }
-
-        override fun getItemViewType(position: Int): Int {
-            return if (items[position] is GalleryItem.Header) TYPE_HEADER else TYPE_MEDIA
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return if (viewType == TYPE_HEADER) {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_gallery_header, parent, false)
-                HeaderViewHolder(view)
-            } else {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_photo, parent, false)
-                MediaViewHolder(view)
-            }
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            when (val item = items[position]) {
-                is GalleryItem.Header -> (holder as HeaderViewHolder).bind(item.date)
-                is GalleryItem.Media -> (holder as MediaViewHolder).bind(item.file, onClick)
-            }
-        }
-
-        override fun getItemCount() = items.size
-
-        class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            private val tvHeader: TextView = view.findViewById(R.id.tvHeader)
-            fun bind(date: String) { tvHeader.text = date }
-        }
-
-        class MediaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            private val imageView: ImageView = view.findViewById(R.id.iv_photo)
-            private val durationView: TextView = view.findViewById(R.id.tv_duration)
-            private val labelView: TextView = view.findViewById(R.id.tv_label)
-            private val favoriteView: ImageView = view.findViewById(R.id.iv_favorite)
-
-            fun bind(file: MediaFile, onClick: (MediaFile) -> Unit) {
-                labelView.isVisible = false
-                imageView.load(file.uri) {
-                    crossfade(true)
-                    if (file.type == MediaType.VIDEO) {
-                        videoFrameMicros(1000000)
-                    }
-                }
-                
-                favoriteView.isVisible = file.isFavorite
-
-                if (file.type == MediaType.VIDEO) {
-                    durationView.isVisible = true
-                    durationView.text = formatDuration(file.duration)
-                } else {
-                    durationView.isVisible = false
-                }
-                
-                itemView.setOnClickListener { onClick(file) }
-            }
-
-            private fun formatDuration(durationMs: Long): String {
-                val seconds = (durationMs / 1000) % 60
-                val minutes = (durationMs / (1000 * 60)) % 60
-                return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-            }
-        }
     }
 }

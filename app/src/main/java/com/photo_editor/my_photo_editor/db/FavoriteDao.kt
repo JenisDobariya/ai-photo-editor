@@ -19,4 +19,10 @@ interface FavoriteDao {
 
     @Query("SELECT * FROM favorites WHERE uri = :uri")
     suspend fun getFavorite(uri: String): FavoriteMedia?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addFavorites(favorites: List<FavoriteMedia>)
+
+    @Query("DELETE FROM favorites WHERE uri IN (:uris)")
+    suspend fun removeFavorites(uris: List<String>)
 }

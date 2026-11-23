@@ -30,7 +30,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -265,24 +264,36 @@ class PhotoEditorActivity : BaseActivity() {
         }
         binding.btnSave.setOnClickListener {
             AnalyticsManager.logEvent("PhotoEditor_btnSave_click")
+            if (viewModel.isSaving.value) return@setOnClickListener
             viewModel.setSelectedLayerId(null)
-            val drawMarkupAction: ((android.graphics.Canvas) -> Unit)? = if (binding.drawingView.hasDrawings() || viewModel.layers.value.isNotEmpty()) {
+            // Saving straight from the crop tool: use the crop that is on screen.
+            if (binding.cropControls.isVisible) {
+                viewModel.normalizedCropRect.value = binding.cropOverlay.getNormalizedCropRect()
+            }
+            val photoOnScreen = photoRectOnScreen()
+            val cropAtSave = viewModel.normalizedCropRect.value?.let { android.graphics.RectF(it) }
+            val drawMarkupAction: ((android.graphics.Canvas) -> Unit)? = if (
+                (binding.drawingView.hasDrawings() || viewModel.layers.value.isNotEmpty()) &&
+                photoOnScreen.width() > 0f && photoOnScreen.height() > 0f
+            ) {
                 { canvas ->
+                    // Map screen positions onto the saved photo with one uniform scale, using
+                    // where the photo really is on screen (letterbox and zoom included) and the
+                    // crop, so text / stickers / drawings keep their place and proportions.
+                    val crop = cropAtSave ?: android.graphics.RectF(0f, 0f, 1f, 1f)
+                    val fullW = canvas.width / crop.width().coerceAtLeast(0.01f)
+                    val fullH = canvas.height / crop.height().coerceAtLeast(0.01f)
+                    canvas.save()
+                    canvas.translate(-crop.left * fullW, -crop.top * fullH)
+                    canvas.scale(fullW / photoOnScreen.width(), fullH / photoOnScreen.height())
+                    canvas.translate(-photoOnScreen.left, -photoOnScreen.top)
                     if (binding.drawingView.hasDrawings()) {
                         binding.drawingView.drawOntoCanvas(canvas)
                     }
                     if (viewModel.layers.value.isNotEmpty()) {
-                        val lw = binding.layersContainer.width.toFloat()
-                        val lh = binding.layersContainer.height.toFloat()
-                        if (lw > 0 && lh > 0) {
-                            val scaleX = canvas.width.toFloat() / lw
-                            val scaleY = canvas.height.toFloat() / lh
-                            canvas.save()
-                            canvas.scale(scaleX, scaleY)
-                            binding.layersContainer.draw(canvas)
-                            canvas.restore()
-                        }
+                        binding.layersContainer.draw(canvas)
                     }
+                    canvas.restore()
                 }
             } else null
             viewModel.saveImage(this, drawMarkupAction)
@@ -570,6 +581,20 @@ class PhotoEditorActivity : BaseActivity() {
         }
     }
 
+    /** Where the photo is drawn on screen right now, including the preview's zoom/pan. */
+    private fun photoRectOnScreen(): android.graphics.RectF {
+        val ib = getImageBounds()
+        val pv = binding.photoPreview
+        val sx = kotlin.math.abs(pv.scaleX)
+        val sy = kotlin.math.abs(pv.scaleY)
+        return android.graphics.RectF(
+            pv.pivotX + (ib.left - pv.pivotX) * sx + pv.translationX,
+            pv.pivotY + (ib.top - pv.pivotY) * sy + pv.translationY,
+            pv.pivotX + (ib.right - pv.pivotX) * sx + pv.translationX,
+            pv.pivotY + (ib.bottom - pv.pivotY) * sy + pv.translationY
+        )
+    }
+
     private fun getImageBounds(): android.graphics.RectF {
         val drawable = binding.photoPreview.drawable ?: return android.graphics.RectF()
         val viewWidth = binding.photoPreview.width.toFloat()
@@ -724,7 +749,7 @@ class PhotoEditorActivity : BaseActivity() {
             val argb = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color))
             val gd = android.graphics.drawable.GradientDrawable().apply {
                 shape = android.graphics.drawable.GradientDrawable.RECTANGLE
-                cornerRadius = 8f * resources.displayMetrics.density
+                cornerRadius = resources.getDimension(R.dimen.radius_l)
                 setColor(argb)
             }
             preview.background = gd
@@ -1250,7 +1275,7 @@ class PhotoEditorActivity : BaseActivity() {
                 if (badge.color != null) {
                     tv.background = android.graphics.drawable.GradientDrawable().apply {
                         shape = android.graphics.drawable.GradientDrawable.RECTANGLE
-                        cornerRadius = 16.dpToPx().toFloat()
+                        cornerRadius = resources.getDimension(R.dimen.radius_m)
                         setColor(badge.color)
                         if (isSelected) {
                             setStroke(2.dpToPx(), Color.parseColor("#FFD700"))
@@ -1562,6 +1587,17 @@ class PhotoEditorActivity : BaseActivity() {
                     }
                 }
                 launch {
+                    var wasSaving = false
+                    viewModel.isSaving.collectLatest { saving ->
+                        binding.btnSave.isEnabled = !saving
+                        binding.btnSave.alpha = if (saving) 0.5f else 1f
+                        if (wasSaving && !saving && viewModel.saveResultUri.value == null) {
+                            Toast.makeText(this@PhotoEditorActivity, "Couldn't save the photo. Please try again.", Toast.LENGTH_LONG).show()
+                        }
+                        wasSaving = saving
+                    }
+                }
+                launch {
                     viewModel.saveResultUri.collectLatest { uri ->
                         uri?.let {
                             Toast.makeText(this@PhotoEditorActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
@@ -1620,7 +1656,7 @@ class PhotoEditorActivity : BaseActivity() {
                         shape = android.graphics.drawable.GradientDrawable.RECTANGLE
                         setStroke(2.dpToPx(), Color.parseColor("#F59E0B"))
                         setColor(Color.parseColor("#15000000"))
-                        cornerRadius = 14.dpToPx().toFloat()
+                        cornerRadius = resources.getDimension(R.dimen.radius_m)
                     }
                 }
 
@@ -1656,7 +1692,7 @@ class PhotoEditorActivity : BaseActivity() {
                                 background = android.graphics.drawable.GradientDrawable().apply {
                                     shape = android.graphics.drawable.GradientDrawable.RECTANGLE
                                     setColor(content.bgBadgeColor)
-                                    cornerRadius = 10.dpToPx().toFloat()
+                                    cornerRadius = resources.getDimension(R.dimen.radius_m)
                                 }
                                 setPadding(14.dpToPx(), 6.dpToPx(), 14.dpToPx(), 6.dpToPx())
                             }
@@ -1675,7 +1711,8 @@ class PhotoEditorActivity : BaseActivity() {
                     }
                     is LayerContent.Sticker -> {
                         val imageView = ImageView(context).apply {
-                            load(content.uri)
+                            // Software bitmap: the save draws this view into a normal Canvas.
+                            load(content.uri) { allowHardware(false) }
                             scaleType = ImageView.ScaleType.FIT_CENTER
                             isClickable = false
                             isFocusable = false
@@ -1716,7 +1753,7 @@ class PhotoEditorActivity : BaseActivity() {
                     tag = "btnScale"
                     setImageResource(R.drawable.ic_scale_handle)
                     setBackgroundResource(R.drawable.bg_circle_accent)
-                    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#6366F1"))
+                    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#3D8BFD"))
                     setColorFilter(Color.WHITE)
                     elevation = 4.dpToPx().toFloat()
                     setPadding(5.dpToPx(), 5.dpToPx(), 5.dpToPx(), 5.dpToPx())
@@ -1872,7 +1909,7 @@ class PhotoEditorActivity : BaseActivity() {
                     tag = "btnEdit"
                     setImageResource(R.drawable.ic_edit)
                     setBackgroundResource(R.drawable.bg_circle_accent)
-                    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1E293B"))
+                    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#21252B"))
                     setColorFilter(Color.parseColor("#F59E0B"))
                     elevation = 4.dpToPx().toFloat()
                     setPadding(5.dpToPx(), 5.dpToPx(), 5.dpToPx(), 5.dpToPx())
@@ -1967,7 +2004,7 @@ class PhotoEditorActivity : BaseActivity() {
                     shape = android.graphics.drawable.GradientDrawable.RECTANGLE
                     setStroke(2.dpToPx(), Color.parseColor("#F59E0B"))
                     setColor(Color.parseColor("#15000000"))
-                    cornerRadius = 14.dpToPx().toFloat()
+                    cornerRadius = resources.getDimension(R.dimen.radius_m)
                 }
             } else null
 
@@ -2062,7 +2099,6 @@ class PhotoEditorActivity : BaseActivity() {
                     notifyItemChanged(old)
                     notifyItemChanged(selectedIndex)
                     onModeSelected(mode)
-                    Toast.makeText(this@PhotoEditorActivity, "Selected: ${mode.name}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

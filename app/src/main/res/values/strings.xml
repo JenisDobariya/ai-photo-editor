@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">AI Photo Editor</string>
-    <string name="nav_library">Library</string>
-    <string name="nav_folders">Folder</string>
+    <!-- Launcher / system name (kept short so it is never cut off under the icon) -->
+    <string name="app_name">Gallerai</string>
+    <!-- Full name, same as the Play Store title -->
+    <string name="app_full_name">Gallerai: Photos, Video &amp; AI</string>
+    <string name="share_app_text">Check out %1$s, a smart gallery, video player &amp; AI photo editor: %2$s</string>
+    <string name="nav_library">Photos</string>
+    <string name="nav_folders">Albums</string>
     <string name="profile_title">Profile</string>
     <string name="profile_settings">SETTINGS</string>
     <string name="profile_support">SUPPORT</string>

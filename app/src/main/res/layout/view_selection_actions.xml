@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_selection_bar"
+    android:elevation="8dp"
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <LinearLayout
+        android:id="@+id/actionShare"
+        style="@style/Widget.App.ActionItem"
+        android:layout_height="52dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_share"
+            app:tint="@color/lumina_text_primary" />
+
+        <TextView
+            style="@style/TextAppearance.App.ActionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Share" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionFavorite"
+        style="@style/Widget.App.ActionItem"
+        android:layout_height="52dp">
+
+        <ImageView
+            android:id="@+id/ivActionFavorite"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_g_heart_outline"
+            app:tint="@color/lumina_text_primary" />
+
+        <TextView
+            android:id="@+id/tvActionFavorite"
+            style="@style/TextAppearance.App.ActionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Favorite" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionHide"
+        style="@style/Widget.App.ActionItem"
+        android:layout_height="52dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_g_lock"
+            app:tint="@color/lumina_text_primary" />
+
+        <TextView
+            style="@style/TextAppearance.App.ActionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lock" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionDelete"
+        style="@style/Widget.App.ActionItem"
+        android:layout_height="52dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_g_delete"
+            app:tint="@color/lumina_danger" />
+
+        <TextView
+            style="@style/TextAppearance.App.ActionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:textColor="@color/lumina_danger" />
+    </LinearLayout>
+
+    <!-- Copy / move to album, share without location, PDF, compress -->
+    <LinearLayout
+        android:id="@+id/actionMore"
+        style="@style/Widget.App.ActionItem"
+        android:layout_height="52dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_g_more"
+            app:tint="@color/lumina_text_primary" />
+
+        <TextView
+            style="@style/TextAppearance.App.ActionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="More" />
+    </LinearLayout>
+</LinearLayout>

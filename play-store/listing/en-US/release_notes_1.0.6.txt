@@ -1,0 +1,7 @@
+New name: Gallerai!
+• AI Cutout with cleaner edges, portrait blur and colour backdrops
+• Copy text: select and copy text from any photo
+• Clean up: find duplicates, blurry shots and large videos
+• Smart search and Things albums
+• Document scanner, Photos to PDF, compress, video trim and GIF
+• Improved video player and a fresh, consistent design

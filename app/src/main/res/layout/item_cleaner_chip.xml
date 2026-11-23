@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="36dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/bg_chip_unselected"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingEnd="14dp">
+
+    <ImageView
+        android:id="@+id/iv_chip_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:importantForAccessibility="no"
+        app:tint="@color/lumina_text_secondary"
+        tools:src="@drawable/ic_cl_duplicate" />
+
+    <TextView
+        android:id="@+id/tv_chip_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:maxLines="1"
+        android:textColor="@color/lumina_text_secondary"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        tools:text="Duplicates" />
+
+    <TextView
+        android:id="@+id/tv_chip_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:maxLines="1"
+        android:textColor="@color/lumina_text_tertiary"
+        android:textSize="12sp"
+        tools:text="12" />
+
+</LinearLayout>

@@ -66,7 +66,7 @@ class BeforeAfterView @JvmOverloads constructor(
             invalidate()
         }
 
-    var dividerColor: Int = Color.parseColor("#F59E0B") // Lumina Gold default
+    var dividerColor: Int = Color.parseColor("#3D8BFD") // app blue default
         set(value) {
             field = value
             invalidate()
@@ -443,7 +443,7 @@ class BeforeAfterView @JvmOverloads constructor(
                 textPaint.setShadowLayer(0f, 0f, 0f, 0)
             }
             BadgeStyle.GOLD_ACCENT -> {
-                badgeBgPaint.color = Color.parseColor("#F59E0B") // Lumina Gold
+                badgeBgPaint.color = Color.parseColor("#3D8BFD") // app blue
                 canvas.drawRoundRect(badgeRect, badgeRadius, badgeRadius, badgeBgPaint)
 
                 textPaint.color = Color.BLACK

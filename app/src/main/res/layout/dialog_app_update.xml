@@ -38,7 +38,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="A new version of Photo Editor is available with new features and improvements. Please update now."
+        android:text="A new version of Gallerai is available with new features and improvements. Please update now."
         android:textColor="@color/lumina_text_secondary"
         android:textSize="14sp"
         android:lineSpacingExtra="2dp" />

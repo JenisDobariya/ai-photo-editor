@@ -70,17 +70,18 @@ class BeforeAfterActivity : BaseActivity() {
     )
 
     private val lineColors = listOf(
-        Color.parseColor("#F59E0B"), // Lumina Gold
+        Color.parseColor("#3D8BFD"), // App blue
+        Color.parseColor("#F59E0B"), // Amber
         Color.WHITE,
         Color.parseColor("#06B6D4"), // Cyan
         Color.parseColor("#10B981"), // Emerald
         Color.parseColor("#EF4444"), // Red
-        Color.parseColor("#1E293B")  // Dark Slate
+        Color.parseColor("#21252B")  // Dark Slate
     )
 
     private var selectedModeIndex = 0
     private var selectedRatioIndex = 0
-    private var selectedColor = Color.parseColor("#F59E0B")
+    private var selectedColor = Color.parseColor("#3D8BFD")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -319,7 +320,7 @@ class BeforeAfterActivity : BaseActivity() {
                     vRing.background = android.graphics.drawable.GradientDrawable().apply {
                         shape = android.graphics.drawable.GradientDrawable.OVAL
                         setColor(Color.TRANSPARENT)
-                        setStroke(2, Color.parseColor("#F59E0B"))
+                        setStroke(2, Color.parseColor("#3D8BFD"))
                     }
                 }
 
@@ -390,6 +391,9 @@ class BeforeAfterActivity : BaseActivity() {
             val request = ImageRequest.Builder(this@BeforeAfterActivity)
                 .data(uri)
                 .size(2048, 2048)
+                // Software bitmaps: the export draws them into a normal Canvas, which can't
+                // take hardware bitmaps ("Software rendering doesn't support hardware bitmaps").
+                .allowHardware(false)
                 .build()
             val result = (imageLoader.execute(request) as? SuccessResult)?.drawable
             (result as? BitmapDrawable)?.bitmap
@@ -402,21 +406,28 @@ class BeforeAfterActivity : BaseActivity() {
     private fun saveComparison() {
         AnalyticsManager.logEvent("BeforeAfter_save_click")
         binding.progressBar.isVisible = true
+        binding.btnSave.isEnabled = false // no duplicate files from a double tap
 
         lifecycleScope.launch {
-            val bitmap = withContext(Dispatchers.Default) {
-                binding.beforeAfterView.exportBitmap(2048)
-            }
-
-            val savedUri = withContext(Dispatchers.IO) {
-                ImageSaver.saveDirectBitmapToMediaStore(this@BeforeAfterActivity, bitmap, "BEFORE_AFTER")
+            val savedUri = try {
+                val bitmap = withContext(Dispatchers.Default) {
+                    binding.beforeAfterView.exportBitmap(2048)
+                }
+                withContext(Dispatchers.IO) {
+                    ImageSaver.saveDirectBitmapToMediaStore(this@BeforeAfterActivity, bitmap, "BEFORE_AFTER")
+                }
+            } catch (e: Throwable) {
+                // Out of memory / storage errors: report instead of crashing.
+                e.printStackTrace()
+                null
             }
 
             binding.progressBar.isVisible = false
+            binding.btnSave.isEnabled = true
             if (savedUri != null) {
                 Toast.makeText(this@BeforeAfterActivity, "Comparison card saved to Gallery!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this@BeforeAfterActivity, PhotoDetailActivity::class.java).apply {
-                    putExtra("PHOTO_URI", savedUri.toString())
+                    putExtra("IMAGE_URI", savedUri.toString())
                 }
                 startActivity(intent)
             } else {

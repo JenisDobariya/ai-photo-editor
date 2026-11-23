@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Video trimmer + video to GIF. In landscape the Activity switches @id/content to horizontal
+     (preview left, options right) since it handles rotation itself. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vtRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lumina_bg"
+    android:orientation="vertical">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            style="@style/Widget.App.TopBarIcon"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_chevron_left" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-black"
+            android:maxLines="1"
+            android:text="Trim video"
+            android:textColor="@color/lumina_text_primary"
+            android:textSize="20sp" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.App.HeaderAction"
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:enabled="false"
+            android:text="Save" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Preview -->
+        <FrameLayout
+            android:id="@+id/previewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/black"
+            android:clickable="true"
+            android:focusable="true">
+
+            <androidx.media3.ui.PlayerView
+                android:id="@+id/playerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:resize_mode="fit"
+                app:shutter_background_color="@color/black"
+                app:use_controller="false" />
+
+            <ImageButton
+                android:id="@+id/btnPlayPause"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_vt_play_circle"
+                android:contentDescription="Play or pause"
+                android:padding="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_v_play" />
+
+            <ProgressBar
+                android:id="@+id/progressLoading"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/lumina_accent" />
+
+            <TextView
+                android:id="@+id/tvError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="24dp"
+                android:textColor="@color/lumina_text_secondary"
+                android:textSize="15sp"
+                android:visibility="gone"
+                tools:text="This video can't be opened." />
+        </FrameLayout>
+
+        <!-- Options -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/panelScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:fillViewport="false"
+            android:overScrollMode="never"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:id="@+id/panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:checkedChip="@id/chipModeTrim"
+                    app:chipSpacingHorizontal="8dp"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipModeTrim"
+                        style="@style/Widget.App.FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="96dp"
+                        android:text="Trim"
+                        android:textAlignment="center"
+                        app:chipIconVisible="false" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipModeGif"
+                        style="@style/Widget.App.FilterChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="96dp"
+                        android:text="GIF"
+                        android:textAlignment="center"
+                        app:chipIconVisible="false" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <!-- Range -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvRange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFeatureSettings="tnum"
+                        android:textColor="@color/lumina_text_primary"
+                        android:textSize="14sp"
+                        tools:text="0:03.2 – 0:12.8 · 9.6 s" />
+
+                    <TextView
+                        android:id="@+id/tvPosition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFeatureSettings="tnum"
+                        android:textColor="@color/lumina_text_tertiary"
+                        android:textSize="12sp"
+                        tools:text="0:05.1 / 1:20.4" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/filmstripFrame"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_vt_filmstrip">
+
+                    <LinearLayout
+                        android:id="@+id/filmstrip"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" />
+
+                    <View
+                        android:id="@+id/dimLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start"
+                        android:background="@color/lumina_scrim" />
+
+                    <View
+                        android:id="@+id/dimRight"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@color/lumina_scrim" />
+
+                    <View
+                        android:id="@+id/selectionFrame"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start"
+                        android:background="@drawable/bg_vt_selection" />
+
+                    <View
+                        android:id="@+id/playhead"
+                        android:layout_width="3dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/bg_vt_playhead"
+                        android:visibility="invisible" />
+                </FrameLayout>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/rangeSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    app:haloColor="@color/lumina_accent_dim"
+                    app:labelBehavior="floating"
+                    app:thumbColor="@color/lumina_accent"
+                    app:thumbRadius="9dp"
+                    app:trackColorActive="@color/lumina_accent"
+                    app:trackColorInactive="@color/lumina_surface_highest"
+                    app:trackHeight="4dp" />
+
+                <!-- Trim options -->
+                <LinearLayout
+                    android:id="@+id/trimOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchRemoveAudio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="Remove audio"
+                        android:textColor="@color/lumina_text_primary"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvTrimInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp"
+                        tools:text="MP4 · 9.6 s · saved to Movies/PhotoEditor" />
+                </LinearLayout>
+
+                <!-- GIF options -->
+                <LinearLayout
+                    android:id="@+id/gifOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Size"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:checkedChip="@id/chipSizeMedium"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSizeSmall"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Small · 320"
+                            app:chipIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSizeMedium"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medium · 480"
+                            app:chipIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSizeLarge"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Large · 640"
+                            app:chipIconVisible="false" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Frame rate"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupFps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:checkedChip="@id/chipFps10"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipFps10"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10 fps"
+                            app:chipIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipFps15"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="15 fps"
+                            app:chipIconVisible="false" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Speed"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupSpeed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:checkedChip="@id/chipSpeed1"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSpeedHalf"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.5×"
+                            app:chipIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSpeed1"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1×"
+                            app:chipIconVisible="false" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSpeed2"
+                            style="@style/Widget.App.FilterChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2×"
+                            app:chipIconVisible="false" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchLoop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:checked="true"
+                        android:minHeight="48dp"
+                        android:text="Loop forever"
+                        android:textColor="@color/lumina_text_primary"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvGifEstimate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFeatureSettings="tnum"
+                        android:textColor="@color/lumina_text_secondary"
+                        android:textSize="12sp"
+                        tools:text="≈ 2.4 MB · 96 frames · 480×270 px" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="GIFs can be up to 15 s long"
+                        android:textColor="@color/lumina_text_tertiary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</LinearLayout>

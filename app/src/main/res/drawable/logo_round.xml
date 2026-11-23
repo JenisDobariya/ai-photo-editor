@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gallerai logo for in-app use and pre-Android 8 launchers (circle). Generated from the ic_launcher_* layers. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <clip-path android:pathData="M54,2a52,52 0,1 1,0 104a52,52 0,1 1,0 -104z" />
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="10" android:startY="0"
+                android:endX="98" android:endY="108">
+                <item android:offset="0" android:color="#FF63AAFF" />
+                <item android:offset="0.55" android:color="#FF2D7BEA" />
+                <item android:offset="1" android:color="#FF1450B4" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- soft highlight in the top-left -->
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="30" android:centerY="24"
+                android:gradientRadius="56">
+                <item android:offset="0" android:color="#40FFFFFF" />
+                <item android:offset="1" android:color="#00FFFFFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <group android:scaleX="1.1" android:scaleY="1.1" android:pivotX="54" android:pivotY="54">
+        <!-- scaled to fill the 66dp safe zone -->
+        <group android:scaleX="1.2" android:scaleY="1.2" android:pivotX="52" android:pivotY="53" android:translateX="2" android:translateY="1">
+            <!-- back card -->
+            <group android:rotation="12" android:pivotX="55" android:pivotY="52">
+                <path
+                    android:fillColor="#59FFFFFF"
+                    android:pathData="M42,35h28a6,6 0,0 1,6 6v20a6,6 0,0 1,-6 6h-28a6,6 0,0 1,-6 -6v-20a6,6 0,0 1,6 -6z" />
+            </group>
+            <!-- front card frame -->
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M38,42h28a6,6 0,0 1,6 6v20a6,6 0,0 1,-6 6h-28a6,6 0,0 1,-6 -6v-20a6,6 0,0 1,6 -6z" />
+            <!-- photo inside the card -->
+            <group>
+                <clip-path android:pathData="M39,45.5h26a3.5,3.5 0,0 1,3.5 3.5v18a3.5,3.5 0,0 1,-3.5 3.5h-26a3.5,3.5 0,0 1,-3.5 -3.5v-18a3.5,3.5 0,0 1,3.5 -3.5z" />
+                <path android:pathData="M35.5,45.5h33v25h-33z">
+                    <aapt:attr name="android:fillColor">
+                        <gradient
+                            android:type="linear"
+                            android:startX="52" android:startY="45.5"
+                            android:endX="52" android:endY="70.5">
+                            <item android:offset="0" android:color="#FF1A4FA6" />
+                            <item android:offset="1" android:color="#FF5C9EFF" />
+                        </gradient>
+                    </aapt:attr>
+                </path>
+                <!-- far hill -->
+                <path
+                    android:fillColor="#FFAFD0FF"
+                    android:pathData="M48,70.5l9,-12 12,12z" />
+                <!-- near hill -->
+                <path
+                    android:fillColor="#FFFFFFFF"
+                    android:pathData="M35.5,70.5v-4l9,-10.5 11,14.5z" />
+            </group>
+            <!-- sparkle sun -->
+            <path
+                android:fillColor="#FFFFC34D"
+                android:pathData="M60,46.5Q60.9,51.1 65.5,52Q60.9,52.9 60,57.5Q59.1,52.9 54.5,52Q59.1,51.1 60,46.5z" />
+            <!-- small accent sparkle -->
+            <path
+                android:fillColor="#FFFFE2A3"
+                android:pathData="M35,33.5Q35.45,36.55 38.5,37Q35.45,37.45 35,40.5Q34.55,37.45 31.5,37Q34.55,36.55 35,33.5z" />
+        </group>
+    </group>
+</vector>

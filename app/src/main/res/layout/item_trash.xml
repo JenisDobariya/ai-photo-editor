@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivTrash"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/lumina_surface"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Rounded12" />
+
+    <View
+        android:id="@+id/trashSelectedOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/lumina_selection_overlay"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/ivTrash"
+        app:layout_constraintEnd_toEndOf="@id/ivTrash"
+        app:layout_constraintStart_toStartOf="@id/ivTrash"
+        app:layout_constraintTop_toTopOf="@id/ivTrash" />
+
+    <TextView
+        android:id="@+id/tvDaysLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_badge_dark"
+        android:paddingHorizontal="7dp"
+        android:paddingVertical="2dp"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivTrash"
+        app:layout_constraintStart_toStartOf="@id/ivTrash"
+        tools:text="12 days" />
+
+    <ImageView
+        android:id="@+id/ivTrashVideo"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_margin="6dp"
+        android:src="@drawable/ic_g_video"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/ivTrash"
+        app:layout_constraintEnd_toEndOf="@id/ivTrash"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/ivTrashSelect"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_margin="6dp"
+        android:src="@drawable/ic_g_circle_outline"
+        app:layout_constraintStart_toStartOf="@id/ivTrash"
+        app:layout_constraintTop_toTopOf="@id/ivTrash"
+        app:tint="@color/white" />
+</androidx.constraintlayout.widget.ConstraintLayout>

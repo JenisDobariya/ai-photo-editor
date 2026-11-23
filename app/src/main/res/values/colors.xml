@@ -3,22 +3,46 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Lumina Theme Colors -->
-    <color name="lumina_bg">#0B0F19</color>
-    <color name="lumina_surface">#1E293B</color>
-    <color name="lumina_search_bg">#334155</color>
-    <color name="lumina_accent">#6366F1</color>
-    <color name="lumina_accent_dim">#336366F1</color>
-    <color name="lumina_gold">#F59E0B</color>
-    <color name="lumina_gold_dim">#33F59E0B</color>
-    <color name="lumina_text_secondary">#94A3B8</color>
-    <color name="lumina_chip_unselected">#1E293B</color>
-    <color name="darkBlue">#1E293B</color>
-    <color name="lightBlue">#F59E0B</color>
-    <color name="blue">#6366F1</color>
-    <color name="app_bg_blue">#101328</color>
-    <color name="lightNevyBlue">#162142</color>
-    <color name="background_app">#141823</color>
-    <color name="logo_color">#8584B1</color>
+    <!--
+        App palette (MX-style dark): near-black surfaces, one clear blue accent,
+        a lighter blue for small highlights, neutral grey text.
+        Resource names are kept so every screen picks the new colours up automatically.
+    -->
+    <color name="lumina_bg">#0F1114</color>
+    <color name="lumina_surface">#181B20</color>
+    <color name="lumina_surface_high">#21252B</color>
+    <color name="lumina_surface_highest">#2A2F36</color>
+    <color name="lumina_outline">#2A2E35</color>
+    <color name="lumina_search_bg">#1E2127</color>
+    <color name="lumina_accent">#3D8BFD</color>
+    <color name="lumina_accent_dim">#333D8BFD</color>
+    <color name="lumina_accent_container">#17325A</color>
+    <color name="lumina_on_accent_container">#D5E5FF</color>
+    <color name="lumina_gold">#5AA9FF</color>
+    <color name="lumina_gold_dim">#335AA9FF</color>
+    <color name="lumina_text_primary">#F2F4F7</color>
+    <color name="lumina_text_secondary">#9BA3AF</color>
+    <color name="lumina_text_tertiary">#6B727D</color>
+    <color name="lumina_chip_unselected">#1B1E23</color>
+    <color name="lumina_favorite">#FF5C8A</color>
+    <color name="lumina_teal">#3DD6C4</color>
+    <color name="lumina_danger">#FF6B6B</color>
+    <!-- Studio tool tints -->
+    <color name="studio_violet">#9B7BFF</color>
+    <color name="studio_amber">#FFB547</color>
+    <color name="lumina_scrim">#B3000000</color>
+    <color name="lumina_scrim_light">#66000000</color>
+    <color name="lumina_selection_overlay">#663D8BFD</color>
+    <color name="lumina_bar_translucent">#E60F1114</color>
+
+    <!-- Legacy names kept for existing screens -->
+    <color name="darkBlue">#181B20</color>
+    <color name="lightBlue">#5AA9FF</color>
+    <color name="blue">#3D8BFD</color>
+    <color name="app_bg_blue">#0F1114</color>
+    <color name="lightNevyBlue">#21252B</color>
+    <color name="background_app">#0F1114</color>
+    <color name="logo_color">#3D8BFD</color>
+    <color name="transparent">#00000000</color>
 
 </resources>

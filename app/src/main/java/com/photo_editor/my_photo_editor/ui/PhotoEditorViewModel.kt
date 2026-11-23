@@ -383,15 +383,14 @@ class PhotoEditorViewModel : ViewModel() {
 
     fun saveImage(context: Context, drawMarkup: ((Canvas) -> Unit)? = null) {
         val uri = _selectedUri.value ?: return
+        if (_isSaving.value) return
         _isSaving.value = true
         _saveResultUri.value = null
 
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    val inputStream = context.contentResolver.openInputStream(uri)
-                    val bitmap = BitmapFactory.decodeStream(inputStream)
-                    inputStream?.close()
+                    val bitmap = decodeUpright(context, uri, MAX_SAVE_DIMENSION)
 
                     if (bitmap != null) {
                         val finalMatrix = ColorMatrixBuilder.build(
@@ -434,6 +433,56 @@ class PhotoEditorViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Decodes the photo upright (EXIF orientation applied, as the preview shows it) and no
+     * bigger than [maxDim] on its long edge, so 50–200 MP photos don't run out of memory.
+     */
+    private fun decodeUpright(context: Context, uri: Uri, maxDim: Int): android.graphics.Bitmap? {
+        val resolver = context.contentResolver
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+        var sample = 1
+        while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= maxDim) sample *= 2
+        val opts = BitmapFactory.Options().apply {
+            inSampleSize = sample
+            inPreferredConfig = android.graphics.Bitmap.Config.ARGB_8888
+        }
+        var bitmap = resolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) } ?: return null
+        val longEdge = maxOf(bitmap.width, bitmap.height)
+        if (longEdge > maxDim) {
+            val scale = maxDim.toFloat() / longEdge
+            val scaled = android.graphics.Bitmap.createScaledBitmap(
+                bitmap, (bitmap.width * scale).toInt().coerceAtLeast(1), (bitmap.height * scale).toInt().coerceAtLeast(1), true
+            )
+            if (scaled !== bitmap) bitmap.recycle()
+            bitmap = scaled
+        }
+        val orientation = try {
+            resolver.openInputStream(uri)?.use {
+                android.media.ExifInterface(it).getAttributeInt(
+                    android.media.ExifInterface.TAG_ORIENTATION, android.media.ExifInterface.ORIENTATION_NORMAL
+                )
+            } ?: android.media.ExifInterface.ORIENTATION_NORMAL
+        } catch (_: Exception) {
+            android.media.ExifInterface.ORIENTATION_NORMAL
+        }
+        val m = android.graphics.Matrix()
+        when (orientation) {
+            android.media.ExifInterface.ORIENTATION_ROTATE_90 -> m.postRotate(90f)
+            android.media.ExifInterface.ORIENTATION_ROTATE_180 -> m.postRotate(180f)
+            android.media.ExifInterface.ORIENTATION_ROTATE_270 -> m.postRotate(270f)
+            android.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> m.postScale(-1f, 1f)
+            android.media.ExifInterface.ORIENTATION_FLIP_VERTICAL -> m.postScale(1f, -1f)
+            android.media.ExifInterface.ORIENTATION_TRANSPOSE -> { m.postRotate(90f); m.postScale(-1f, 1f) }
+            android.media.ExifInterface.ORIENTATION_TRANSVERSE -> { m.postRotate(270f); m.postScale(-1f, 1f) }
+            else -> return bitmap
+        }
+        val upright = android.graphics.Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, m, true)
+        if (upright !== bitmap) bitmap.recycle()
+        return upright
+    }
+
     fun reset() {
         brightness.value = 0f
         contrast.value = 1f
@@ -465,5 +514,10 @@ class PhotoEditorViewModel : ViewModel() {
         redoStack.clear()
         _canUndo.value = false
         _canRedo.value = false
+    }
+
+    companion object {
+        /** Long-edge cap for saved edits (about 27 MP for 4:3) — keeps big photos in memory. */
+        private const val MAX_SAVE_DIMENSION = 6000
     }
 }

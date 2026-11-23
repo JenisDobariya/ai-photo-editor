@@ -1,0 +1,48 @@
+Gallerai is a fast, private gallery with smart AI tools built in. Browse photos and videos smoothly, find any picture in seconds, free up space, and edit with one tap. Your photos are processed on your phone and are never uploaded.
+
+━━━━━━━━━━━━━━━━━━━━
+📷 FAST, SMART GALLERY
+━━━━━━━━━━━━━━━━━━━━
+• Smooth timeline of all your photos and videos, grouped by day, month or year
+• Pinch to change the grid size and drag to select many items at once
+• Smart search: type "dog", "food", "beach" or a date to find photos
+• Things albums: pets, food, nature and more are sorted for you automatically
+• On this day: relive photos from past years
+• Favorites, Videos and Screenshots collections
+• Copy, move and rename photos, and share without location
+
+🎬 POWERFUL VIDEO PLAYER
+• Swipe for brightness, volume and seeking; double-tap to skip
+• Playback speed, A-B repeat, subtitles, audio tracks and screen lock
+• Clear message when a video is beyond your phone's hardware (for example 4K on some phones)
+
+✨ AI TOOLS, RIGHT ON YOUR PHONE
+• AI Cutout: remove the background from people, pets and objects with clean edges
+• Portrait blur and colour backdrops for any photo
+• Copy text: select text in any photo, then copy or share it; tap phone numbers, emails and links
+• Auto enhance: one-tap light and colour fix
+• Blur faces: hide faces before you share
+• Document scanner: auto crop and clean up, saved as PDF
+
+🧹 CLEAN UP & FREE SPACE
+• Find exact duplicates, similar shots, blurry photos, old screenshots and large videos
+• See how much space you can free before deleting anything
+• Recycle Bin keeps deleted items for 30 days
+
+🔒 PRIVACY
+• Locked Folder hides private photos and videos behind your screen lock
+• Share photos without their location data
+• Photos and videos stay on your device: no cloud uploads
+
+🎨 EDITOR & STUDIO
+• Filters, adjustments, crop, rotate, straighten and perspective
+• Markup pens and text with fonts, colours and effects
+• Collage maker, Before & After split cards
+• Photos to PDF, compress and resize photos
+• Trim videos, remove audio and turn clips into GIFs
+
+Good to know
+• The AI tools use models delivered by Google Play services. They download once with an internet connection, and then work offline.
+• Edited photos are saved as new copies; your originals are never overwritten.
+
+Download Gallerai and enjoy a faster, smarter and more private gallery.

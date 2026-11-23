@@ -5,6 +5,7 @@ import android.util.Log
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.VideoFrameDecoder
+import com.photo_editor.my_photo_editor.ui.gallery.SystemThumbnailFetcher
 import com.google.firebase.analytics.FirebaseAnalytics
 
 class PhotoEditorApplication : Application(), ImageLoaderFactory {
@@ -24,6 +25,9 @@ class PhotoEditorApplication : Application(), ImageLoaderFactory {
         return ImageLoader.Builder(this)
             .components {
                 add(VideoFrameDecoder.Factory())
+                // Video thumbnails from the system cache (see SystemThumbnailFetcher).
+                add(SystemThumbnailFetcher.Factory())
+                add(SystemThumbnailFetcher.Keyer())
             }
             .crossfade(true)
             .build()

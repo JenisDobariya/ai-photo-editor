@@ -1,0 +1,300 @@
+<!doctype html>
+<!-- Play Store phone screenshots, 1080x1920 (9:16). Rendered by render.py with ?s=1..8.
+     Slides 2 and 7 use real app screens (shots/). Slides 1, 3, 4, 5 and 6 are faithful
+     recreations of the real screens (same layout, colours and text), with illustrated
+     pictures drawn in code instead of personal photos. Slide 8 is a feature overview. -->
+<html><head><meta charset="utf-8">
+<style>
+  :root{--bg:#0F1114;--surface:#181B20;--outline:#2A2E35;--accent:#3D8BFD;--gold:#5AA9FF;
+        --teal:#3DD6C4;--danger:#FF6B6B;--t1:#F2F4F7;--t2:#9BA3AF;--t3:#6B727D}
+  html,body{margin:0;width:1080px;height:1920px;overflow:hidden}
+  body{font-family:"Segoe UI","Roboto","Noto Sans",Arial,sans-serif;color:var(--t1);
+       background:radial-gradient(circle at 50% 18%,rgba(61,139,253,.30),rgba(61,139,253,0) 55%),
+                  linear-gradient(180deg,#121A2B 0%,#0F1114 60%,#0B0D10 100%);}
+  .s{display:none}
+  .cap{position:absolute;top:96px;left:70px;right:70px;text-align:center}
+  .cap h2{margin:0;font-size:76px;line-height:1.08;font-weight:800;letter-spacing:-1px}
+  .cap h2 em{font-style:normal;color:var(--gold)}
+  .cap p{margin:26px 0 0;font-size:38px;line-height:1.3;color:var(--t2);font-weight:500}
+  .phone{position:absolute;left:50%;top:520px;width:820px;height:1640px;margin-left:-410px;border-radius:72px;
+         background:#05070A;padding:22px;box-sizing:border-box;box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 3px #2A2F36}
+  .screen{position:relative;width:100%;height:100%;border-radius:54px;overflow:hidden;background:var(--bg)}
+  .screen>img{width:100%;display:block}
+  /* recreated screens are laid out at real device pixels (1080 wide) and scaled into the frame */
+  .vp{position:absolute;left:0;top:0;width:1080px;height:1918px;transform:scale(.718519);transform-origin:0 0;background:var(--bg);overflow:hidden}
+  .vp *{box-sizing:border-box}
+  svg.i{width:66px;height:66px;fill:var(--t1)}
+  .tabTitle{position:absolute;left:60px;top:70px;font-size:66px;font-weight:700}
+  .hdr{position:absolute;left:0;right:0;top:0;height:200px;display:flex;align-items:center;padding:0 48px 0 30px}
+  .hdr .back{width:110px;height:110px;display:flex;align-items:center;justify-content:center}
+  .hdr .back svg{width:62px;height:62px;stroke:var(--t1);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .hdr .tt{margin-left:20px;flex:1}
+  .hdr .tt b{display:block;font-size:56px;font-weight:700}
+  .hdr .tt span{display:block;font-size:36px;color:var(--t2);font-weight:600;margin-top:4px}
+  .save{background:var(--accent);color:#fff;font-weight:700;font-size:42px;border-radius:16px;padding:0 60px;height:106px;display:flex;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:18px;height:106px;padding:0 40px;border-radius:16px;background:#1B1E23;border:3px solid var(--outline);font-size:40px;font-weight:600;color:var(--t2);white-space:nowrap}
+  .chip.on{background:#17325A;border-color:var(--accent);color:var(--t1)}
+  .nav{position:absolute;left:0;right:0;bottom:0;height:200px;background:#1A1F27;display:flex;justify-content:space-around;align-items:center}
+  .nav div{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:38px;font-weight:600;color:var(--t2)}
+  .nav div.on{color:var(--accent)} .nav svg{width:70px;height:70px;fill:currentColor}
+  .sec{display:flex;justify-content:space-between;align-items:baseline;padding:0 48px;font-size:52px;font-weight:700}
+  .sec span{font-size:40px;color:var(--t2);font-weight:600}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:30px}
+  .grid4 .th{position:relative;aspect-ratio:1/1;overflow:hidden}
+  .th svg{width:100%;height:100%;display:block}
+  .dur{position:absolute;right:16px;bottom:12px;font-size:34px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+  .dur svg{width:42px;height:42px;fill:#fff}
+  .grid8{position:absolute;top:400px;left:70px;right:70px;display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .card{background:#181B20;border:2px solid #2A2E35;border-radius:8px;padding:38px 34px;min-height:262px;box-sizing:border-box}
+  .card b{display:block;font-size:44px;font-weight:700;margin:26px 0 12px}
+  .card span{font-size:31px;color:#9BA3AF;line-height:1.3}
+  .ico{width:84px;height:84px;border-radius:6px;background:#17325A;display:flex;align-items:center;justify-content:center}
+  .ico svg{width:46px;height:46px}
+  .foot{position:absolute;bottom:80px;left:0;right:0;text-align:center;font-size:32px;color:#6B727D}
+</style></head>
+<body>
+
+<!-- 1: gallery timeline (recreation) -->
+<div class="s" id="s1">
+  <div class="cap"><h2>A fast, <em>beautiful</em><br>gallery</h2><p>All your photos and videos, smooth and organised</p></div>
+  <div class="phone"><div class="screen"><div class="vp">
+    <div class="tabTitle">Photos</div>
+    <svg class="i" style="position:absolute;right:170px;top:78px" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <svg class="i" style="position:absolute;right:50px;top:78px" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+    <div style="position:absolute;left:36px;top:240px;display:flex;gap:26px">
+      <span class="chip on">All</span><span class="chip">Photos</span><span class="chip">Videos</span><span class="chip">Favorites</span>
+    </div>
+    <div style="position:absolute;left:48px;top:410px;font-size:50px;font-weight:700;display:flex;align-items:center;gap:22px">
+      <svg viewBox="0 0 24 24" style="width:60px;height:60px;fill:var(--accent)"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>On this day</div>
+    <div style="position:absolute;left:48px;top:520px;display:flex;gap:26px" id="mem"></div>
+    <div style="position:absolute;left:0;right:0;top:1130px">
+      <div class="sec">Today <span>8 items</span></div>
+      <div class="grid4" id="g1"></div>
+      <div class="sec" style="margin-top:56px">Yesterday <span>6 items</span></div>
+      <div class="grid4" id="g2"></div>
+    </div>
+    <div class="nav" id="nav1"></div>
+  </div></div></div>
+</div>
+
+<!-- 2: smart tools (real screen) -->
+<div class="s" id="s2">
+  <div class="cap"><h2>Smart <em>AI tools</em><br>right on your phone</h2><p>Cutout, copy text, enhance, blur faces, scan and more</p></div>
+  <div class="phone"><div class="screen"><img src="shots/studio_top.png"></div></div>
+</div>
+
+<!-- 3: AI cutout (recreation) -->
+<div class="s" id="s3">
+  <div class="cap"><h2>Remove backgrounds<br><em>in one tap</em></h2><p>Clean cutouts of people, pets and objects</p></div>
+  <div class="phone"><div class="screen"><div class="vp">
+    <div class="hdr"><div class="back"><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></div>
+      <div class="tt"><b>AI Cutout &amp; Blur</b></div>
+      <svg viewBox="0 0 24 24" style="width:70px;height:70px;margin-right:40px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round"><path d="M9 5.5H6.5a1.25 1.25 0 0 0-1.25 1.25v10.5c0 .69.56 1.25 1.25 1.25H9M15 5.5h2.5c.69 0 1.25.56 1.25 1.25v10.5c0 .69-.56 1.25-1.25 1.25H15M12 3v18"/></svg>
+      <div class="save">Save</div></div>
+    <div style="position:absolute;left:48px;right:48px;top:230px;height:1170px;border-radius:16px;overflow:hidden;
+                background-color:#2B3038;background-image:linear-gradient(45deg,#353B44 25%,transparent 25%,transparent 75%,#353B44 75%),linear-gradient(45deg,#353B44 25%,transparent 25%,transparent 75%,#353B44 75%);
+                background-size:80px 80px;background-position:0 0,40px 40px;display:flex;align-items:flex-end;justify-content:center">
+      <svg viewBox="0 0 400 520" style="width:660px;margin-bottom:50px">
+        <path d="M200 300 C 120 250, 60 200, 70 120 C 140 140, 190 200, 200 300z" fill="#2E8B57"/>
+        <path d="M200 300 C 280 240, 350 210, 340 110 C 270 140, 215 200, 200 300z" fill="#3BAA6A"/>
+        <path d="M200 300 C 170 210, 160 110, 205 30 C 250 110, 235 210, 200 300z" fill="#45C07A"/>
+        <path d="M200 305 C 140 300, 70 300, 30 250 C 100 225, 165 250, 200 305z" fill="#27774B"/>
+        <path d="M200 305 C 260 300, 335 300, 372 252 C 300 228, 235 252, 200 305z" fill="#2F9A5F"/>
+        <path d="M205 40 L200 300 M80 128 L198 296 M332 118 L203 296" stroke="#1E5E3A" stroke-width="3" fill="none"/>
+        <path d="M120 300 h160 l-22 200 h-116z" fill="#D9774A"/><rect x="108" y="292" width="184" height="34" rx="6" fill="#E88B5C"/>
+        <path d="M134 380 h132" stroke="#C4643A" stroke-width="6"/>
+      </svg>
+    </div>
+    <div style="position:absolute;left:48px;right:48px;top:1470px;display:flex;align-items:center;gap:26px">
+      <span style="font-size:40px;color:var(--t2);font-weight:600;width:110px">Edge</span>
+      <span class="chip" style="flex:1;justify-content:center;background:var(--accent);border-color:var(--accent);color:#fff">Smooth</span>
+      <span class="chip" style="flex:1;justify-content:center;border-color:transparent">Crisp</span>
+      <span class="chip" style="flex:1;justify-content:center;border-color:transparent">Soft</span></div>
+    <div style="position:absolute;left:48px;right:48px;top:1650px;display:flex;gap:26px">
+      <span class="chip" style="flex:1;justify-content:center;background:var(--accent);border-color:var(--accent);color:#fff">Cutout</span>
+      <span class="chip" style="flex:1;justify-content:center;border-color:transparent">Portrait Blur</span>
+      <span class="chip" style="flex:1;justify-content:center;border-color:transparent">Color Backdrop</span></div>
+  </div></div></div>
+</div>
+
+<!-- 4: copy text (recreation) -->
+<div class="s" id="s4">
+  <div class="cap"><h2>Copy <em>text</em> from<br>any photo</h2><p>Select words, then copy or share them</p></div>
+  <div class="phone"><div class="screen"><div class="vp" style="background:#000">
+    <div class="hdr" style="background:#000"><div class="back"><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></div>
+      <div class="tt"><b>Copy text</b></div><span style="font-size:44px;font-weight:700">All text</span></div>
+    <div style="position:absolute;left:0;right:0;top:220px;height:1300px;overflow:hidden;
+                background:repeating-linear-gradient(90deg,#5A3B26 0 120px,#634129 120px 240px,#55381F 240px 330px)">
+      <div id="menu" style="position:absolute;left:120px;top:60px;width:840px;padding:56px 66px 50px;background:#F7F1E6;border-radius:6px;transform:rotate(-2deg);
+                  box-shadow:0 20px 40px rgba(0,0,0,.45);color:#2B2118;font-family:Georgia,'Times New Roman',serif"></div>
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,.18);pointer-events:none"></div>
+    </div>
+    <div style="position:absolute;left:48px;top:1560px;display:flex;gap:24px">
+      <span class="chip" style="color:var(--t1);background:#1E2228;border-color:transparent">Call +1 555 0142</span>
+      <span class="chip" style="color:var(--t1);background:#1E2228;border-color:transparent">Open cafeluma.example</span></div>
+    <div style="position:absolute;left:48px;right:48px;top:1730px;display:flex;align-items:center;gap:30px">
+      <span style="flex:1;font-size:42px;font-weight:600;color:var(--t2)">2 words selected</span>
+      <span style="font-size:44px;font-weight:700">Share</span>
+      <span class="save" style="height:110px">Copy</span></div>
+  </div></div></div>
+</div>
+
+<!-- 5: clean up (recreation) -->
+<div class="s" id="s5">
+  <div class="cap"><h2>Free up <em>space</em><br>safely</h2><p>Duplicates, similar shots, blurry photos and big videos</p></div>
+  <div class="phone"><div class="screen"><div class="vp">
+    <div class="hdr"><div class="back"><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></div>
+      <div class="tt"><b>Clean up</b><span>7.3 GB can be freed</span></div></div>
+    <div style="position:absolute;left:48px;right:48px;top:220px;padding:44px 46px;background:var(--surface);border:3px solid var(--outline);border-radius:22px">
+      <div style="display:flex;align-items:center;gap:40px">
+        <div style="width:130px;height:130px;border-radius:50%;background:#17325A;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 24 24" style="width:70px;height:70px"><path fill="#5AA9FF" d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg></div>
+        <div><div style="font-size:72px;font-weight:700">7.3 GB</div><div style="font-size:40px;color:var(--t2);font-weight:600">can be freed</div></div></div>
+      <div style="margin-top:36px;font-size:34px;color:var(--t3);font-weight:600;line-height:1.35">Checked on your phone. Deleted items go to the Recycle Bin.</div>
+    </div>
+    <div style="position:absolute;left:48px;top:700px;display:flex;gap:24px">
+      <span class="chip" style="background:var(--accent);border-color:var(--accent);color:#fff">Duplicates&nbsp;&nbsp;21</span>
+      <span class="chip" style="border-color:transparent;background:#1E2228">Similar&nbsp;&nbsp;157</span>
+      <span class="chip" style="border-color:transparent;background:#1E2228">Blurry</span></div>
+    <div style="position:absolute;left:48px;right:48px;top:870px;display:flex;justify-content:space-between;font-size:38px;font-weight:600">
+      <span style="color:var(--t2)">21 groups · 21 extra copies · 92 MB</span><span style="color:var(--accent)">Deselect all</span></div>
+    <div id="dups" style="position:absolute;left:48px;right:48px;top:990px"></div>
+    <div style="position:absolute;left:48px;right:48px;bottom:60px;height:150px;border-radius:24px;background:var(--danger);display:flex;align-items:center;justify-content:center;gap:24px;font-size:46px;font-weight:700;color:#3A0D0D">
+      <svg viewBox="0 0 24 24" style="width:56px;height:56px;fill:#3A0D0D"><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg>Delete 21 items · frees 92 MB</div>
+  </div></div></div>
+</div>
+
+<!-- 6: video player (recreation) -->
+<div class="s" id="s6">
+  <div class="cap"><h2>Powerful <em>video</em><br>player</h2><p>Swipe gestures, speed, subtitles and screen lock</p></div>
+  <div class="phone"><div class="screen"><div class="vp" style="background:#000">
+    <div class="hdr" style="background:#000"><div class="back"><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></div>
+      <div class="tt"><b style="font-size:50px">Mountain trip.mp4</b><span>12 Oct 2026 · Camera</span></div>
+      <svg class="i" style="margin-left:30px" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      <svg class="i" style="margin-left:50px" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 12h4v2H4v-2zm10 6H4v-2h10v2zm6 0h-4v-2h4v2zm0-4H10v-2h10v2z"/></svg>
+      <svg class="i" style="margin-left:40px" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></div>
+    <div id="vframe" style="position:absolute;left:0;right:0;top:560px;height:608px"></div>
+    <div style="position:absolute;left:80px;top:680px;padding:26px 40px;border-radius:16px;background:rgba(0,0,0,.55);display:flex;align-items:center;gap:22px;font-size:44px;font-weight:700">
+      <svg viewBox="0 0 24 24" style="width:60px;height:60px;fill:#FFD36B"><path d="M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm0-10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/></svg>72%</div>
+    <div style="position:absolute;right:80px;top:680px;padding:20px 36px;border-radius:16px;background:rgba(61,139,253,.9);font-size:44px;font-weight:800">1.5×</div>
+    <div style="position:absolute;left:48px;right:48px;top:1400px;display:flex;align-items:center;gap:36px;font-size:44px;font-weight:700">
+      <span>1:24</span><div style="flex:1;height:10px;border-radius:5px;background:#3A3F47;position:relative">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:38%;background:var(--accent);border-radius:5px"></div>
+        <div style="position:absolute;left:38%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:var(--accent);border:6px solid #fff"></div></div><span>-2:13</span></div>
+    <div style="position:absolute;left:60px;right:60px;top:1530px;display:flex;justify-content:space-between;align-items:center">
+      <svg class="i" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg>
+      <svg class="i" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      <svg class="i" style="width:120px;height:120px" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      <svg class="i" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+      <svg class="i" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></div>
+    <div style="position:absolute;left:60px;right:60px;top:1760px;display:flex;justify-content:space-around">
+      <svg class="i" viewBox="0 0 24 24"><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></svg>
+      <svg class="i" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+      <svg class="i" viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+      <svg class="i" viewBox="0 0 24 24"><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg></div>
+  </div></div></div>
+</div>
+
+<!-- 7: create (real screen) -->
+<div class="s" id="s7">
+  <div class="cap"><h2>Create <em>collages</em>,<br>cutouts &amp; splits</h2><p>Pro-looking results in a few taps</p></div>
+  <div class="phone"><div class="screen"><img src="shots/studio_create.png"></div></div>
+</div>
+
+<!-- 8: everything in one gallery -->
+<div class="s" id="s8">
+  <div class="cap"><h2>Everything in<br><em>one gallery</em></h2></div>
+  <div class="grid8">
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#5AA9FF" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><b>Smart search</b><span>Find "dog", "food" or a date</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#3DD6C4" d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"/></svg></div><b>Clean up</b><span>Duplicates, blurry, big videos</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#5AA9FF" d="M8 5v14l11-7z"/></svg></div><b>Video player</b><span>Gestures, speed, subtitles</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#FFB547" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg></div><b>Locked Folder</b><span>Hide private photos</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#5AA9FF" d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></svg></div><b>Copy text</b><span>Select text in any photo</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#FF5C8A" d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></svg></div><b>PDF &amp; scan</b><span>Documents to PDF, fast</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#3DD6C4" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM10 17H5v-2h5v2zm0-4H5v-2h5v2zm0-4H5V7h5v2zm9 8h-7v-2h7v2zm0-4h-7v-2h7v2zm0-4h-7V7h7v2z"/></svg></div><b>Albums</b><span>Things, favourites, memories</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#FF5C8A" d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg></div><b>Video tools</b><span>Trim, mute, make GIFs</span></div>
+  </div>
+  <div class="foot">Your photos stay on your phone</div>
+</div>
+
+<script>
+/* ---------- illustrated "photos" (original artwork drawn in code) ---------- */
+function rng(seed){let s=seed*9301+49297;return()=>((s=(s*9301+49297)%233280)/233280)}
+const PAL=[
+ ['#FF9A8B','#FF6A88','#FFD3A5','#2E1F47','#4B2C5E'],
+ ['#89F7FE','#66A6FF','#E0F7FF','#1F4E79','#2C6E9B'],
+ ['#A8E063','#56AB2F','#EAF7D7','#2D5016','#3E6B1F'],
+ ['#FBD786','#F7797D','#FFF1C9','#6B3A2E','#8C4B3A'],
+ ['#C9D6FF','#7F8CFF','#F0F3FF','#2B2F5C','#3F4590'],
+ ['#43E97B','#38F9D7','#E3FFF6','#0E4D3A','#16654C'],
+ ['#F6D365','#FDA085','#FFF4D9','#5A3E2B','#7A5238'],
+ ['#E0C3FC','#8EC5FC','#F6EEFF','#3A2D5C','#55418A']
+];
+function art(seed,w,h){
+  const r=rng(seed),p=PAL[seed%PAL.length],kind=seed%5;let s='';
+  s+=`<defs><linearGradient id="g${seed}_${w}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${p[1]}"/><stop offset="1" stop-color="${p[0]}"/></linearGradient></defs>`;
+  s+=`<rect width="${w}" height="${h}" fill="url(#g${seed}_${w})"/>`;
+  const sx=w*(.2+r()*.6),sy=h*(.2+r()*.25),sr=Math.min(w,h)*(.08+r()*.06);
+  s+=`<circle cx="${sx}" cy="${sy}" r="${sr}" fill="${p[2]}" opacity=".9"/>`;
+  if(kind===0||kind===4){
+    for(let k=0;k<3;k++){const base=h*(.55+k*.13),col=k?p[4]:p[3];let d=`M0 ${h} L0 ${base}`;
+      for(let x=0;x<=w;x+=w/6){d+=` L${x} ${base-(r()*h*.25)}`}d+=` L${w} ${h}z`;s+=`<path d="${d}" fill="${col}" opacity="${.65+k*.15}"/>`}
+  }else if(kind===1){
+    s+=`<rect y="${h*.6}" width="${w}" height="${h*.4}" fill="${p[3]}"/>`;
+    for(let k=0;k<5;k++){s+=`<rect x="${r()*w*.7}" y="${h*(.65+k*.06)}" width="${w*(.15+r()*.2)}" height="${h*.012}" fill="${p[2]}" opacity=".5"/>`}
+  }else if(kind===2){
+    for(let x=0;x<w;){const bw=w*(.08+r()*.1),bh=h*(.25+r()*.4);s+=`<rect x="${x}" y="${h-bh}" width="${bw}" height="${bh}" fill="${p[3]}" opacity="${.8+r()*.2}"/>`;
+      for(let yy=h-bh+h*.04;yy<h-h*.04;yy+=h*.07)s+=`<rect x="${x+bw*.25}" y="${yy}" width="${bw*.18}" height="${h*.025}" fill="${p[2]}" opacity="${r()>.4?.8:.15}"/>`;x+=bw+w*.01}
+  }else{
+    s+=`<path d="M0 ${h*.7} Q ${w*.3} ${h*.55} ${w*.6} ${h*.68} T ${w} ${h*.62} V ${h} H0z" fill="${p[4]}"/>`;
+    s+=`<path d="M0 ${h*.82} Q ${w*.4} ${h*.72} ${w} ${h*.8} V ${h} H0z" fill="${p[3]}"/>`;
+    for(let k=0;k<7;k++){const tx=r()*w,ty=h*(.72+r()*.18),ts=h*(.04+r()*.05);s+=`<circle cx="${tx}" cy="${ty}" r="${ts}" fill="${kind===3?p[0]:p[3]}" opacity=".9"/>`}
+  }
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice">${s}</svg>`;
+}
+function thumbs(id,seeds,videos){const el=document.getElementById(id);if(!el)return;
+  seeds.forEach((sd,i)=>{const d=document.createElement('div');d.className='th';d.innerHTML=art(sd,200,200)+
+    (videos[i]?`<div class="dur"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>${videos[i]}</div>`:'');el.appendChild(d)})}
+thumbs('g1',[3,11,6,20,9,14,27,5],{2:'0:24',6:'1:08'});
+thumbs('g2',[16,8,31,2,22,13],{3:'0:12'});
+const mem=document.getElementById('mem');
+[[40,'1 year ago','12 photos · 2025'],[33,'2 years ago','8 photos · 2024'],[17,'3 years ago','15 photos · 2023']].forEach(([sd,t,s])=>{
+  mem.insertAdjacentHTML('beforeend',`<div style="position:relative;width:440px;height:560px;border-radius:22px;overflow:hidden">${art(sd,440,560)}
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.65))"></div>
+  <div style="position:absolute;left:30px;bottom:28px"><div style="font-size:48px;font-weight:700">${t}</div><div style="font-size:36px;font-weight:600;opacity:.9">${s}</div></div></div>`)});
+document.getElementById('nav1').innerHTML=`<div class="on"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>Photos</div>
+ <div><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 8H9v-2h6v2z"/></svg>Albums</div>
+ <div><svg viewBox="0 0 24 24"><path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.996.996 0 0 0-1.41 0L1.29 18.96a.996.996 0 0 0 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05a.996.996 0 0 0 0-1.41l-2.33-2.35z"/></svg>Studio</div>
+ <div><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile</div>`;
+
+/* cafe menu (illustration) with word highlights; the selected line is in accent like the real screen */
+const lines=[['CAFÉ','LUMA'],['Fresh','coffee','&','bakes'],[],['Cappuccino','140'],['Cold','coffee','160'],['Masala','chai','60'],['Blueberry','muffin','120'],['Butter','croissant','110'],[],['Open','daily','8am','–','10pm'],['+1','555','0142']];
+const sel=3; let html='';
+lines.forEach((ws,li)=>{if(!ws.length){html+='<div style="height:40px"></div>';return}
+  const big=li===0, sub=li===1, price=ws.length>1&&ws[0]!=='+1'&&/^\d+$/.test(ws[ws.length-1]);
+  const style=big?'font-size:90px;font-weight:700;letter-spacing:4px;text-align:center':sub?'font-size:44px;font-style:italic;text-align:center;color:#6B5A4A':'font-size:54px';
+  const words=ws.map(w=>`<span style="padding:2px 8px;border-radius:6px;${li===sel?'background:rgba(61,139,253,.42);outline:3px solid #3D8BFD':'background:rgba(255,255,255,.55)'}">${w}</span>`);
+  if(price&&!big){html+=`<div style="${style};display:flex;justify-content:space-between;margin:22px 0;position:relative"><span>${words.slice(0,-1).join(' ')}</span>${words[words.length-1]}
+    ${li===sel?'<i style="position:absolute;left:-24px;top:-30px;width:30px;height:30px;border-radius:50%;background:#3D8BFD"></i><i style="position:absolute;right:-24px;bottom:-30px;width:30px;height:30px;border-radius:50%;background:#3D8BFD"></i>':''}</div>`}
+  else html+=`<div style="${style};margin:14px 0">${words.join(' ')}</div>`});
+document.getElementById('menu').innerHTML=html;
+
+/* duplicate groups */
+const dups=document.getElementById('dups');
+[[7,'Dec 27, 2026 · frees 12 MB','12 MB'],[19,'Dec 14, 2026 · frees 9 MB','9 MB'],[28,'Nov 30, 2026 · frees 5 MB','5 MB']].forEach(([sd,sub,mb])=>{
+  const t=(best)=>`<div style="position:relative;width:300px;height:300px;border-radius:16px;overflow:hidden;${best?'':'outline:6px solid #3D8BFD;outline-offset:-6px'}">${art(sd,300,300)}
+    ${best?'<span style="position:absolute;left:16px;top:16px;background:#3DD6C4;color:#0B1F1D;font-size:30px;font-weight:700;padding:4px 14px;border-radius:8px">Best</span>':''}
+    <span style="position:absolute;right:16px;top:16px;width:58px;height:58px;border-radius:50%;${best?'border:5px solid #fff':'background:#3D8BFD;border:5px solid #fff'};display:flex;align-items:center;justify-content:center;color:#fff;font-size:34px;font-weight:900">${best?'':'✓'}</span>
+    <span style="position:absolute;left:16px;bottom:14px;background:rgba(0,0,0,.6);font-size:30px;font-weight:700;padding:4px 12px;border-radius:8px">${mb}</span></div>`;
+  dups.insertAdjacentHTML('beforeend',`<div style="margin-bottom:46px"><div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div><div style="font-size:44px;font-weight:700">2 copies</div><div style="font-size:36px;color:var(--t2);font-weight:600;margin-top:6px">${sub}</div></div>
+    <span style="font-size:40px;font-weight:700;color:var(--accent);margin-top:14px">Keep all</span></div>
+    <div style="display:flex;gap:26px;margin-top:26px">${t(true)}${t(false)}</div></div>`)});
+
+/* video frame */
+document.getElementById('vframe').innerHTML=art(10,1080,608).replace('<svg ','<svg style="width:100%;height:100%;display:block" ');
+
+var n=(new URLSearchParams(location.search).get('s'))||'1';
+document.getElementById('s'+n).style.display='block';
+</script>
+</body></html>

@@ -69,7 +69,7 @@
             android:background="@drawable/bg_circle_accent"
             android:backgroundTint="#333333"
             android:padding="8dp"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_chevron_left"
             android:rotation="270"
             android:contentDescription="Close"
             app:tint="#FFFFFF" />

@@ -14,8 +14,8 @@ android {
         applicationId = "com.photo_editor.my_photo_editor"
         minSdk = 24
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.0.5"
+        versionCode = 6
+        versionName = "1.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,6 +34,17 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+        }
+    }
+    // Smaller APKs for installing by hand: build with -PsplitApks to get one APK per
+    // processor type instead of one APK carrying all of them. Off by default, so normal
+    // builds and the Play Store bundle (.aab) are unchanged.
+    splits {
+        abi {
+            isEnable = project.hasProperty("splitApks")
+            reset()
+            include("arm64-v8a", "armeabi-v7a")
+            isUniversalApk = false
         }
     }
     compileOptions {
@@ -83,6 +94,23 @@ dependencies {
 
     // Google ML Kit On-Device Segmentation
     implementation("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
+
+    // Smart tools: all run on the phone (models are delivered by Google Play services,
+    // so the APK stays small) — no backend, no API keys, free.
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
+    implementation("com.google.android.gms:play-services-mlkit-image-labeling:16.0.8")
+    implementation("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
+    implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0-beta1")
+    // Any-subject cutout (people, pets, objects) at full resolution, via Play services
+    implementation("com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    // Video trimming / mute (same Media3 version as the player)
+    implementation("androidx.media3:media3-transformer:1.2.0")
+    implementation("androidx.media3:media3-effect:1.2.0")
+
+    // Print a photo
+    implementation("androidx.print:print:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

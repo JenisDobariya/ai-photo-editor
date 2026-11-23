@@ -34,7 +34,7 @@ class CollageView @JvmOverloads constructor(
     private val slots = mutableListOf<SlotState>()
     private var activeTemplate: CollageTemplate = CollageLayoutRepository.getTemplatesForCount(2).first()
 
-    var collageBackgroundColor: Int = Color.parseColor("#0B0F19")
+    var collageBackgroundColor: Int = Color.parseColor("#0F1114")
         set(value) {
             field = value
             invalidate()
@@ -81,7 +81,7 @@ class CollageView @JvmOverloads constructor(
     private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private val selectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = Color.parseColor("#6366F1")
+        color = Color.parseColor("#3D8BFD")
         strokeWidth = 6f
     }
 
@@ -301,7 +301,7 @@ class CollageView @JvmOverloads constructor(
                 canvas.drawBitmap(bmp, slot.matrix, bitmapPaint)
             } else {
                 // Placeholder if empty
-                bgPaint.color = Color.parseColor("#334155")
+                bgPaint.color = Color.parseColor("#2A2F36")
                 canvas.drawRect(slot.pixelRect, bgPaint)
             }
 

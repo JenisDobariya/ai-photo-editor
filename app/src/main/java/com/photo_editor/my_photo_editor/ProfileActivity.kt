@@ -105,8 +105,11 @@ class ProfileActivity : BaseActivity() {
     private fun shareApp() {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            putExtra(Intent.EXTRA_TEXT, "Check out this amazing Photo Editor app: https://play.google.com/store/apps/details?id=$packageName")
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_full_name))
+            putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.share_app_text, getString(R.string.app_full_name), "https://play.google.com/store/apps/details?id=$packageName")
+            )
         }
         startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
@@ -114,7 +117,7 @@ class ProfileActivity : BaseActivity() {
     private fun sendFeedback() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:mydjearth@gmail.com")
-            putExtra(Intent.EXTRA_SUBJECT, "Feedback for Photo Editor")
+            putExtra(Intent.EXTRA_SUBJECT, "Feedback for ${getString(R.string.app_name)}")
         }
         try {
             startActivity(intent)

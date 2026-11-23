@@ -27,14 +27,20 @@ class FastScrollerView @JvmOverloads constructor(
     private val scrollIconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_scrolling_icon)
 
     private val popupBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.parseColor("#CC1A1A1A")
+        color = ContextCompat.getColor(context, R.color.lumina_surface_high)
         style = Paint.Style.FILL
     }
 
     private val popupTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
-        textSize = 36f
+        textSize = 15f * resources.displayMetrics.scaledDensity
         textAlign = Paint.Align.CENTER
+        isFakeBoldText = true
+    }
+
+    // Auto-hide: the handle fades in while scrolling and fades out shortly after.
+    private val hideRunnable = Runnable {
+        if (!isDragging) animate().alpha(0f).setDuration(250).start()
     }
 
     private val thumbRect = RectF()
@@ -50,6 +56,7 @@ class FastScrollerView @JvmOverloads constructor(
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             if (!isDragging) {
                 updateThumbPosition()
+                if (dy != 0) showTemporarily()
             }
         }
     }
@@ -63,6 +70,18 @@ class FastScrollerView @JvmOverloads constructor(
             thumbWidth = 44f
             thumbHeight = 112f
         }
+        alpha = 0f
+    }
+
+    private fun showTemporarily() {
+        removeCallbacks(hideRunnable)
+        if (alpha < 1f) animate().alpha(1f).setDuration(120).start()
+        postDelayed(hideRunnable, HIDE_DELAY_MS)
+    }
+
+    override fun onDetachedFromWindow() {
+        removeCallbacks(hideRunnable)
+        super.onDetachedFromWindow()
     }
 
     fun attachFastScrollerToRecyclerView(rv: RecyclerView) {
@@ -135,6 +154,17 @@ class FastScrollerView @JvmOverloads constructor(
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                // Only grab the gesture when the visible handle itself is touched; anything
+                // else falls through to the grid underneath (this view is wider than the
+                // handle so the date bubble has room to draw).
+                val slop = thumbHeight * 0.4f
+                val onHandle = alpha > 0.1f &&
+                        event.x >= width - thumbWidth * 1.8f &&
+                        event.y >= thumbTop - slop && event.y <= thumbTop + thumbHeight + slop
+                if (!onHandle) return false
+                removeCallbacks(hideRunnable)
+                animate().cancel()
+                alpha = 1f
                 performClick()
                 isDragging = true
                 parent?.requestDisallowInterceptTouchEvent(true)
@@ -154,6 +184,7 @@ class FastScrollerView @JvmOverloads constructor(
                 lastTargetPosition = -1
                 parent?.requestDisallowInterceptTouchEvent(false)
                 updateThumbPosition()
+                postDelayed(hideRunnable, HIDE_DELAY_MS)
                 invalidate()
                 return true
             }
@@ -199,17 +230,22 @@ class FastScrollerView @JvmOverloads constructor(
         // Draw date popup when dragging
         if (isDragging && currentPopupText.isNotEmpty()) {
             val textWidth = popupTextPaint.measureText(currentPopupText.toString())
-            val popupWidth = textWidth + 48f
-            val popupHeight = 80f
-            val popupLeft = left - popupWidth - 24f
+            val density = resources.displayMetrics.density
+            val popupWidth = textWidth + 32f * density
+            val popupHeight = 40f * density
+            val popupLeft = (left - popupWidth - 12f * density).coerceAtLeast(0f)
             val popupTop = (top + thumbHeight / 2f - popupHeight / 2f).coerceIn(0f, height.toFloat() - popupHeight)
 
             popupRect.set(popupLeft, popupTop, popupLeft + popupWidth, popupTop + popupHeight)
-            canvas.drawRoundRect(popupRect, 16f, 16f, popupBgPaint)
+            canvas.drawRoundRect(popupRect, popupHeight / 2f, popupHeight / 2f, popupBgPaint)
 
             val fontMetrics = popupTextPaint.fontMetrics
             val textY = popupRect.centerY() - (fontMetrics.ascent + fontMetrics.descent) / 2f
             canvas.drawText(currentPopupText, 0, currentPopupText.length, popupRect.centerX(), textY, popupTextPaint)
         }
+    }
+
+    private companion object {
+        const val HIDE_DELAY_MS = 1500L
     }
 }

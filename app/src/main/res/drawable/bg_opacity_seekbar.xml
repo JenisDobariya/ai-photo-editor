@@ -4,7 +4,7 @@
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
             <solid android:color="#2A2A2A" />
-            <corners android:radius="12dp" />
+            <corners android:radius="@dimen/radius_m" />
         </shape>
     </item>
     <!-- Progress Track -->
@@ -15,7 +15,7 @@
                     android:startColor="#00000000"
                     android:endColor="#FF0000"
                     android:angle="0" />
-                <corners android:radius="12dp" />
+                <corners android:radius="@dimen/radius_m" />
             </shape>
         </clip>
     </item>

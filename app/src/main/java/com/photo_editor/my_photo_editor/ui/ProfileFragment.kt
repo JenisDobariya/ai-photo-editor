@@ -10,13 +10,23 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import android.text.format.Formatter
+import com.photo_editor.my_photo_editor.HiddenMediaActivity
 import com.photo_editor.my_photo_editor.R
+import com.photo_editor.my_photo_editor.TrashActivity
 import com.photo_editor.my_photo_editor.databinding.FragmentProfileBinding
+import kotlinx.coroutines.launch
+import java.util.Locale
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +39,21 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+        observeLibraryStats()
+    }
+
+    private fun observeLibraryStats() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.libraryStats.collect { stats ->
+                    binding.tvStatPhotos.text = String.format(Locale.getDefault(), "%,d", stats.photoCount)
+                    binding.tvStatVideos.text = String.format(Locale.getDefault(), "%,d", stats.videoCount)
+                    binding.tvStatAlbums.text = String.format(Locale.getDefault(), "%,d", stats.albumCount)
+                    binding.tvStatFavorites.text = String.format(Locale.getDefault(), "%,d", stats.favoriteCount)
+                    binding.tvStatStorage.text = Formatter.formatShortFileSize(requireContext(), stats.totalBytes)
+                }
+            }
+        }
     }
 
     private fun setupUI() {
@@ -40,6 +65,15 @@ class ProfileFragment : Fragment() {
 //        setupItem(binding.itemNotifications.root, R.drawable.ic_settings, "Notifications", "On") {
 //            Toast.makeText(requireContext(), "Notification settings coming soon", Toast.LENGTH_SHORT).show()
 //        }
+
+        // Gallery Section
+        setupItem(binding.itemRecycleBin.root, R.drawable.ic_g_delete, "Recycle Bin", "30 days") {
+            startActivity(Intent(requireContext(), TrashActivity::class.java))
+        }
+
+        setupItem(binding.itemLockedFolder.root, R.drawable.ic_g_lock, "Locked Folder", "Private") {
+            startActivity(Intent(requireContext(), HiddenMediaActivity::class.java))
+        }
 
         // Support Section
         setupItem(binding.itemRateUs.root, R.drawable.ic_like, "Rate Us", null) {
@@ -76,7 +110,7 @@ class ProfileFragment : Fragment() {
 
     private fun showThemeDialog() {
         val themes = arrayOf("Light", "Dark", "System Default")
-        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        AppDialog.Builder(requireContext())
             .setTitle("Choose Theme")
             .setItems(themes) { _, which ->
                 Toast.makeText(requireContext(), "Theme set to: ${themes[which]}", Toast.LENGTH_SHORT).show()
@@ -119,17 +153,22 @@ class ProfileFragment : Fragment() {
     private fun shareApp() {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            putExtra(Intent.EXTRA_TEXT, "Check out this amazing Photo Editor app: https://play.google.com/store/apps/details?id=${requireContext().packageName}")
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_full_name))
+            putExtra(
+                Intent.EXTRA_TEXT,
+                getString(
+                    R.string.share_app_text, getString(R.string.app_full_name),
+                    "https://play.google.com/store/apps/details?id=${requireContext().packageName}"
+                )
+            )
         }
         startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
 
     private fun sendFeedback() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL, arrayOf("feedback@lumina.com"))
-            putExtra(Intent.EXTRA_SUBJECT, "Feedback for Photo Editor")
+            data = Uri.parse("mailto:mydjearth@gmail.com")
+            putExtra(Intent.EXTRA_SUBJECT, "Feedback for ${getString(R.string.app_name)}")
         }
         try {
             startActivity(intent)

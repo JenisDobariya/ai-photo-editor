@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The app's only corner sizes (MX-like: minor rounding, never pills or big bubbles).
+     Use these everywhere instead of literal dp values. -->
+<resources>
+    <!-- badges, tiny pills, progress tracks -->
+    <dimen name="radius_s">4dp</dimen>
+    <!-- buttons, chips, inputs, icon tiles, thumbnails -->
+    <dimen name="radius_m">6dp</dimen>
+    <!-- cards, dialogs, popovers, sheets -->
+    <dimen name="radius_l">8dp</dimen>
+</resources>

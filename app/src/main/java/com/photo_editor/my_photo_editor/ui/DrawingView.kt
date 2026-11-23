@@ -142,21 +142,25 @@ class DrawingView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        for (p in paths) {
-            canvas.drawPath(p.path, p.paint)
-        }
+        drawStrokes(canvas)
     }
 
-    fun drawOntoCanvas(canvas: Canvas) {
-        if (paths.isEmpty() || width <= 0 || height <= 0) return
-        val scaleX = canvas.width.toFloat() / width.toFloat()
-        val scaleY = canvas.height.toFloat() / height.toFloat()
-
-        canvas.save()
-        canvas.scale(scaleX, scaleY)
+    /**
+     * Strokes are drawn in their own layer so the eraser (CLEAR) only removes strokes;
+     * without it the eraser punched through to the photo and saved black holes.
+     */
+    private fun drawStrokes(canvas: Canvas) {
+        if (paths.isEmpty()) return
+        val layer = canvas.saveLayer(null, null)
         for (p in paths) {
             canvas.drawPath(p.path, p.paint)
         }
-        canvas.restore()
+        canvas.restoreToCount(layer)
+    }
+
+    /** Draws the strokes in this view's coordinates; the caller maps them onto the photo. */
+    fun drawOntoCanvas(canvas: Canvas) {
+        if (paths.isEmpty() || width <= 0 || height <= 0) return
+        drawStrokes(canvas)
     }
 }

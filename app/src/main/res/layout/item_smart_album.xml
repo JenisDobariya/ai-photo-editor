@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="104dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:background="@drawable/bg_card_surface"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <FrameLayout
+        android:id="@+id/smartIconBg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_smart_album_icon">
+
+        <ImageView
+            android:id="@+id/ivSmartIcon"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center"
+            app:tint="@color/lumina_accent"
+            tools:src="@drawable/ic_g_heart" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvSmartTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/lumina_text_primary"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        tools:text="Favorites" />
+
+    <TextView
+        android:id="@+id/tvSmartCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/lumina_text_secondary"
+        android:textSize="11sp"
+        tools:text="24 items" />
+</LinearLayout>

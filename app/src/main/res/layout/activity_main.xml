@@ -7,77 +7,64 @@
     android:layout_height="match_parent"
     android:background="#121212">
 
-    <!-- Custom Top Bar -->
-    <RelativeLayout
+    <!-- Top bar: same pattern as the other tool screens (chevron + title left, actions right) -->
+    <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:paddingHorizontal="16dp"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            style="@style/Widget.App.TopBarIcon"
             android:id="@+id/btnBack"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_chevron_left" />
+
+        <TextView
+            style="@style/Widget.App.HeaderTitle"
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Filter" />
+
+        <ImageButton
+            android:id="@+id/btnUndo"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
+            android:alpha="0.35"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_back" />
+            android:contentDescription="Undo"
+            android:enabled="false"
+            android:padding="9dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_undo"
+            app:tint="@color/white" />
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="sans-serif-medium"
-            android:text="Studio"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/btnRedo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:alpha="0.35"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Redo"
+            android:enabled="false"
+            android:padding="9dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_redo"
+            app:tint="@color/white" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/btnSave"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/btnUndo"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_undo"
-                app:tint="@color/white"
-                android:alpha="0.4"
-                android:enabled="false" />
-
-            <ImageButton
-                android:id="@+id/btnRedo"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="4dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_redo"
-                app:tint="@color/white"
-                android:alpha="0.4"
-                android:enabled="false" />
-        </LinearLayout>
-
-        <TextView
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.App.HeaderAction"
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackground"
-            android:padding="8dp"
-            android:text="Save"
-            android:textColor="@color/lumina_gold"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:layout_marginStart="10dp"
+            android:text="Save" />
+    </LinearLayout>
 
     <!-- Preview Container -->
     <FrameLayout
@@ -322,8 +309,8 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_back"
-                        android:rotation="-90" />
+                        android:src="@drawable/ic_rotate_right"
+                        app:tint="@color/white" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -344,7 +331,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_compare" />
+                        android:src="@drawable/ic_flip" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -442,7 +429,7 @@
                         android:layout_height="56dp"
                         android:background="@drawable/bg_pill_dark"
                         android:padding="16dp"
-                        android:src="@drawable/ic_markup" />
+                        android:src="@drawable/ic_perspective_v" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -464,7 +451,7 @@
                         android:layout_height="56dp"
                         android:background="@drawable/bg_pill_dark"
                         android:padding="16dp"
-                        android:src="@drawable/ic_compare" />
+                        android:src="@drawable/ic_perspective_h" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -634,7 +621,7 @@
                     android:textColor="#000000"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    app:cornerRadius="22dp"
+                    app:cornerRadius="@dimen/radius_m"
                     app:icon="@drawable/ic_check"
                     app:iconTint="#000000"
                     app:iconSize="16dp" />

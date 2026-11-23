@@ -34,19 +34,30 @@ object ImageSaver {
         val contentResolver = context.contentResolver
         val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
-        uri?.let {
-            contentResolver.openOutputStream(it)?.use { outputStream: OutputStream ->
-                bitmap.compress(format, quality, outputStream)
-            }
+        return writeOrDelete(context, uri) { out -> bitmap.compress(format, quality, out) }
+    }
 
+    /**
+     * Writes the image and publishes it. If anything fails the half-written MediaStore row is
+     * deleted (otherwise it stays hidden with IS_PENDING=1, or shows as an empty file) and
+     * null is returned so the caller can show an error.
+     */
+    private fun writeOrDelete(context: Context, uri: Uri?, write: (OutputStream) -> Boolean): Uri? {
+        uri ?: return null
+        val resolver = context.contentResolver
+        return try {
+            val ok = resolver.openOutputStream(uri)?.use { write(it) } ?: false
+            if (!ok) throw java.io.IOException("Image encoding failed")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                contentValues.clear()
-                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0)
-                contentResolver.update(it, contentValues, null, null)
+                val done = ContentValues().apply { put(MediaStore.MediaColumns.IS_PENDING, 0) }
+                resolver.update(uri, done, null, null)
             }
+            uri
+        } catch (e: Exception) {
+            e.printStackTrace()
+            try { resolver.delete(uri, null, null) } catch (_: Exception) {}
+            null
         }
-
-        return uri
     }
 
     fun saveBitmapToMediaStore(
@@ -80,19 +91,7 @@ object ImageSaver {
         val contentResolver = context.contentResolver
         val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
-        uri?.let {
-            contentResolver.openOutputStream(it)?.use { outputStream: OutputStream ->
-                editedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                contentValues.clear()
-                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0)
-                contentResolver.update(it, contentValues, null, null)
-            }
-        }
-
-        return uri
+        return writeOrDelete(context, uri) { out -> editedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out) }
     }
 
     private fun applyAdjustments(
@@ -124,9 +123,7 @@ object ImageSaver {
             }
         }
 
-        // 2. Prepare Result Bitmap
-        val result = Bitmap.createBitmap(sourceBitmap.width, sourceBitmap.height, sourceBitmap.config ?: Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(result)
+        // 2. Build the transform first: the output size depends on the rotation.
         val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
         paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
 
@@ -159,7 +156,22 @@ object ImageSaver {
             matrix.postRotate(rotation, sourceBitmap.width / 2f, sourceBitmap.height / 2f)
         }
 
-        // 5. Draw to canvas with matrix
+        // 5. A rotated photo gets a frame that fits it (a 90° turn swaps width and height),
+        //    like the preview, instead of being cut off inside the original frame.
+        var outWidth = sourceBitmap.width
+        var outHeight = sourceBitmap.height
+        if (rotation % 360f != 0f) {
+            val bounds = RectF(0f, 0f, sourceBitmap.width.toFloat(), sourceBitmap.height.toFloat())
+            matrix.mapRect(bounds)
+            outWidth = Math.round(bounds.width()).coerceAtLeast(1)
+            outHeight = Math.round(bounds.height()).coerceAtLeast(1)
+            matrix.postTranslate(-bounds.left, -bounds.top)
+        }
+        val config = sourceBitmap.config?.takeIf {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.O || it != Bitmap.Config.HARDWARE
+        } ?: Bitmap.Config.ARGB_8888
+        val result = Bitmap.createBitmap(outWidth, outHeight, config)
+        val canvas = Canvas(result)
         canvas.drawBitmap(sourceBitmap, matrix, paint)
         
         // 6. Draw Markup & Layers on top

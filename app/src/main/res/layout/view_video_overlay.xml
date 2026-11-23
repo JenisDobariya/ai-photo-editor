@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Non-interactive feedback layer over the video: brightness/volume level, double-tap seek,
+     resize mode text and the unlock button shown while the screen is locked. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Subtitles are drawn here (full screen, bottom centre) rather than inside the video
+         frame, so they sit near the bottom of the screen like MX and keep a fixed size. -->
+    <androidx.media3.ui.SubtitleView
+        android:id="@+id/videoSubtitles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="24dp" />
+
+    <LinearLayout
+        android:id="@+id/levelIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_video_indicator"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/ivLevelIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_v_volume" />
+
+        <ProgressBar
+            android:id="@+id/levelProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="120dp"
+            android:layout_height="4dp"
+            android:layout_marginStart="12dp"
+            android:max="100"
+            android:progressDrawable="@drawable/video_level_progress"
+            tools:progress="60" />
+
+        <TextView
+            android:id="@+id/tvLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFeatureSettings="tnum"
+            android:minWidth="32dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="60" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCenterMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_video_indicator"
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="Crop" />
+
+    <LinearLayout
+        android:id="@+id/seekBackBubble"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="24dp"
+        android:background="@drawable/bg_video_seek_bubble"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_v_fast_rewind" />
+
+        <TextView
+            android:id="@+id/tvSeekBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="10 seconds" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/seekForwardBubble"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_video_seek_bubble"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_v_fast_forward" />
+
+        <TextView
+            android:id="@+id/tvSeekForward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            tools:text="10 seconds" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnUnlock"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/bg_icon_button_scrim"
+        android:contentDescription="Unlock screen"
+        android:padding="14dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_v_unlock"
+        android:visibility="gone"
+        app:tint="@color/lumina_accent" />
+</FrameLayout>

@@ -118,7 +118,7 @@
                     android:layout_marginStart="12dp"
                     android:indeterminate="true"
                     android:visibility="invisible"
-                    app:indicatorColor="@color/lumina_accent"
+                    app:indicatorColor="?attr/appAccent"
                     app:indicatorSize="22dp"
                     app:trackThickness="2dp" />
             </LinearLayout>
@@ -226,8 +226,8 @@
                 android:valueFrom="40"
                 android:valueTo="100"
                 app:labelBehavior="gone"
-                app:thumbColor="@color/lumina_accent"
-                app:trackColorActive="@color/lumina_accent"
+                app:thumbColor="?attr/appAccent"
+                app:trackColorActive="?attr/appAccent"
                 app:trackColorInactive="@color/lumina_surface_highest" />
 
             <LinearLayout
@@ -367,7 +367,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:backgroundTint="@color/lumina_accent"
+            app:backgroundTint="?attr/appAccent"
             app:cornerRadius="@dimen/radius_m" />
     </LinearLayout>
 

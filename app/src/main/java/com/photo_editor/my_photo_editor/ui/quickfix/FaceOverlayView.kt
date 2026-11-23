@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui.quickfix
 
 import android.content.Context
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
@@ -35,7 +36,7 @@ class FaceOverlayView @JvmOverloads constructor(
     private var selected: List<Boolean> = emptyList()
 
     private val density = resources.displayMetrics.density
-    private val accent = ContextCompat.getColor(context, R.color.lumina_accent)
+    private val accent = context.appColor(R.color.lumina_accent)
 
     private val selectedStroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE

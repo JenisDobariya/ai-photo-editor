@@ -177,7 +177,7 @@
             <ProgressBar
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:indeterminateTint="@color/lumina_accent" />
+                android:indeterminateTint="?attr/appAccent" />
 
             <TextView
                 android:id="@+id/tvLoadingText"
@@ -241,10 +241,10 @@
                     android:value="70"
                     android:valueFrom="0"
                     android:valueTo="100"
-                    app:haloColor="@color/lumina_accent_dim"
+                    app:haloColor="?attr/appAccentDim"
                     app:labelBehavior="gone"
-                    app:thumbColor="@color/lumina_accent"
-                    app:trackColorActive="@color/lumina_accent"
+                    app:thumbColor="?attr/appAccent"
+                    app:trackColorActive="?attr/appAccent"
                     app:trackColorInactive="@color/lumina_outline" />
 
                 <TextView
@@ -290,7 +290,7 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
                     android:text="Try again"
-                    android:textColor="@color/lumina_accent"
+                    android:textColor="?attr/appAccent"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -359,10 +359,10 @@
                     android:value="60"
                     android:valueFrom="0"
                     android:valueTo="100"
-                    app:haloColor="@color/lumina_accent_dim"
+                    app:haloColor="?attr/appAccentDim"
                     app:labelBehavior="gone"
-                    app:thumbColor="@color/lumina_accent"
-                    app:trackColorActive="@color/lumina_accent"
+                    app:thumbColor="?attr/appAccent"
+                    app:trackColorActive="?attr/appAccent"
                     app:trackColorInactive="@color/lumina_outline" />
 
                 <TextView

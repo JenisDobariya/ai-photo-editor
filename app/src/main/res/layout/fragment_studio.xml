@@ -47,7 +47,7 @@
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="3dp"
                         android:text="ON-DEVICE · PRIVATE"
-                        android:textColor="@color/lumina_gold"
+                        android:textColor="?attr/appAccentSoft"
                         android:textSize="10sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,7 @@
                         android:layout_marginEnd="12dp"
                         android:fontFamily="sans-serif-black"
                         android:text="Clean up your gallery"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="21sp"
                         app:layout_constraintEnd_toStartOf="@id/cleanupIconWrap"
                         app:layout_constraintStart_toStartOf="parent"
@@ -103,11 +103,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:visibility="gone"
-                        app:indicatorColor="@color/lumina_accent"
+                        app:indicatorColor="?attr/appAccent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tvCleanupStats"
-                        app:trackColor="#1FFFFFFF"
+                        app:trackColor="@color/studio_progress_track"
                         app:trackCornerRadius="4dp"
                         app:trackThickness="4dp" />
 
@@ -117,7 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
                         android:layout_marginTop="16dp"
-                        android:backgroundTint="@color/lumina_accent"
+                        android:backgroundTint="?attr/appAccent"
                         android:text="Start clean up"
                         android:textColor="@color/white"
                         android:textSize="13sp"
@@ -187,7 +187,7 @@
                 android:focusable="true"
                 app:cardCornerRadius="@dimen/radius_l"
                 app:cardElevation="6dp"
-                app:strokeColor="@color/lumina_accent"
+                app:strokeColor="?attr/appAccent"
                 app:strokeWidth="1.5dp">
 
                 <LinearLayout
@@ -211,7 +211,7 @@
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="3dp"
                             android:text="POPULAR"
-                            android:textColor="@color/lumina_gold"
+                            android:textColor="?attr/appAccentSoft"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
@@ -224,7 +224,7 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:src="@drawable/ic_collage_grid"
-                            app:tint="@color/white" />
+                            app:tint="@color/lumina_text_strong" />
                     </LinearLayout>
 
                     <TextView
@@ -233,7 +233,7 @@
                         android:layout_marginTop="14dp"
                         android:fontFamily="sans-serif-black"
                         android:text="Collage Maker"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="20sp" />
 
                     <TextView
@@ -242,7 +242,7 @@
                         android:layout_marginTop="6dp"
                         android:lineSpacingExtra="2dp"
                         android:text="Combine 2 to 9 photos into custom grid layouts with adjustable borders, corner radius, and canvas aspect ratios."
-                        android:textColor="#CBD5E1"
+                        android:textColor="@color/studio_card_text"
                         android:textSize="13sp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -251,7 +251,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="42dp"
                         android:layout_marginTop="16dp"
-                        android:backgroundTint="@color/lumina_accent"
+                        android:backgroundTint="?attr/appAccent"
                         android:text="Create Collage"
                         android:textColor="@color/white"
                         android:textSize="13sp"
@@ -295,7 +295,7 @@
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="3dp"
                             android:text="AI POWERED"
-                            android:textColor="@color/lumina_gold"
+                            android:textColor="?attr/appAccentSoft"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
@@ -308,7 +308,7 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:src="@drawable/ic_magic_wand"
-                            app:tint="@color/lumina_gold" />
+                            app:tint="?attr/appAccentSoft" />
                     </LinearLayout>
 
                     <TextView
@@ -317,7 +317,7 @@
                         android:layout_marginTop="14dp"
                         android:fontFamily="sans-serif-black"
                         android:text="AI Cutout &amp; Blur"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="20sp" />
 
                     <TextView
@@ -336,12 +336,12 @@
                         android:layout_height="42dp"
                         android:layout_marginTop="16dp"
                         android:text="Try Cutout"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="13sp"
                         app:cornerRadius="@dimen/radius_m"
                         app:icon="@drawable/ic_magic_wand"
-                        app:iconTint="@color/white"
-                        app:strokeColor="#64748B" />
+                        app:iconTint="@color/lumina_text_strong"
+                        app:strokeColor="@color/studio_button_stroke" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -379,7 +379,7 @@
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="3dp"
                             android:text="SHOWCASE"
-                            android:textColor="@color/lumina_gold"
+                            android:textColor="?attr/appAccentSoft"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
@@ -392,7 +392,7 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:src="@drawable/ic_compare"
-                            app:tint="#38BDF8" />
+                            app:tint="@color/studio_sky" />
                     </LinearLayout>
 
                     <TextView
@@ -401,7 +401,7 @@
                         android:layout_marginTop="14dp"
                         android:fontFamily="sans-serif-black"
                         android:text="Before &amp; After"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="20sp" />
 
                     <TextView
@@ -420,12 +420,12 @@
                         android:layout_height="42dp"
                         android:layout_marginTop="16dp"
                         android:text="Create Split"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="13sp"
                         app:cornerRadius="@dimen/radius_m"
                         app:icon="@drawable/ic_compare"
-                        app:iconTint="@color/white"
-                        app:strokeColor="#64748B" />
+                        app:iconTint="@color/lumina_text_strong"
+                        app:strokeColor="@color/studio_button_stroke" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

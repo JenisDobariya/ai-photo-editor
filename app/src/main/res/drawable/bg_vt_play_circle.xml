@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Round translucent backdrop for the centred play button on the video tools preview. -->
-<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/lumina_accent_dim">
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="?attr/appAccentDim">
     <item>
         <shape android:shape="oval">
             <solid android:color="#80000000" />

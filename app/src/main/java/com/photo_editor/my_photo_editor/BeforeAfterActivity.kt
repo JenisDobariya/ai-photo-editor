@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import android.content.Intent
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -35,6 +36,9 @@ import kotlinx.coroutines.withContext
 class BeforeAfterActivity : BaseActivity() {
 
     override fun getScreenTag(): String = "BeforeAfter"
+
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
 
     private lateinit var binding: ActivityBeforeAfterBinding
 
@@ -150,7 +154,7 @@ class BeforeAfterActivity : BaseActivity() {
             tabs.forEachIndexed { i, tv ->
                 val isSel = i == index
                 tv.setBackgroundResource(if (isSel) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                tv.setTextColor(if (isSel) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                tv.setTextColor(if (isSel) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
                 tv.setTypeface(null, if (isSel) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
             }
 
@@ -182,9 +186,9 @@ class BeforeAfterActivity : BaseActivity() {
 
                 val isSelected = position == selectedModeIndex
                 b.modeRoot.setBackgroundResource(if (isSelected) R.drawable.bg_font_card_selected else R.drawable.bg_font_card_unselected)
-                b.tvModeName.setTextColor(if (isSelected) ContextCompat.getColor(this@BeforeAfterActivity, R.color.lumina_gold) else ContextCompat.getColor(this@BeforeAfterActivity, R.color.lumina_text_secondary))
+                b.tvModeName.setTextColor(if (isSelected) this@BeforeAfterActivity.appColor(R.color.lumina_gold) else this@BeforeAfterActivity.appColor(R.color.lumina_text_secondary))
                 b.ivModeIcon.imageTintList = android.content.res.ColorStateList.valueOf(
-                    if (isSelected) ContextCompat.getColor(this@BeforeAfterActivity, R.color.lumina_gold) else ContextCompat.getColor(this@BeforeAfterActivity, R.color.lumina_text_secondary)
+                    if (isSelected) this@BeforeAfterActivity.appColor(R.color.lumina_gold) else this@BeforeAfterActivity.appColor(R.color.lumina_text_secondary)
                 )
 
                 b.modeRoot.setOnClickListener {
@@ -215,7 +219,7 @@ class BeforeAfterActivity : BaseActivity() {
 
                 val isSelected = position == selectedRatioIndex
                 tv.setBackgroundResource(if (isSelected) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                tv.setTextColor(if (isSelected) Color.WHITE else ContextCompat.getColor(this@BeforeAfterActivity, R.color.lumina_text_secondary))
+                tv.setTextColor(if (isSelected) Color.WHITE else this@BeforeAfterActivity.appColor(R.color.lumina_text_secondary))
                 tv.setTypeface(null, if (isSelected) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
 
                 tv.setOnClickListener {
@@ -244,7 +248,7 @@ class BeforeAfterActivity : BaseActivity() {
                 badgeButtons.forEach { (b, _) ->
                     val isSel = b == btn
                     b.setBackgroundResource(if (isSel) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                    b.setTextColor(if (isSel) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                    b.setTextColor(if (isSel) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
                     b.setTypeface(null, if (isSel) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
                 }
                 binding.beforeAfterView.badgeStyle = style
@@ -262,7 +266,7 @@ class BeforeAfterActivity : BaseActivity() {
                 presetButtons.forEach { (b, _) ->
                     val isSel = b == btn
                     b.setBackgroundResource(if (isSel) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                    b.setTextColor(if (isSel) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                    b.setTextColor(if (isSel) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
                     b.setTypeface(null, if (isSel) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
                 }
                 binding.beforeAfterView.beforeLabel = pair.first

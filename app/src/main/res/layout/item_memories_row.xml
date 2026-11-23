@@ -18,7 +18,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_g_history"
-            app:tint="@color/lumina_gold" />
+            app:tint="?attr/appAccentSoft" />
 
         <TextView
             android:layout_width="wrap_content"

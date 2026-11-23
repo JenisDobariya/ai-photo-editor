@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LIGHT version of drawable/bg_studio_card_accent (the dark one is unchanged). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="@dimen/radius_l" />
+    <gradient
+        android:angle="135"
+        android:startColor="?attr/appAccentContainer"
+        android:endColor="@color/lumina_surface"
+        android:type="linear" />
+    <stroke
+        android:width="1.5dp"
+        android:color="?attr/appAccent" />
+</shape>

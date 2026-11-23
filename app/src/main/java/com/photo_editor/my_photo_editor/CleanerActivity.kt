@@ -1,15 +1,18 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -162,17 +165,24 @@ class CleanerActivity : BaseActivity(), CleanerAdapter.Listener {
         }
         binding.tvTotalSize.text = if (state.loading) "—" else viewModel.formatSize(state.totalReclaimableBytes)
 
+        val isNightTheme = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+            Configuration.UI_MODE_NIGHT_YES
         chips.forEach { (c, chip) ->
             val selected = c == category
             chip.root.setBackgroundResource(if (selected) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-            val textColor = ContextCompat.getColor(this, if (selected) R.color.white else R.color.lumina_text_secondary)
+            val textColor = this.appColor(if (selected) R.color.white else R.color.lumina_text_secondary)
             chip.tvChipLabel.setTextColor(textColor)
             ImageViewCompat.setImageTintList(chip.ivChipIcon, ColorStateList.valueOf(textColor))
             val count = state.counts[c] ?: 0
             chip.tvChipCount.isVisible = !state.loading && count > 0
             chip.tvChipCount.text = count.toString()
             chip.tvChipCount.setTextColor(
-                ContextCompat.getColor(this, if (selected) R.color.lumina_on_accent_container else R.color.lumina_text_tertiary)
+                when {
+                    // Light theme: the on-container tone is too dark on the accent fill.
+                    selected && !isNightTheme -> ColorUtils.setAlphaComponent(this.appColor(R.color.white), 0xD9)
+                    selected -> this.appColor(R.color.lumina_on_accent_container)
+                    else -> this.appColor(R.color.lumina_text_tertiary)
+                }
             )
         }
 

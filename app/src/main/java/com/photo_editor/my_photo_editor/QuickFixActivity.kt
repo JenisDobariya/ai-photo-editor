@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -52,6 +53,9 @@ class QuickFixActivity : BaseActivity() {
     }
 
     override fun getScreenTag(): String = "QuickFix"
+
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
 
     private lateinit var binding: ActivityQuickFixBinding
     private val viewModel: QuickFixViewModel by viewModels()
@@ -220,8 +224,8 @@ class QuickFixActivity : BaseActivity() {
 
     private fun styleChip(chip: TextView, selected: Boolean) {
         chip.setBackgroundResource(if (selected) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-        val color = if (selected) ContextCompat.getColor(this, R.color.white)
-        else ContextCompat.getColor(this, R.color.lumina_text_secondary)
+        val color = if (selected) this.appColor(R.color.white)
+        else this.appColor(R.color.lumina_text_secondary)
         chip.setTextColor(color)
         chip.setTypeface(null, if (selected) Typeface.BOLD else Typeface.NORMAL)
         TextViewCompat.setCompoundDrawableTintList(chip, ColorStateList.valueOf(color))

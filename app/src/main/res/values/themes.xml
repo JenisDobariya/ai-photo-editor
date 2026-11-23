@@ -7,16 +7,30 @@
 
     <style name="Theme.Photo_Editor" parent="Base.Theme.Photo_Editor" />
 
-    <style name="Theme.Lumina" parent="Theme.Material3.Dark.NoActionBar">
+    <!-- Light / dark base: values/ = light, values-night/ = dark (the original look).
+         Light, Dark or System is chosen in Profile → Appearance (utils/ThemePreferences). -->
+    <style name="Base.Theme.Lumina" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+    </style>
+
+    <style name="Theme.Lumina" parent="Base.Theme.Lumina">
+        <!-- Accent roles: Blue defaults; ThemeOverlay.Accent.* replaces them (user choice) -->
+        <item name="appAccent">@color/lumina_accent</item>
+        <item name="appAccentSoft">@color/lumina_gold</item>
+        <item name="appAccentContainer">@color/lumina_accent_container</item>
+        <item name="appOnAccentContainer">@color/lumina_on_accent_container</item>
+        <item name="appAccentDim">@color/lumina_accent_dim</item>
+        <item name="appSelectionOverlay">@color/lumina_selection_overlay</item>
         <item name="android:windowBackground">@color/lumina_bg</item>
-        <item name="colorPrimary">@color/lumina_accent</item>
+        <item name="colorPrimary">?attr/appAccent</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/lumina_accent_container</item>
-        <item name="colorOnPrimaryContainer">@color/lumina_on_accent_container</item>
-        <item name="colorSecondary">@color/lumina_accent</item>
-        <item name="colorSecondaryContainer">@color/lumina_accent_container</item>
-        <item name="colorOnSecondaryContainer">@color/lumina_on_accent_container</item>
-        <item name="colorTertiary">@color/lumina_gold</item>
+        <item name="colorPrimaryContainer">?attr/appAccentContainer</item>
+        <item name="colorOnPrimaryContainer">?attr/appOnAccentContainer</item>
+        <item name="colorSecondary">?attr/appAccent</item>
+        <item name="colorSecondaryContainer">?attr/appAccentContainer</item>
+        <item name="colorOnSecondaryContainer">?attr/appOnAccentContainer</item>
+        <item name="colorTertiary">?attr/appAccentSoft</item>
         <item name="colorError">@color/lumina_danger</item>
         <item name="android:colorBackground">@color/lumina_bg</item>
         <item name="colorSurface">@color/lumina_surface</item>
@@ -32,7 +46,6 @@
         <item name="colorOutlineVariant">@color/lumina_outline</item>
         <item name="android:statusBarColor">@color/lumina_bg</item>
         <item name="android:navigationBarColor">@color/lumina_bg</item>
-        <item name="android:windowLightStatusBar">false</item>
 
         <!-- Bottom Nav Overrides -->
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
@@ -64,7 +77,7 @@
         <item name="android:minHeight">56dp</item>
         <item name="itemPaddingTop">7dp</item>
         <item name="itemPaddingBottom">7dp</item>
-        <item name="itemRippleColor">@color/lumina_accent_dim</item>
+        <item name="itemRippleColor">?attr/appAccentDim</item>
     </style>
 
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
@@ -100,20 +113,20 @@
     <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorSurface">@color/lumina_surface_high</item>
         <item name="colorSurfaceContainerHigh">@color/lumina_surface_high</item>
-        <item name="colorPrimary">@color/lumina_accent</item>
+        <item name="colorPrimary">?attr/appAccent</item>
         <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.App.Dialog</item>
     </style>
 
     <!-- AppDialog (ui/AppDialog.kt): the app's one dialog look. The card itself is
          bg_app_dialog; the window is transparent so only the rounded card shows. -->
-    <style name="ThemeOverlay.App.Dialog" parent="Theme.Material3.Dark.Dialog">
+    <style name="ThemeOverlay.App.Dialog" parent="Theme.Material3.DayNight.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowNoTitle">true</item>
         <item name="android:backgroundDimAmount">0.62</item>
         <item name="android:windowAnimationStyle">@style/Animation.App.Dialog</item>
-        <item name="colorPrimary">@color/lumina_accent</item>
-        <item name="colorAccent">@color/lumina_accent</item>
+        <item name="colorPrimary">?attr/appAccent</item>
+        <item name="colorAccent">?attr/appAccent</item>
         <item name="colorSurface">@color/lumina_surface_high</item>
         <item name="android:textColorPrimary">@color/lumina_text_primary</item>
     </style>
@@ -151,7 +164,7 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:maxLines">1</item>
         <item name="android:textColor">@color/white</item>
-        <item name="backgroundTint">@color/lumina_accent</item>
+        <item name="backgroundTint">?attr/appAccent</item>
         <item name="cornerRadius">@dimen/radius_m</item>
     </style>
 
@@ -210,7 +223,7 @@
         <item name="chipBackgroundColor">@color/chip_bg_selector</item>
         <item name="android:textColor">@color/chip_text_selector</item>
         <item name="chipIconTint">@color/chip_text_selector</item>
-        <item name="checkedIconTint">@color/lumina_on_accent_container</item>
+        <item name="checkedIconTint">?attr/appOnAccentContainer</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="chipStrokeColor">@color/chip_stroke_selector</item>
         <item name="chipCornerRadius">@dimen/radius_m</item>
@@ -243,7 +256,7 @@
     <style name="ProfileSectionHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/lumina_gold</item>
+        <item name="android:textColor">?attr/appAccentSoft</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:paddingTop">16dp</item>
@@ -270,6 +283,24 @@
         <item name="android:paddingStart">20dp</item>
         <item name="android:paddingEnd">20dp</item>
         <item name="backgroundTint">@color/header_action_bg</item>
+    </style>
+
+    <!-- Theme option tile (System / Light / Dark) in the Appearance sheet -->
+    <style name="Widget.App.AppearanceOption" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_appearance_option</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/appearance_option_text</item>
+        <item name="drawableTint">@color/appearance_option_text</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="Widget.App.TopBarIcon" parent="">

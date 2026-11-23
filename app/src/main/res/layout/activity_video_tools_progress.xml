@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:max="100"
-            app:indicatorColor="@color/lumina_accent"
+            app:indicatorColor="?attr/appAccent"
             app:trackColor="@color/lumina_surface_highest"
             app:trackCornerRadius="2dp"
             app:trackThickness="4dp" />

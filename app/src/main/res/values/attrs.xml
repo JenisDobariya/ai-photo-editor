@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Accent colour roles, set by ThemeOverlay.Accent.* (user-selectable in Settings → Appearance).
+         Use these as ?attr/appAccent etc. instead of @color/lumina_accent so the chosen colour applies. -->
+    <attr name="appAccent" format="color" />
+    <!-- lighter/brighter accent for small highlights, links and tags (was lumina_gold) -->
+    <attr name="appAccentSoft" format="color" />
+    <attr name="appAccentContainer" format="color" />
+    <attr name="appOnAccentContainer" format="color" />
+    <attr name="appAccentDim" format="color" />
+    <attr name="appSelectionOverlay" format="color" />
+</resources>

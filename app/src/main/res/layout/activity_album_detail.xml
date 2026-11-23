@@ -115,7 +115,7 @@
                 android:layout_gravity="center"
                 android:contentDescription="No data"
                 android:src="@drawable/ic_g_photo"
-                app:tint="@color/lumina_accent" />
+                app:tint="?attr/appAccent" />
         </FrameLayout>
 
         <TextView

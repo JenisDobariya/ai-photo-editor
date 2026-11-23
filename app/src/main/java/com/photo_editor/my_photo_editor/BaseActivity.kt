@@ -1,30 +1,54 @@
 package com.photo_editor.my_photo_editor
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ThemePreferences
 
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract fun getScreenTag(): String
 
+    /**
+     * Photo/video viewers and editors stay dark in every theme (photos look best on dark).
+     * Override with `true` in those screens; everything else follows Light / Dark / System.
+     */
+    protected open val alwaysDark: Boolean = false
+
+    private var appliedAccentVersion = -1
+
+    override fun attachBaseContext(newBase: Context) {
+        // Must be set before the base context is attached so no recreation is needed.
+        if (alwaysDark) delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+        super.attachBaseContext(newBase)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // User's accent colour (Profile → Appearance), applied on top of the theme.
+        theme.applyStyle(ThemePreferences.accent(this).overlay, true)
+        appliedAccentVersion = ThemePreferences.accentVersion
         super.onCreate(savedInstanceState)
         AnalyticsManager.logEvent("${getScreenTag()}_onCreate")
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        // Ensure status bar icons are light (white) on dark theme
+        // Dark icons on the light theme, light icons on the dark theme.
+        val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+            Configuration.UI_MODE_NIGHT_YES
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-        insetsController.isAppearanceLightStatusBars = false
-        insetsController.isAppearanceLightNavigationBars = false
+        insetsController.isAppearanceLightStatusBars = !isNight
+        insetsController.isAppearanceLightNavigationBars = !isNight
     }
+
 
     override fun setContentView(view: View?) {
         super.setContentView(view)
@@ -67,6 +91,8 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         AnalyticsManager.logEvent("${getScreenTag()}_onResume")
+        // The accent was changed on another screen: redraw this one with the new colour.
+        if (appliedAccentVersion != ThemePreferences.accentVersion) recreate()
     }
 
     override fun onPause() {

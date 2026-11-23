@@ -64,7 +64,7 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/iv_photo"
             app:layout_constraintTop_toTopOf="@id/iv_photo"
-            app:tint="@color/lumina_gold"
+            app:tint="?attr/appAccentSoft"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

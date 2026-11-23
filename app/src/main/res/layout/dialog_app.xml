@@ -117,7 +117,7 @@
             style="@style/Widget.App.DialogButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/lumina_accent"
+            android:textColor="?attr/appAccent"
             android:visibility="gone"
             tools:text="Share"
             tools:visibility="visible" />

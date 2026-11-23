@@ -81,7 +81,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_g_info"
-            app:tint="@color/lumina_gold" />
+            app:tint="?attr/appAccentSoft" />
 
         <TextView
             android:id="@+id/tvBanner"
@@ -131,7 +131,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_g_delete"
-                app:tint="@color/lumina_accent" />
+                app:tint="?attr/appAccent" />
         </FrameLayout>
 
         <TextView

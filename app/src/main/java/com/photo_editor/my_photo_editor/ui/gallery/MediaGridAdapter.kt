@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui.gallery
 
 import android.view.LayoutInflater
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -106,9 +107,7 @@ class MediaGridAdapter(
             select.isVisible = item.selectionMode
             select.setImageResource(if (item.allSelected) R.drawable.ic_g_check_circle else R.drawable.ic_g_circle_outline)
             select.setColorFilter(
-                ContextCompat.getColor(
-                    itemView.context,
-                    if (item.allSelected) R.color.lumina_accent else R.color.lumina_text_secondary
+                itemView.context.appColor(if (item.allSelected) R.color.lumina_accent else R.color.lumina_text_secondary
                 )
             )
             itemView.setOnClickListener {
@@ -152,7 +151,7 @@ class MediaGridAdapter(
             select.isVisible = item.selectionMode
             select.setImageResource(if (item.selected) R.drawable.ic_g_check_circle else R.drawable.ic_g_circle_outline)
             select.setColorFilter(
-                ContextCompat.getColor(itemView.context, if (item.selected) R.color.lumina_accent else R.color.white)
+                itemView.context.appColor(if (item.selected) R.color.lumina_accent else R.color.white)
             )
             selectionBg.visibility = if (item.selected) View.VISIBLE else View.INVISIBLE
             val scale = if (item.selected) 0.84f else 1f

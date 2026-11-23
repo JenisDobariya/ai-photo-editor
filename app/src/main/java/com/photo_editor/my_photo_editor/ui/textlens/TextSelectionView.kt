@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui.textlens
 
 import android.animation.ValueAnimator
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
@@ -87,7 +88,7 @@ class TextSelectionView @JvmOverloads constructor(
     private var fitBottom = 0f
 
     // ---- Look ----
-    private val accent = ContextCompat.getColor(context, R.color.lumina_accent)
+    private val accent = context.appColor(R.color.lumina_accent)
     private val boxRadius = resources.getDimension(R.dimen.radius_s)
     private val boxPad = dp(2f)
     private val handleRadius = dp(7f)

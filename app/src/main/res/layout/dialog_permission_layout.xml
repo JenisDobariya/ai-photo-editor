@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp" 
         android:text="Permission Required"
-        android:textColor="@color/white"
+        android:textColor="@color/lumina_text_strong"
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/clSettingView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/app_name"
-            android:textColor="@color/white"
+            android:textColor="@color/lumina_text_strong"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/ivAppLogo" />
@@ -86,7 +86,7 @@
                         android:layout_height="25dp"
                         android:gravity="center"
                         android:text="1."
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                         android:layout_marginStart="10dp"
                         android:gravity="left"
                         android:text="Open Setting"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -112,7 +112,7 @@
                         android:layout_height="25dp"
                         android:gravity="center"
                         android:text="2."
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -122,7 +122,7 @@
                         android:layout_marginStart="10dp"
                         android:gravity="left"
                         android:text="Click On Permission"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -138,7 +138,7 @@
                         android:layout_height="25dp"
                         android:gravity="center"
                         android:text="3."
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -148,7 +148,7 @@
                         android:layout_marginStart="10dp"
                         android:gravity="left"
                         android:text="Find And Click Storage"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -164,7 +164,7 @@
                         android:layout_height="25dp"
                         android:gravity="center"
                         android:text="4."
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -174,7 +174,7 @@
                         android:layout_marginStart="10dp"
                         android:gravity="left"
                         android:text="Click On Allow"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lumina_text_strong"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -230,7 +230,7 @@
         android:layout_height="35dp"
         android:layout_margin="10dp"
         android:background="@drawable/shape_round"
-        android:backgroundTint="@color/blue"
+        android:backgroundTint="?attr/appAccent"
         android:gravity="center"
         android:padding="5dp"
         android:text="Open Setting"

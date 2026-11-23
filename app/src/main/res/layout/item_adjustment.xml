@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_adjustment_overlay"
                 android:gravity="center"
-                android:textColor="@color/lumina_gold"
+                android:textColor="?attr/appAccentSoft"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:visibility="gone"

@@ -28,7 +28,7 @@
                 android:layout_height="26dp"
                 android:layout_gravity="center"
                 android:contentDescription="@null"
-                app:tint="@color/lumina_accent"
+                app:tint="?attr/appAccent"
                 tools:src="@drawable/ic_t_scan" />
         </FrameLayout>
 

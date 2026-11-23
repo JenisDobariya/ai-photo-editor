@@ -1,6 +1,8 @@
 package com.photo_editor.my_photo_editor.ui
 
 import android.content.Intent
+import com.photo_editor.my_photo_editor.utils.appColor
+import com.photo_editor.my_photo_editor.utils.accentColor
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -119,7 +121,7 @@ class FoldersFragment : Fragment() {
     }
 
     private fun setupSwipeRefresh() {
-        binding.swipeRefresh.setColorSchemeResources(R.color.lumina_accent)
+        binding.swipeRefresh.setColorSchemeColors(requireContext().accentColor)
         binding.swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.lumina_surface_high)
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadMedia()
@@ -406,7 +408,7 @@ class FoldersFragment : Fragment() {
         override fun onBindViewHolder(holder: VH, position: Int) {
             val item = items[position]
             holder.icon.setImageResource(item.icon)
-            holder.icon.setColorFilter(androidx.core.content.ContextCompat.getColor(holder.itemView.context, item.tint))
+            holder.icon.setColorFilter(holder.itemView.context.appColor(item.tint))
             holder.title.text = item.title
             holder.count.text = item.subtitle
             holder.itemView.setOnClickListener { onClick(item) }

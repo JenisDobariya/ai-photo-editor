@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LIGHT version of drawable/bg_stat_card (the dark one is unchanged). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:angle="135" android:startColor="?attr/appAccentContainer" android:endColor="@color/lumina_surface" />
+    <corners android:radius="@dimen/radius_l" />
+    <stroke android:width="1dp" android:color="?attr/appAccentDim" />
+</shape>

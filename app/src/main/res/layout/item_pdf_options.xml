@@ -224,7 +224,7 @@
                 android:contentDescription="Rename"
                 android:padding="6dp"
                 android:src="@drawable/ic_pdf_edit"
-                app:tint="@color/lumina_accent" />
+                app:tint="?attr/appAccent" />
         </LinearLayout>
 
         <TextView

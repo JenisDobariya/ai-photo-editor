@@ -14,17 +14,17 @@
         android:layout_height="56dp"
         android:src="@drawable/ic_exit"
         android:background="@drawable/bg_circle_accent"
-        android:backgroundTint="@color/lumina_gold_dim"
+        android:backgroundTint="?attr/appAccentDim"
         android:padding="14dp"
         android:contentDescription="Exit"
-        app:tint="@color/lumina_gold" />
+        app:tint="?attr/appAccentSoft" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Exit App"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/lumina_text_strong"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -50,9 +50,9 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             android:background="@drawable/bg_pill_dark"
-            android:backgroundTint="#2A2A2A"
+            android:backgroundTint="@color/lumina_surface_highest"
             android:text="Cancel"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/lumina_text_strong"
             android:textAllCaps="false" />
 
         <Button
@@ -62,9 +62,9 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:background="@drawable/bg_pill_dark"
-            android:backgroundTint="@color/lumina_gold"
+            android:backgroundTint="?attr/appAccentSoft"
             android:text="Exit"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textAllCaps="false" />
     </LinearLayout>
 

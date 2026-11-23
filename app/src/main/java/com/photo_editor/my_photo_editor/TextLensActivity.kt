@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import android.content.ActivityNotFoundException
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -47,6 +48,9 @@ class TextLensActivity : BaseActivity() {
     }
 
     override fun getScreenTag(): String = "TextLens"
+
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
 
     private lateinit var binding: ActivityTextLensBinding
     private val viewModel: TextLensViewModel by viewModels()
@@ -197,7 +201,7 @@ class TextLensActivity : BaseActivity() {
             else -> "Tap or drag over text to select"
         }
         b.tvStatus.setTextColor(
-            ContextCompat.getColor(this, if (selected) R.color.lumina_text_primary else R.color.lumina_text_secondary)
+            this.appColor(if (selected) R.color.lumina_text_primary else R.color.lumina_text_secondary)
         )
         b.btnSelectAll.isVisible = ready && !allSelected
         b.btnShare.isVisible = selected
@@ -220,7 +224,7 @@ class TextLensActivity : BaseActivity() {
             }
             val chip = TextView(this).apply {
                 text = label
-                setTextColor(ContextCompat.getColor(context, R.color.lumina_text_primary))
+                setTextColor(context.appColor(R.color.lumina_text_primary))
                 textSize = 13f
                 maxLines = 1
                 ellipsize = TextUtils.TruncateAt.END

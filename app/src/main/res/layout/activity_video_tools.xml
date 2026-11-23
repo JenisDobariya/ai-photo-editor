@@ -88,7 +88,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/lumina_accent" />
+                android:indeterminateTint="?attr/appAccent" />
 
             <TextView
                 android:id="@+id/tvError"
@@ -234,11 +234,11 @@
                     android:enabled="false"
                     android:valueFrom="0"
                     android:valueTo="1"
-                    app:haloColor="@color/lumina_accent_dim"
+                    app:haloColor="?attr/appAccentDim"
                     app:labelBehavior="floating"
-                    app:thumbColor="@color/lumina_accent"
+                    app:thumbColor="?attr/appAccent"
                     app:thumbRadius="9dp"
-                    app:trackColorActive="@color/lumina_accent"
+                    app:trackColorActive="?attr/appAccent"
                     app:trackColorInactive="@color/lumina_surface_highest"
                     app:trackHeight="4dp" />
 

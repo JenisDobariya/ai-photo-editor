@@ -24,6 +24,8 @@ import java.util.Locale
 
 class ProfileFragment : Fragment() {
 
+    private val appearanceViewModel: AppearanceViewModel by activityViewModels()
+
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainViewModel by activityViewModels()
@@ -40,6 +42,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         observeLibraryStats()
+        observeAppearance()
     }
 
     private fun observeLibraryStats() {
@@ -67,6 +70,14 @@ class ProfileFragment : Fragment() {
 //        }
 
         // Gallery Section
+        // Appearance: Light / Dark / System and accent colour (values follow the ViewModel state)
+        setupItem(binding.itemThemeMode.root, R.drawable.ic_g_theme, "Theme", appearanceViewModel.state.value.mode.label) {
+            openAppearance()
+        }
+        setupItem(binding.itemAccent.root, R.drawable.ic_g_palette, "Accent colour", appearanceViewModel.state.value.accent.label) {
+            openAppearance()
+        }
+
         setupItem(binding.itemRecycleBin.root, R.drawable.ic_g_delete, "Recycle Bin", "30 days") {
             startActivity(Intent(requireContext(), TrashActivity::class.java))
         }
@@ -108,14 +119,21 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun showThemeDialog() {
-        val themes = arrayOf("Light", "Dark", "System Default")
-        AppDialog.Builder(requireContext())
-            .setTitle("Choose Theme")
-            .setItems(themes) { _, which ->
-                Toast.makeText(requireContext(), "Theme set to: ${themes[which]}", Toast.LENGTH_SHORT).show()
+    private fun openAppearance() {
+        if (childFragmentManager.findFragmentByTag(AppearanceBottomSheet.TAG) == null) {
+            AppearanceBottomSheet().show(childFragmentManager, AppearanceBottomSheet.TAG)
+        }
+    }
+
+    private fun observeAppearance() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                appearanceViewModel.state.collect { state ->
+                    binding.itemThemeMode.root.findViewById<TextView>(R.id.tvItemValue).text = state.mode.label
+                    binding.itemAccent.root.findViewById<TextView>(R.id.tvItemValue).text = state.accent.label
+                }
             }
-            .show()
+        }
     }
 
     private fun setupItem(

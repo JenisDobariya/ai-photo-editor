@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Accent colour overlays (Settings → Appearance). Generated with a contrast check:
+     dark tones; white text on the accent stays readable. Blue is the default. -->
+<resources>
+    <style name="ThemeOverlay.Accent.Blue" parent="">
+        <item name="appAccent">#3D8BFD</item>
+        <item name="appAccentSoft">#5AA9FF</item>
+        <item name="appAccentContainer">#17325A</item>
+        <item name="appOnAccentContainer">#D5E5FF</item>
+        <item name="appAccentDim">#333D8BFD</item>
+        <item name="appSelectionOverlay">#663D8BFD</item>
+        <item name="colorPrimary">#3D8BFD</item>
+        <item name="colorSecondary">#3D8BFD</item>
+        <item name="colorTertiary">#5AA9FF</item>
+        <item name="colorPrimaryContainer">#17325A</item>
+        <item name="colorSecondaryContainer">#17325A</item>
+        <item name="colorOnPrimaryContainer">#D5E5FF</item>
+        <item name="colorOnSecondaryContainer">#D5E5FF</item>
+        <item name="android:colorAccent">#3D8BFD</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Indigo" parent="">
+        <item name="appAccent">#6E7BFF</item>
+        <item name="appAccentSoft">#929CFF</item>
+        <item name="appAccentContainer">#2C315B</item>
+        <item name="appOnAccentContainer">#E2E5FF</item>
+        <item name="appAccentDim">#336E7BFF</item>
+        <item name="appSelectionOverlay">#666E7BFF</item>
+        <item name="colorPrimary">#6E7BFF</item>
+        <item name="colorSecondary">#6E7BFF</item>
+        <item name="colorTertiary">#929CFF</item>
+        <item name="colorPrimaryContainer">#2C315B</item>
+        <item name="colorSecondaryContainer">#2C315B</item>
+        <item name="colorOnPrimaryContainer">#E2E5FF</item>
+        <item name="colorOnSecondaryContainer">#E2E5FF</item>
+        <item name="android:colorAccent">#6E7BFF</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Purple" parent="">
+        <item name="appAccent">#A06BF5</item>
+        <item name="appAccentSoft">#B890F8</item>
+        <item name="appAccentContainer">#3B2C58</item>
+        <item name="appOnAccentContainer">#ECE1FD</item>
+        <item name="appAccentDim">#33A06BF5</item>
+        <item name="appSelectionOverlay">#66A06BF5</item>
+        <item name="colorPrimary">#A06BF5</item>
+        <item name="colorSecondary">#A06BF5</item>
+        <item name="colorTertiary">#B890F8</item>
+        <item name="colorPrimaryContainer">#3B2C58</item>
+        <item name="colorSecondaryContainer">#3B2C58</item>
+        <item name="colorOnPrimaryContainer">#ECE1FD</item>
+        <item name="colorOnSecondaryContainer">#ECE1FD</item>
+        <item name="android:colorAccent">#A06BF5</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Pink" parent="">
+        <item name="appAccent">#EC4D9A</item>
+        <item name="appAccentSoft">#F17AB3</item>
+        <item name="appAccentContainer">#51233C</item>
+        <item name="appOnAccentContainer">#FBDBEB</item>
+        <item name="appAccentDim">#33EC4D9A</item>
+        <item name="appSelectionOverlay">#66EC4D9A</item>
+        <item name="colorPrimary">#EC4D9A</item>
+        <item name="colorSecondary">#EC4D9A</item>
+        <item name="colorTertiary">#F17AB3</item>
+        <item name="colorPrimaryContainer">#51233C</item>
+        <item name="colorSecondaryContainer">#51233C</item>
+        <item name="colorOnPrimaryContainer">#FBDBEB</item>
+        <item name="colorOnSecondaryContainer">#FBDBEB</item>
+        <item name="android:colorAccent">#EC4D9A</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Red" parent="">
+        <item name="appAccent">#EF5350</item>
+        <item name="appAccentSoft">#F37E7C</item>
+        <item name="appAccentContainer">#522526</item>
+        <item name="appOnAccentContainer">#FCDDDC</item>
+        <item name="appAccentDim">#33EF5350</item>
+        <item name="appSelectionOverlay">#66EF5350</item>
+        <item name="colorPrimary">#EF5350</item>
+        <item name="colorSecondary">#EF5350</item>
+        <item name="colorTertiary">#F37E7C</item>
+        <item name="colorPrimaryContainer">#522526</item>
+        <item name="colorSecondaryContainer">#522526</item>
+        <item name="colorOnPrimaryContainer">#FCDDDC</item>
+        <item name="colorOnSecondaryContainer">#FCDDDC</item>
+        <item name="android:colorAccent">#EF5350</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Orange" parent="">
+        <item name="appAccent">#E2621C</item>
+        <item name="appAccentSoft">#E98955</item>
+        <item name="appAccentContainer">#4E2916</item>
+        <item name="appOnAccentContainer">#F9E0D2</item>
+        <item name="appAccentDim">#33E2621C</item>
+        <item name="appSelectionOverlay">#66E2621C</item>
+        <item name="colorPrimary">#E2621C</item>
+        <item name="colorSecondary">#E2621C</item>
+        <item name="colorTertiary">#E98955</item>
+        <item name="colorPrimaryContainer">#4E2916</item>
+        <item name="colorSecondaryContainer">#4E2916</item>
+        <item name="colorOnPrimaryContainer">#F9E0D2</item>
+        <item name="colorOnSecondaryContainer">#F9E0D2</item>
+        <item name="android:colorAccent">#E2621C</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Green" parent="">
+        <item name="appAccent">#22A85C</item>
+        <item name="appAccentSoft">#59BE85</item>
+        <item name="appAccentContainer">#153E2A</item>
+        <item name="appOnAccentContainer">#D3EEDE</item>
+        <item name="appAccentDim">#3322A85C</item>
+        <item name="appSelectionOverlay">#6622A85C</item>
+        <item name="colorPrimary">#22A85C</item>
+        <item name="colorSecondary">#22A85C</item>
+        <item name="colorTertiary">#59BE85</item>
+        <item name="colorPrimaryContainer">#153E2A</item>
+        <item name="colorSecondaryContainer">#153E2A</item>
+        <item name="colorOnPrimaryContainer">#D3EEDE</item>
+        <item name="colorOnSecondaryContainer">#D3EEDE</item>
+        <item name="android:colorAccent">#22A85C</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Teal" parent="">
+        <item name="appAccent">#14A5A0</item>
+        <item name="appAccentSoft">#4FBCB8</item>
+        <item name="appAccentContainer">#103D3E</item>
+        <item name="appOnAccentContainer">#D0EDEC</item>
+        <item name="appAccentDim">#3314A5A0</item>
+        <item name="appSelectionOverlay">#6614A5A0</item>
+        <item name="colorPrimary">#14A5A0</item>
+        <item name="colorSecondary">#14A5A0</item>
+        <item name="colorTertiary">#4FBCB8</item>
+        <item name="colorPrimaryContainer">#103D3E</item>
+        <item name="colorSecondaryContainer">#103D3E</item>
+        <item name="colorOnPrimaryContainer">#D0EDEC</item>
+        <item name="colorOnSecondaryContainer">#D0EDEC</item>
+        <item name="android:colorAccent">#14A5A0</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Cyan" parent="">
+        <item name="appAccent">#1590CE</item>
+        <item name="appAccentSoft">#50ACDA</item>
+        <item name="appAccentContainer">#11374C</item>
+        <item name="appOnAccentContainer">#D0E9F5</item>
+        <item name="appAccentDim">#331590CE</item>
+        <item name="appSelectionOverlay">#661590CE</item>
+        <item name="colorPrimary">#1590CE</item>
+        <item name="colorSecondary">#1590CE</item>
+        <item name="colorTertiary">#50ACDA</item>
+        <item name="colorPrimaryContainer">#11374C</item>
+        <item name="colorSecondaryContainer">#11374C</item>
+        <item name="colorOnPrimaryContainer">#D0E9F5</item>
+        <item name="colorOnSecondaryContainer">#D0E9F5</item>
+        <item name="android:colorAccent">#1590CE</item>
+    </style>
+    <style name="ThemeOverlay.Accent.Slate" parent="">
+        <item name="appAccent">#7A8AA3</item>
+        <item name="appAccentSoft">#9BA7BA</item>
+        <item name="appAccentContainer">#2F353F</item>
+        <item name="appOnAccentContainer">#E4E8ED</item>
+        <item name="appAccentDim">#337A8AA3</item>
+        <item name="appSelectionOverlay">#667A8AA3</item>
+        <item name="colorPrimary">#7A8AA3</item>
+        <item name="colorSecondary">#7A8AA3</item>
+        <item name="colorTertiary">#9BA7BA</item>
+        <item name="colorPrimaryContainer">#2F353F</item>
+        <item name="colorSecondaryContainer">#2F353F</item>
+        <item name="colorOnPrimaryContainer">#E4E8ED</item>
+        <item name="colorOnSecondaryContainer">#E4E8ED</item>
+        <item name="android:colorAccent">#7A8AA3</item>
+    </style>
+</resources>

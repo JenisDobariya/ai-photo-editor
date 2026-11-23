@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui
 
 import android.app.Dialog
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
@@ -63,7 +64,7 @@ class AppDialog private constructor(
         b.dialogTitle.isVisible = !spec.title.isNullOrEmpty()
         val icon = spec.icon
         if (icon != null) {
-            val tint = ContextCompat.getColor(context, spec.iconTint)
+            val tint = context.appColor(spec.iconTint)
             b.dialogIconWrap.isVisible = true
             b.dialogIconWrap.background = GradientDrawable().apply {
                 shape = GradientDrawable.OVAL

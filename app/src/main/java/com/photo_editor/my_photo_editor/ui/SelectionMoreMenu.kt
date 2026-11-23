@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui
 
 import android.text.InputType
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
@@ -93,8 +94,8 @@ object SelectionMoreMenu {
             hint = "Album name"
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
             setSingleLine()
-            setTextColor(ContextCompat.getColor(activity, R.color.lumina_text_primary))
-            setHintTextColor(ContextCompat.getColor(activity, R.color.lumina_text_tertiary))
+            setTextColor(activity.appColor(R.color.lumina_text_primary))
+            setHintTextColor(activity.appColor(R.color.lumina_text_tertiary))
         }
         val pad = (22 * activity.resources.displayMetrics.density).toInt()
         val container = FrameLayout(activity).apply {
@@ -125,7 +126,7 @@ object SelectionMoreMenu {
             setSelection(current.length)
             inputType = InputType.TYPE_CLASS_TEXT
             setSingleLine()
-            setTextColor(ContextCompat.getColor(activity, R.color.lumina_text_primary))
+            setTextColor(activity.appColor(R.color.lumina_text_primary))
         }
         val pad = (22 * activity.resources.displayMetrics.density).toInt()
         val container = FrameLayout(activity).apply {

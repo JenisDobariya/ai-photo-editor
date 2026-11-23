@@ -5,7 +5,7 @@
         <layer-list>
             <item android:width="28dp" android:height="96dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/lumina_gold" />
+                    <solid android:color="?attr/appAccentSoft" />
                     <corners android:radius="@dimen/radius_m" />
                 </shape>
             </item>
@@ -15,7 +15,7 @@
         <layer-list>
             <item android:width="24dp" android:height="84dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/lumina_gold" />
+                    <solid android:color="?attr/appAccentSoft" />
                     <corners android:radius="@dimen/radius_m" />
                 </shape>
             </item>

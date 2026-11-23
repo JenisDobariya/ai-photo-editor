@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent_swatch_blue">#3D8BFD</color>
+    <color name="accent_swatch_indigo">#6E7BFF</color>
+    <color name="accent_swatch_purple">#A06BF5</color>
+    <color name="accent_swatch_pink">#EC4D9A</color>
+    <color name="accent_swatch_red">#EF5350</color>
+    <color name="accent_swatch_orange">#E2621C</color>
+    <color name="accent_swatch_green">#22A85C</color>
+    <color name="accent_swatch_teal">#14A5A0</color>
+    <color name="accent_swatch_cyan">#1590CE</color>
+    <color name="accent_swatch_slate">#7A8AA3</color>
+</resources>

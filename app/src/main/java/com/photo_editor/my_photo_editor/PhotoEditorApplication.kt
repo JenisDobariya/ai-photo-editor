@@ -12,6 +12,8 @@ class PhotoEditorApplication : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+        // Light / Dark / System (Profile → Appearance)
+        com.photo_editor.my_photo_editor.utils.ThemePreferences.applyNightMode(this)
         instanceOfApplication = this
         pFirebaseAnalytics = try {
             FirebaseAnalytics.getInstance(this)

@@ -1,8 +1,8 @@
 package com.photo_editor.my_photo_editor.ui
 
 import android.content.Context
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
@@ -27,12 +27,12 @@ class FastScrollerView @JvmOverloads constructor(
     private val scrollIconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_scrolling_icon)
 
     private val popupBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.lumina_surface_high)
+        color = context.appColor(R.color.lumina_surface_high)
         style = Paint.Style.FILL
     }
 
     private val popupTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
+        color = context.appColor(R.color.lumina_text_strong)
         textSize = 15f * resources.displayMetrics.scaledDensity
         textAlign = Paint.Align.CENTER
         isFakeBoldText = true

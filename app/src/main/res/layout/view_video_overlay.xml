@@ -140,5 +140,5 @@
         android:scaleType="fitCenter"
         android:src="@drawable/ic_v_unlock"
         android:visibility="gone"
-        app:tint="@color/lumina_accent" />
+        app:tint="?attr/appAccent" />
 </FrameLayout>

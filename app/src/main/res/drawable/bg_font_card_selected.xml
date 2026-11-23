@@ -5,5 +5,5 @@
     <corners android:radius="@dimen/radius_m" />
     <stroke
         android:width="2dp"
-        android:color="@color/lumina_gold" />
+        android:color="?attr/appAccentSoft" />
 </shape>

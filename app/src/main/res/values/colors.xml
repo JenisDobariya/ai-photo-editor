@@ -4,45 +4,55 @@
     <color name="white">#FFFFFFFF</color>
 
     <!--
-        App palette (MX-style dark): near-black surfaces, one clear blue accent,
-        a lighter blue for small highlights, neutral grey text.
-        Resource names are kept so every screen picks the new colours up automatically.
+        LIGHT theme palette. The dark palette (unchanged) lives in values-night/colors.xml with the
+        same names, so every screen switches automatically with the Light / Dark / System setting.
+        Photo/video viewers and editors always use the dark palette (BaseActivity.alwaysDark).
+        Accent colours come from ?attr/appAccent (user-selectable); the lumina_accent* values below
+        are only the Blue defaults.
     -->
-    <color name="lumina_bg">#0F1114</color>
-    <color name="lumina_surface">#181B20</color>
-    <color name="lumina_surface_high">#21252B</color>
-    <color name="lumina_surface_highest">#2A2F36</color>
-    <color name="lumina_outline">#2A2E35</color>
-    <color name="lumina_search_bg">#1E2127</color>
-    <color name="lumina_accent">#3D8BFD</color>
-    <color name="lumina_accent_dim">#333D8BFD</color>
-    <color name="lumina_accent_container">#17325A</color>
-    <color name="lumina_on_accent_container">#D5E5FF</color>
-    <color name="lumina_gold">#5AA9FF</color>
-    <color name="lumina_gold_dim">#335AA9FF</color>
-    <color name="lumina_text_primary">#F2F4F7</color>
-    <color name="lumina_text_secondary">#9BA3AF</color>
-    <color name="lumina_text_tertiary">#6B727D</color>
-    <color name="lumina_chip_unselected">#1B1E23</color>
-    <color name="lumina_favorite">#FF5C8A</color>
-    <color name="lumina_teal">#3DD6C4</color>
-    <color name="lumina_danger">#FF6B6B</color>
+    <color name="lumina_bg">#F6F7F9</color>
+    <color name="lumina_surface">#FFFFFF</color>
+    <color name="lumina_surface_high">#EEF1F5</color>
+    <color name="lumina_surface_highest">#E3E7ED</color>
+    <color name="lumina_outline">#DDE2E9</color>
+    <color name="lumina_search_bg">#ECEFF3</color>
+    <color name="lumina_accent">#1A66D6</color>
+    <color name="lumina_accent_dim">#331A66D6</color>
+    <color name="lumina_accent_container">#DFEAF9</color>
+    <color name="lumina_on_accent_container">#0E3876</color>
+    <color name="lumina_gold">#185EC5</color>
+    <color name="lumina_gold_dim">#33185EC5</color>
+    <color name="lumina_text_primary">#15181D</color>
+    <!-- pure white text in dark (as before), dark text in light -->
+    <color name="lumina_text_strong">#15181D</color>
+    <color name="lumina_text_secondary">#5A6370</color>
+    <color name="lumina_text_tertiary">#8B939E</color>
+    <color name="lumina_chip_unselected">#EEF1F5</color>
+    <color name="lumina_favorite">#E0356B</color>
+    <color name="lumina_teal">#0E9484</color>
+    <color name="lumina_danger">#D6363C</color>
     <!-- Studio tool tints -->
-    <color name="studio_violet">#9B7BFF</color>
-    <color name="studio_amber">#FFB547</color>
+    <color name="studio_violet">#7A5AF0</color>
+    <color name="studio_amber">#C97C06</color>
     <color name="lumina_scrim">#B3000000</color>
     <color name="lumina_scrim_light">#66000000</color>
-    <color name="lumina_selection_overlay">#663D8BFD</color>
-    <color name="lumina_bar_translucent">#E60F1114</color>
+    <color name="lumina_selection_overlay">#661A66D6</color>
+    <color name="lumina_bar_translucent">#E6F6F7F9</color>
+
+    <!-- Studio cards (fragment_studio): dark values = the original literals -->
+    <color name="studio_card_text">#4A5361</color>
+    <color name="studio_button_stroke">#B4BCC7</color>
+    <color name="studio_sky">#0280BE</color>
+    <color name="studio_progress_track">#1F000000</color>
 
     <!-- Legacy names kept for existing screens -->
-    <color name="darkBlue">#181B20</color>
-    <color name="lightBlue">#5AA9FF</color>
-    <color name="blue">#3D8BFD</color>
-    <color name="app_bg_blue">#0F1114</color>
-    <color name="lightNevyBlue">#21252B</color>
-    <color name="background_app">#0F1114</color>
-    <color name="logo_color">#3D8BFD</color>
+    <color name="darkBlue">#FFFFFF</color>
+    <color name="lightBlue">#185EC5</color>
+    <color name="blue">#1A66D6</color>
+    <color name="app_bg_blue">#F6F7F9</color>
+    <color name="lightNevyBlue">#EEF1F5</color>
+    <color name="background_app">#F6F7F9</color>
+    <color name="logo_color">#1A66D6</color>
     <color name="transparent">#00000000</color>
 
 </resources>

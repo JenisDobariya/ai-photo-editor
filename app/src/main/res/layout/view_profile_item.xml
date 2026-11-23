@@ -16,7 +16,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_settings"
-        app:tint="@color/lumina_gold" />
+        app:tint="?attr/appAccentSoft" />
 
     <TextView
         android:id="@+id/tvItemTitle"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_weight="1"
-        android:textColor="@color/white"
+        android:textColor="@color/lumina_text_strong"
         android:textSize="16sp"
         tools:text="Settings Item" />
 
@@ -45,6 +45,6 @@
         android:alpha="0.5"
         android:src="@drawable/ic_chevron_left"
         android:rotation="180"
-        app:tint="@color/white" />
+        app:tint="@color/lumina_text_strong" />
 
 </LinearLayout>

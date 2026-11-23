@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/lumina_accent_dim">
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="?attr/appAccentDim">
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/lumina_surface_high" />

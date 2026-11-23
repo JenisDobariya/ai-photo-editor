@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.accentColor
 import android.content.ContentUris
 import android.content.Intent
 import android.os.Bundle
@@ -112,7 +113,7 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
     }
 
     private fun setupSwipeRefresh() {
-        binding.swipeRefresh.setColorSchemeResources(R.color.lumina_accent)
+        binding.swipeRefresh.setColorSchemeColors(this.accentColor)
         binding.swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.lumina_surface_high)
         binding.swipeRefresh.setOnRefreshListener {
             loadAlbumMedia()

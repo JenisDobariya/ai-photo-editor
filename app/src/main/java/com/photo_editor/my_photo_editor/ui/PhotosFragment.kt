@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui
 
 import android.content.Intent
+import com.photo_editor.my_photo_editor.utils.accentColor
 import android.net.Uri
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
@@ -111,7 +112,7 @@ class PhotosFragment : Fragment(), MediaGridAdapter.Listener {
     }
 
     private fun setupSwipeRefresh() {
-        binding.swipeRefresh.setColorSchemeResources(R.color.lumina_accent)
+        binding.swipeRefresh.setColorSchemeColors(requireContext().accentColor)
         binding.swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.lumina_surface_high)
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadMedia()

@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.ContentUris
 import android.content.Intent
 import android.graphics.Bitmap
@@ -69,6 +70,9 @@ import kotlin.math.abs
 class PhotoDetailActivity : BaseActivity() {
 
     override fun getScreenTag(): String = "PhotoDetail"
+
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
 
     private lateinit var binding: ActivityPhotoDetailBinding
     private var initialUri: Uri? = null
@@ -749,7 +753,7 @@ class PhotoDetailActivity : BaseActivity() {
         binding.btnLike.isSelected = isFavorite
         binding.btnLike.setImageResource(if (isFavorite) R.drawable.ic_g_heart else R.drawable.ic_g_heart_outline)
         binding.btnLike.setColorFilter(
-            if (isFavorite) ContextCompat.getColor(this, R.color.lumina_favorite)
+            if (isFavorite) this.appColor(R.color.lumina_favorite)
             else android.graphics.Color.WHITE
         )
         if (isFavorite) {

@@ -64,7 +64,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/lumina_accent"
+            android:indeterminateTint="?attr/appAccent"
             android:visibility="gone" />
     </FrameLayout>
 
@@ -192,8 +192,8 @@
                         android:layout_weight="1"
                         android:max="40"
                         android:progress="8"
-                        android:progressTint="@color/lumina_accent"
-                        android:thumbTint="@color/lumina_accent" />
+                        android:progressTint="?attr/appAccent"
+                        android:thumbTint="?attr/appAccent" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -217,8 +217,8 @@
                         android:layout_weight="1"
                         android:max="30"
                         android:progress="6"
-                        android:progressTint="@color/lumina_accent"
-                        android:thumbTint="@color/lumina_accent" />
+                        android:progressTint="?attr/appAccent"
+                        android:thumbTint="?attr/appAccent" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -242,8 +242,8 @@
                         android:layout_weight="1"
                         android:max="40"
                         android:progress="8"
-                        android:progressTint="@color/lumina_accent"
-                        android:thumbTint="@color/lumina_accent" />
+                        android:progressTint="?attr/appAccent"
+                        android:thumbTint="?attr/appAccent" />
                 </LinearLayout>
             </LinearLayout>
 

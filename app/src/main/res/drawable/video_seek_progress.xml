@@ -21,7 +21,7 @@
             <shape android:shape="rectangle">
                 <size android:height="3dp" />
                 <corners android:radius="2dp" />
-                <solid android:color="@color/lumina_accent" />
+                <solid android:color="?attr/appAccent" />
             </shape>
         </scale>
     </item>

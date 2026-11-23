@@ -15,7 +15,7 @@
         app:cardBackgroundColor="#000000"
         app:cardCornerRadius="@dimen/radius_m"
         app:cardElevation="0dp"
-        app:strokeColor="@color/lumina_gold"
+        app:strokeColor="?attr/appAccentSoft"
         app:strokeWidth="0dp">
 
         <FrameLayout
@@ -37,7 +37,7 @@
                 android:background="#80000000"
                 android:gravity="center"
                 android:text="78"
-                android:textColor="@color/lumina_gold"
+                android:textColor="?attr/appAccentSoft"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:visibility="gone"
@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@color/lumina_gold"
+                android:background="?attr/appAccentSoft"
                 android:gravity="center"
                 android:paddingVertical="2dp"
                 android:text="NC Film"

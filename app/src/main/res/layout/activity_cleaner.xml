@@ -89,7 +89,7 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_g_pie"
-                        app:tint="@color/lumina_accent" />
+                        app:tint="?attr/appAccent" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -152,7 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    app:indicatorColor="@color/lumina_accent"
+                    app:indicatorColor="?attr/appAccent"
                     app:trackColor="@color/lumina_surface_highest"
                     app:trackCornerRadius="2dp"
                     app:trackThickness="4dp" />
@@ -222,7 +222,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:paddingHorizontal="12dp"
-                android:textColor="@color/lumina_accent"
+                android:textColor="?attr/appAccent"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 tools:text="Select all" />
@@ -248,7 +248,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/lumina_accent" />
+                android:indeterminateTint="?attr/appAccent" />
 
             <LinearLayout
                 android:id="@+id/empty_state"
@@ -274,7 +274,7 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_g_check_circle"
-                        app:tint="@color/lumina_accent" />
+                        app:tint="?attr/appAccent" />
                 </FrameLayout>
 
                 <TextView

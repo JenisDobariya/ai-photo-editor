@@ -38,6 +38,9 @@ class CollageActivity : BaseActivity() {
 
     override fun getScreenTag(): String = "Collage"
 
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
+
     private lateinit var binding: ActivityCollageBinding
     private val selectedUris = mutableListOf<Uri>()
     private var replaceSlotIndex: Int = -1

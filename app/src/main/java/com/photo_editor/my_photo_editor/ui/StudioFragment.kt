@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui
 
 import android.app.Activity
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -285,7 +286,7 @@ class StudioFragment : Fragment() {
         override fun onBindViewHolder(holder: VH, position: Int) {
             val item = items[position]
             holder.icon.setImageResource(item.icon)
-            holder.icon.setColorFilter(ContextCompat.getColor(holder.itemView.context, item.tint))
+            holder.icon.setColorFilter(holder.itemView.context.appColor(item.tint))
             holder.title.text = item.title
             holder.badge.isVisible = item.badge != null
             holder.badge.text = item.badge

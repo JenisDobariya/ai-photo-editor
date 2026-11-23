@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui.cleaner
 
 import android.content.res.ColorStateList
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -102,7 +103,7 @@ class CleanerAdapter(private val listener: Listener) :
             binding.ivCheck.setImageResource(if (row.selected) R.drawable.ic_g_check_circle else R.drawable.ic_g_circle_outline)
             ImageViewCompat.setImageTintList(
                 binding.ivCheck,
-                ColorStateList.valueOf(ContextCompat.getColor(ctx, if (row.selected) R.color.lumina_accent else R.color.white))
+                ColorStateList.valueOf(ctx.appColor(if (row.selected) R.color.lumina_accent else R.color.white))
             )
             binding.checkTouch.contentDescription = if (row.selected) "Selected for deletion" else "Not selected"
         }

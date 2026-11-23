@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import android.content.Context
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -65,6 +66,9 @@ import kotlin.math.roundToInt
 class PhotoEditorActivity : BaseActivity() {
 
     override fun getScreenTag(): String = "PhotoEditor"
+
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: PhotoEditorViewModel by viewModels()
@@ -972,7 +976,7 @@ class PhotoEditorActivity : BaseActivity() {
             tabs.forEachIndexed { index, tv ->
                 val isSel = index == tab
                 tv.setBackgroundResource(if (isSel) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                tv.setTextColor(if (isSel) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                tv.setTextColor(if (isSel) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
                 tv.setTypeface(null, if (isSel) Typeface.BOLD else Typeface.NORMAL)
             }
 
@@ -1089,13 +1093,13 @@ class PhotoEditorActivity : BaseActivity() {
         // Alignment Chips
         fun updateAlignUI(gravity: Int) {
             binding.btnAlignLeft.setBackgroundResource(if (gravity == Gravity.START) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-            binding.btnAlignLeft.setTextColor(if (gravity == Gravity.START) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+            binding.btnAlignLeft.setTextColor(if (gravity == Gravity.START) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
 
             binding.btnAlignCenter.setBackgroundResource(if (gravity == Gravity.CENTER) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-            binding.btnAlignCenter.setTextColor(if (gravity == Gravity.CENTER) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+            binding.btnAlignCenter.setTextColor(if (gravity == Gravity.CENTER) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
 
             binding.btnAlignRight.setBackgroundResource(if (gravity == Gravity.END) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-            binding.btnAlignRight.setTextColor(if (gravity == Gravity.END) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+            binding.btnAlignRight.setTextColor(if (gravity == Gravity.END) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
         }
 
         binding.btnAlignLeft.setOnClickListener {
@@ -1116,7 +1120,7 @@ class PhotoEditorActivity : BaseActivity() {
             val selected = getSelectedTextLayer()
             val isBold = ((selected?.content as? LayerContent.Text)?.isBold ?: false).not()
             binding.btnBold.setBackgroundResource(if (isBold) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-            binding.btnBold.setTextColor(if (isBold) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+            binding.btnBold.setTextColor(if (isBold) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
             if (selected != null) viewModel.updateLayerFormat(selected, isBold = isBold)
         }
 
@@ -1124,7 +1128,7 @@ class PhotoEditorActivity : BaseActivity() {
             val selected = getSelectedTextLayer()
             val isItalic = ((selected?.content as? LayerContent.Text)?.isItalic ?: false).not()
             binding.btnItalic.setBackgroundResource(if (isItalic) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-            binding.btnItalic.setTextColor(if (isItalic) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+            binding.btnItalic.setTextColor(if (isItalic) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
             if (selected != null) viewModel.updateLayerFormat(selected, isItalic = isItalic)
         }
 
@@ -1132,7 +1136,7 @@ class PhotoEditorActivity : BaseActivity() {
             val selected = getSelectedTextLayer()
             val isAllCaps = ((selected?.content as? LayerContent.Text)?.isAllCaps ?: false).not()
             binding.btnAllCaps.setBackgroundResource(if (isAllCaps) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-            binding.btnAllCaps.setTextColor(if (isAllCaps) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+            binding.btnAllCaps.setTextColor(if (isAllCaps) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
             if (selected != null) viewModel.updateLayerFormat(selected, isAllCaps = isAllCaps)
         }
 
@@ -1161,7 +1165,7 @@ class PhotoEditorActivity : BaseActivity() {
 
                 val isSelected = position == activeFontIndex
                 cardRoot.setBackgroundResource(if (isSelected) R.drawable.bg_font_card_selected else R.drawable.bg_font_card_unselected)
-                tvName.setTextColor(if (isSelected) ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_gold) else ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_text_secondary))
+                tvName.setTextColor(if (isSelected) this@PhotoEditorActivity.appColor(R.color.lumina_gold) else this@PhotoEditorActivity.appColor(R.color.lumina_text_secondary))
 
                 cardRoot.setOnClickListener {
                     val prev = activeFontIndex
@@ -1237,7 +1241,7 @@ class PhotoEditorActivity : BaseActivity() {
 
                 val isSelected = position == activeShadowIndex
                 tv.setBackgroundResource(if (isSelected) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                tv.setTextColor(if (isSelected) Color.WHITE else ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_text_secondary))
+                tv.setTextColor(if (isSelected) Color.WHITE else this@PhotoEditorActivity.appColor(R.color.lumina_text_secondary))
                 tv.setTypeface(null, if (isSelected) Typeface.BOLD else Typeface.NORMAL)
 
                 tv.setOnClickListener {
@@ -1284,7 +1288,7 @@ class PhotoEditorActivity : BaseActivity() {
                     tv.setTextColor(badge.textColor)
                 } else {
                     tv.setBackgroundResource(if (isSelected) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                    tv.setTextColor(if (isSelected) Color.WHITE else ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_text_secondary))
+                    tv.setTextColor(if (isSelected) Color.WHITE else this@PhotoEditorActivity.appColor(R.color.lumina_text_secondary))
                 }
 
                 tv.setOnClickListener {
@@ -1380,7 +1384,7 @@ class PhotoEditorActivity : BaseActivity() {
                     chip.setTypeface(null, android.graphics.Typeface.BOLD)
                 } else {
                     chip.setBackgroundResource(R.drawable.bg_chip_unselected)
-                    chip.setTextColor(ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_text_secondary))
+                    chip.setTextColor(this@PhotoEditorActivity.appColor(R.color.lumina_text_secondary))
                     chip.setTypeface(null, android.graphics.Typeface.NORMAL)
                 }
 
@@ -2036,23 +2040,23 @@ class PhotoEditorActivity : BaseActivity() {
 
                 // Sync formatting chips
                 binding.btnBold.setBackgroundResource(if (content.isBold) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                binding.btnBold.setTextColor(if (content.isBold) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                binding.btnBold.setTextColor(if (content.isBold) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
 
                 binding.btnItalic.setBackgroundResource(if (content.isItalic) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                binding.btnItalic.setTextColor(if (content.isItalic) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                binding.btnItalic.setTextColor(if (content.isItalic) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
 
                 binding.btnAllCaps.setBackgroundResource(if (content.isAllCaps) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                binding.btnAllCaps.setTextColor(if (content.isAllCaps) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                binding.btnAllCaps.setTextColor(if (content.isAllCaps) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
 
                 // Sync alignment
                 binding.btnAlignLeft.setBackgroundResource(if (content.alignment == Gravity.START) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                binding.btnAlignLeft.setTextColor(if (content.alignment == Gravity.START) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                binding.btnAlignLeft.setTextColor(if (content.alignment == Gravity.START) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
 
                 binding.btnAlignCenter.setBackgroundResource(if (content.alignment == Gravity.CENTER) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                binding.btnAlignCenter.setTextColor(if (content.alignment == Gravity.CENTER) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                binding.btnAlignCenter.setTextColor(if (content.alignment == Gravity.CENTER) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
 
                 binding.btnAlignRight.setBackgroundResource(if (content.alignment == Gravity.END) R.drawable.bg_chip_selected else R.drawable.bg_chip_unselected)
-                binding.btnAlignRight.setTextColor(if (content.alignment == Gravity.END) Color.WHITE else ContextCompat.getColor(this, R.color.lumina_text_secondary))
+                binding.btnAlignRight.setTextColor(if (content.alignment == Gravity.END) Color.WHITE else this.appColor(R.color.lumina_text_secondary))
             } else {
                 binding.btnAddText.text = "Add"
             }
@@ -2089,8 +2093,8 @@ class PhotoEditorActivity : BaseActivity() {
             holder.b.tvModeName.text = mode.name
             holder.b.ivModeIcon.setImageResource(mode.iconRes)
             val isSelected = selectedIndex == position
-            holder.b.tvModeName.setTextColor(if (isSelected) ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_gold) else Color.WHITE)
-            holder.b.ivModeIcon.imageTintList = android.content.res.ColorStateList.valueOf(if (isSelected) ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_gold) else Color.WHITE)
+            holder.b.tvModeName.setTextColor(if (isSelected) this@PhotoEditorActivity.appColor(R.color.lumina_gold) else Color.WHITE)
+            holder.b.ivModeIcon.imageTintList = android.content.res.ColorStateList.valueOf(if (isSelected) this@PhotoEditorActivity.appColor(R.color.lumina_gold) else Color.WHITE)
             holder.itemView.setOnClickListener {
                 val old = selectedIndex
                 val currentPosition = holder.adapterPosition
@@ -2194,7 +2198,7 @@ class PhotoEditorActivity : BaseActivity() {
             }
             holder.binding.filterCard.strokeWidth = if (isSelected) 4 else 0
             holder.binding.tvFilterName.setTextColor(
-                if (isSelected) ContextCompat.getColor(this@PhotoEditorActivity, R.color.lumina_gold)
+                if (isSelected) this@PhotoEditorActivity.appColor(R.color.lumina_gold)
                 else Color.parseColor("#808080")
             )
             holder.itemView.setOnClickListener {

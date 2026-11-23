@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -74,6 +75,9 @@ class VideoToolsActivity : BaseActivity() {
     }
 
     override fun getScreenTag(): String = "VideoTools"
+
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
 
     private lateinit var binding: ActivityVideoToolsBinding
     private val viewModel: VideoToolsViewModel by viewModels()
@@ -485,7 +489,7 @@ class VideoToolsActivity : BaseActivity() {
         binding.tvRange.text = "${formatTime(s.startMs)} – ${formatTime(s.endMs)} · ${formatSpan(s.spanMs)}" +
             if (over) " (max 15 s)" else ""
         binding.tvRange.setTextColor(
-            ContextCompat.getColor(this, if (over) R.color.lumina_danger else R.color.lumina_text_primary)
+            this.appColor(if (over) R.color.lumina_danger else R.color.lumina_text_primary)
         )
     }
 

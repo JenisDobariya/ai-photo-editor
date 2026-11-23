@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui
 
 import android.content.Context
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -25,7 +26,7 @@ class StraightenRulerView @JvmOverloads constructor(
 
     private val centerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = try {
-            ContextCompat.getColor(context, R.color.lumina_gold)
+            context.appColor(R.color.lumina_gold)
         } catch (_: Exception) {
             Color.parseColor("#FFB300")
         }

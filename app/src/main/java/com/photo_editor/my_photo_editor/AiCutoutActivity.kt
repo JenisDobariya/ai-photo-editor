@@ -39,6 +39,9 @@ class AiCutoutActivity : BaseActivity() {
 
     override fun getScreenTag(): String = "AiCutout"
 
+    // Photos look best on dark: this screen stays dark in every theme.
+    override val alwaysDark = true
+
     private lateinit var binding: ActivityAiCutoutBinding
     private var imageUri: Uri? = null
 

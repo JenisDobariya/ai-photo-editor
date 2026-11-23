@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor.ui.video
 
 import android.content.ContentValues
+import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -1253,7 +1254,7 @@ class VideoPlayerController(
     private fun buildQuickTools() {
         val row = quickTools.quickItems
         row.removeAllViews()
-        val accent = ContextCompat.getColor(activity, R.color.lumina_accent)
+        val accent = activity.appColor(R.color.lumina_accent)
         quickToolList().forEach { tool ->
             val item = LinearLayout(activity).apply {
                 orientation = LinearLayout.VERTICAL

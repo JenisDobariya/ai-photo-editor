@@ -90,7 +90,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginBottom="10dp"
-            android:indeterminateTint="@color/lumina_accent" />
+            android:indeterminateTint="?attr/appAccent" />
 
         <TextView
             android:id="@+id/tvCenterTitle"
@@ -261,7 +261,7 @@
                 android:lineSpacingExtra="3dp"
                 android:padding="14dp"
                 android:textColor="@color/lumina_text_primary"
-                android:textColorLink="@color/lumina_gold"
+                android:textColorLink="?attr/appAccentSoft"
                 android:textIsSelectable="true"
                 android:textSize="15sp"
                 tools:text="WIFI: HomeNet\nPassword: blue-sky-42" />

@@ -1,6 +1,8 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.appColor
+import com.photo_editor.my_photo_editor.utils.accentColor
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -67,7 +69,7 @@ class TrashActivity : BaseActivity() {
         })
         binding.rvTrash.layoutManager = GridLayoutManager(this, 3)
         binding.rvTrash.adapter = adapter
-        binding.swipeRefresh.setColorSchemeResources(R.color.lumina_accent)
+        binding.swipeRefresh.setColorSchemeColors(this.accentColor)
         binding.swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.lumina_surface_high)
         binding.swipeRefresh.setOnRefreshListener { viewModel.load() }
 
@@ -196,7 +198,7 @@ class TrashActivity : BaseActivity() {
             holder.days.text = if (daysLeft == 1) "1 day" else "$daysLeft days"
             holder.select.setImageResource(if (row.selected) R.drawable.ic_g_check_circle else R.drawable.ic_g_circle_outline)
             holder.select.setColorFilter(
-                ContextCompat.getColor(holder.itemView.context, if (row.selected) R.color.lumina_accent else R.color.white)
+                holder.itemView.context.appColor(if (row.selected) R.color.lumina_accent else R.color.white)
             )
             holder.overlay.isVisible = row.selected
             holder.itemView.setOnClickListener { onClick(row.item) }

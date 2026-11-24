@@ -10,6 +10,9 @@
     <!-- Light / dark base: values/ = light, values-night/ = dark (the original look).
          Light, Dark or System is chosen in Profile → Appearance (utils/ThemePreferences). -->
     <style name="Base.Theme.Lumina" parent="Theme.Material3.Light.NoActionBar">
+        <!-- softer press/ripple highlight on light backgrounds (dark keeps the default) -->
+        <item name="colorControlHighlight">#1A15181D</item>
+        <item name="android:colorControlHighlight">#1A15181D</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
@@ -22,6 +25,7 @@
         <item name="appOnAccentContainer">@color/lumina_on_accent_container</item>
         <item name="appAccentDim">@color/lumina_accent_dim</item>
         <item name="appSelectionOverlay">@color/lumina_selection_overlay</item>
+        <item name="appAccentOutline">@color/lumina_accent_outline</item>
         <item name="android:windowBackground">@color/lumina_bg</item>
         <item name="colorPrimary">?attr/appAccent</item>
         <item name="colorOnPrimary">@color/white</item>

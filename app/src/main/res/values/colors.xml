@@ -17,6 +17,7 @@
     <color name="lumina_outline">#DDE2E9</color>
     <color name="lumina_search_bg">#ECEFF3</color>
     <color name="lumina_accent">#1A66D6</color>
+    <color name="lumina_accent_outline">#591A66D6</color>
     <color name="lumina_accent_dim">#331A66D6</color>
     <color name="lumina_accent_container">#DFEAF9</color>
     <color name="lumina_on_accent_container">#0E3876</color>

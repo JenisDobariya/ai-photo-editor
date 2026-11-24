@@ -12,7 +12,8 @@ play-store/
 ├── policy/
 │   ├── console_checklist.md          Step-by-step Play Console checklist for this update
 │   ├── data_safety.md                Exact Data safety answers + related declarations
-│   └── privacy_policy.md             Updated privacy policy text (fill in the [brackets])
+│   ├── privacy_policy.md             Complete privacy policy (Markdown)
+│   └── privacy_policy.html           Same policy, ready to paste into Blogger (HTML view)
 └── graphics/
     ├── icon/icon_512.png                               App icon, 512×512 PNG
     ├── feature-graphic/feature_graphic_1024x500.png    Feature graphic, 1024×500 PNG
@@ -46,7 +47,7 @@ To add more screenshots, put a clean phone capture (status bar cropped, **no per
 
 ## Notes
 - The icon is the app's own launcher artwork, converted 1:1 from `app/src/main/res/drawable/ic_launcher_*.xml`.
-- Screenshots 02 and 07 are real app screens with no personal photos. 01, 03, 04, 05 and 06 recreate the real screens (same layout, colours and text) in `screenshot.html`, with illustrated pictures drawn in code in place of personal photos. 08 is a feature overview.
-- Order: 01 Gallery · 02 Smart AI tools · 03 AI Cutout · 04 Copy text · 05 Clean up · 06 Video player · 07 Create · 08 Everything in one gallery.
+- Screenshots 02 and 07 are real app screens with no personal photos (07 shows the light theme with Green accent next to the dark theme). 01, 03, 04, 05 and 06 recreate the real screens (same layout, colours and text) in `screenshot.html`, with illustrated pictures drawn in code in place of personal photos. 08 is a feature overview.
+- Order: 01 Gallery · 02 Smart AI tools · 03 AI Cutout · 04 Copy text · 05 Clean up · 06 Video player · 07 Light & dark themes, accent colours · 08 Everything in one gallery.
 - Wording follows Play's metadata rules: no "best", "#1", "free" or emoji in the title, no claims of "no tracking" or "fully offline", and no other apps' brand names.
 - Recommended before publishing: a trademark search for "Gallerai". An older Android app called "GallerAI" exists.

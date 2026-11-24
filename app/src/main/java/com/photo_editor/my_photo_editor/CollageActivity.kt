@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.accentContainerColor
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -373,7 +374,7 @@ class CollageActivity : BaseActivity() {
             holder.icon.setImageDrawable(com.photo_editor.my_photo_editor.ui.CollagePreviewDrawable(item.slots))
             val isSelected = (position == selectedPosition)
             holder.card.strokeWidth = if (isSelected) 3 else 0
-            holder.card.setCardBackgroundColor(if (isSelected) Color.parseColor("#17325A") else Color.parseColor("#21252B"))
+            holder.card.setCardBackgroundColor(if (isSelected) holder.card.context.accentContainerColor else Color.parseColor("#21252B"))
 
             holder.view.setOnClickListener {
                 val old = selectedPosition

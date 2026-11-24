@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Clean up hero card in the Studio tab: the app's navy → surface gradient with a soft blue glow. -->
+<!-- Clean up hero card in the Studio tab (dark): surface → accent container gradient with a soft
+     accent glow. Follows the chosen accent. Light version: drawable-notnight/. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/radius_l" />
             <gradient
                 android:angle="315"
-                android:centerColor="#16243A"
-                android:endColor="#17325A"
+                android:endColor="?attr/appAccentContainer"
                 android:startColor="@color/lumina_surface"
                 android:type="linear" />
         </shape>
@@ -18,16 +18,16 @@
             <gradient
                 android:centerX="1.0"
                 android:centerY="0.0"
-                android:endColor="#003D8BFD"
+                android:endColor="@android:color/transparent"
                 android:gradientRadius="240dp"
-                android:startColor="#443D8BFD"
+                android:startColor="?attr/appAccentDim"
                 android:type="radial" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/radius_l" />
-            <stroke android:width="1dp" android:color="#4D3D8BFD" />
+            <stroke android:width="1dp" android:color="?attr/appAccentOutline" />
         </shape>
     </item>
 </layer-list>

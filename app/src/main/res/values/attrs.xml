@@ -9,4 +9,6 @@
     <attr name="appOnAccentContainer" format="color" />
     <attr name="appAccentDim" format="color" />
     <attr name="appSelectionOverlay" format="color" />
+    <!-- translucent accent line for card/tag outlines and glows -->
+    <attr name="appAccentOutline" format="color" />
 </resources>

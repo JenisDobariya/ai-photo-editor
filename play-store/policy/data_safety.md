@@ -7,7 +7,7 @@ Play Console → **App content → Data safety**. These answers match what the a
 |---|---|
 | Does your app collect or share any of the required user data types? | **Yes** |
 | Is all of the user data collected by your app encrypted in transit? | **Yes** |
-| Do you provide a way for users to request that their data is deleted? | **No** (no accounts; analytics data is anonymous and expires on Google's schedule). Answer "Yes" only if you offer a request route, such as an email address in the privacy policy. |
+| Do you provide a way for users to request that their data is deleted? | **Yes**: users can email **mydjearth@gmail.com** (stated in the privacy policy, section 7). |
 
 ## Data types collected
 Collected by **Firebase Analytics / Remote Config** and **Google Play services (ML Kit)**. Not shared with third parties: Google acts as your service provider.
@@ -19,6 +19,7 @@ Collected by **Firebase Analytics / Remote Config** and **Google Play services (
 | Device or other IDs → **Device or other IDs** (Firebase app instance ID) | Yes | No | Required | Analytics |
 
 **Do NOT declare:**
+- **App settings** (theme, accent colour, view options). They are stored on the device only and never sent.
 - **Photos and videos.** They are read and processed on the device only and never leave it.
 - **Location.** Photo GPS is only read on the device for the info sheet and "Share without location", and is never sent anywhere.
 - **Advertising ID.** It was removed in 1.0.6 (the app has no ads).

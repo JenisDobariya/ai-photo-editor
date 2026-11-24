@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import android.content.Intent
+import com.photo_editor.my_photo_editor.utils.accentColor
 import com.photo_editor.my_photo_editor.utils.appColor
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -324,7 +325,7 @@ class BeforeAfterActivity : BaseActivity() {
                     vRing.background = android.graphics.drawable.GradientDrawable().apply {
                         shape = android.graphics.drawable.GradientDrawable.OVAL
                         setColor(Color.TRANSPARENT)
-                        setStroke(2, Color.parseColor("#3D8BFD"))
+                        setStroke(2, accentColor)
                     }
                 }
 

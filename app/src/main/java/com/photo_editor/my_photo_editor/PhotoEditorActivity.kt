@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import android.content.Context
+import com.photo_editor.my_photo_editor.utils.accentColor
 import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
@@ -242,6 +243,10 @@ class PhotoEditorActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Crop frame follows the photo when the preview is laid out again (rotation, restore, panels).
+        binding.photoPreview.addOnLayoutChangeListener { _, l, t, r, b, ol, ot, or, ob ->
+            if (r - l != or - ol || b - t != ob - ot) syncCropOverlay()
+        }
 
         setupUI()
         observeViewModel()
@@ -487,7 +492,7 @@ class PhotoEditorActivity : BaseActivity() {
         binding.straightenRuler.isVisible = mode != "crop"
         binding.ratioList.isVisible = mode == "crop"
         binding.cropOverlay.isVisible = true // Always show overlay when in crop mode
-        binding.cropOverlay.setImageRect(getImageBounds())
+        binding.cropOverlay.setImageRect(cropImageBounds())
 
         when (mode) {
             "straighten" -> {
@@ -540,6 +545,8 @@ class PhotoEditorActivity : BaseActivity() {
             binding.drawingView.isEnabled = true
         }
         
+        // Compare sits over the photo's bottom-right corner, where a crop handle is: hide it while cropping.
+        binding.btnCompare.isVisible = panel != binding.cropControls
         if (panel != binding.cropControls) {
             binding.cropOverlay.isVisible = false
             updatePreviewZoom()
@@ -547,6 +554,7 @@ class PhotoEditorActivity : BaseActivity() {
             // When entering crop mode, reset zoom to show full image for adjustment
             resetPreviewZoom()
             binding.cropOverlay.isVisible = true
+            syncCropOverlay()
         }
     }
 
@@ -617,10 +625,42 @@ class PhotoEditorActivity : BaseActivity() {
         return android.graphics.RectF(x, y, x + w, y + h)
     }
 
+    /**
+     * In crop mode the photo is shown slightly inset, so the crop frame and all four corner
+     * handles have room around them (a full-height photo put the bottom handles on the edge).
+     */
+    private fun cropInsetScale(): Float {
+        val w = binding.photoPreview.width.toFloat()
+        val h = binding.photoPreview.height.toFloat()
+        if (w <= 0f || h <= 0f) return 1f
+        val inset = 24f * resources.displayMetrics.density
+        return minOf((w - 2 * inset) / w, (h - 2 * inset) / h).coerceIn(0.5f, 1f)
+    }
+
+    /** Photo bounds in crop mode: [getImageBounds] scaled by [cropInsetScale] around the centre. */
+    private fun cropImageBounds(): android.graphics.RectF {
+        val b = getImageBounds()
+        if (b.isEmpty) return b
+        val s = cropInsetScale()
+        val cx = binding.photoPreview.width / 2f
+        val cy = binding.photoPreview.height / 2f
+        return android.graphics.RectF(cx + (b.left - cx) * s, cy + (b.top - cy) * s, cx + (b.right - cx) * s, cy + (b.bottom - cy) * s)
+    }
+
+    /** Keeps the crop frame on the photo whenever the photo's size or position may have changed. */
+    private fun syncCropOverlay() {
+        if (!binding.cropControls.isVisible) return
+        binding.photoPreview.post {
+            if (binding.cropControls.isVisible) binding.cropOverlay.setImageRect(cropImageBounds())
+        }
+    }
+
+    /** Entering crop mode: show the whole photo, inset so the crop handles fit (see [cropInsetScale]). */
     private fun resetPreviewZoom() {
+        val s = cropInsetScale()
         binding.photoPreview.animate()
-            .scaleX(1f)
-            .scaleY(1f)
+            .scaleX(s)
+            .scaleY(s)
             .translationX(0f)
             .translationY(0f)
             .setDuration(300)
@@ -1551,6 +1591,7 @@ class PhotoEditorActivity : BaseActivity() {
                                 listener(onSuccess = { _, result ->
                                     val ratio = result.drawable.intrinsicWidth.toFloat() / result.drawable.intrinsicHeight
                                     binding.cropOverlay.originalRatio = ratio
+                                    syncCropOverlay()
                                 })
                             }
                             (binding.filterList.adapter as? FilterAdapter)?.updateImage(it)
@@ -1757,7 +1798,7 @@ class PhotoEditorActivity : BaseActivity() {
                     tag = "btnScale"
                     setImageResource(R.drawable.ic_scale_handle)
                     setBackgroundResource(R.drawable.bg_circle_accent)
-                    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#3D8BFD"))
+                    backgroundTintList = ColorStateList.valueOf(accentColor)
                     setColorFilter(Color.WHITE)
                     elevation = 4.dpToPx().toFloat()
                     setPadding(5.dpToPx(), 5.dpToPx(), 5.dpToPx(), 5.dpToPx())

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Small label tag (POPULAR, AI POWERED…): minor rounding, faint accent fill. -->
+<!-- Small label tag (POPULAR, AI POWERED…), dark: faint accent fill + accent outline. Light: drawable-notnight/. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <corners android:radius="@dimen/radius_s" />
-    <solid android:color="#263D8BFD" />
-    <stroke android:width="1dp" android:color="#593D8BFD" />
+    <solid android:color="?attr/appAccentDim" />
+    <stroke android:width="1dp" android:color="?attr/appAccentOutline" />
 </shape>

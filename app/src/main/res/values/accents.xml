@@ -4,6 +4,7 @@
 <resources>
     <style name="ThemeOverlay.Accent.Blue" parent="">
         <item name="appAccent">#1A66D6</item>
+        <item name="appAccentOutline">#591A66D6</item>
         <item name="appAccentSoft">#185EC5</item>
         <item name="appAccentContainer">#DFEAF9</item>
         <item name="appOnAccentContainer">#0E3876</item>
@@ -20,6 +21,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Indigo" parent="">
         <item name="appAccent">#4B57D4</item>
+        <item name="appAccentOutline">#594B57D4</item>
         <item name="appAccentSoft">#4550C3</item>
         <item name="appAccentContainer">#E6E7F9</item>
         <item name="appOnAccentContainer">#293075</item>
@@ -36,6 +38,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Purple" parent="">
         <item name="appAccent">#7B45D6</item>
+        <item name="appAccentOutline">#597B45D6</item>
         <item name="appAccentSoft">#713FC5</item>
         <item name="appAccentContainer">#EDE5F9</item>
         <item name="appOnAccentContainer">#442676</item>
@@ -52,6 +55,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Pink" parent="">
         <item name="appAccent">#C4307B</item>
+        <item name="appAccentOutline">#59C4307B</item>
         <item name="appAccentSoft">#B42C71</item>
         <item name="appAccentContainer">#F7E2ED</item>
         <item name="appOnAccentContainer">#6C1A44</item>
@@ -68,6 +72,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Red" parent="">
         <item name="appAccent">#C62F2F</item>
+        <item name="appAccentOutline">#59C62F2F</item>
         <item name="appAccentSoft">#B62B2B</item>
         <item name="appAccentContainer">#F7E2E2</item>
         <item name="appOnAccentContainer">#6D1A1A</item>
@@ -84,6 +89,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Orange" parent="">
         <item name="appAccent">#B04C0B</item>
+        <item name="appAccentOutline">#59B04C0B</item>
         <item name="appAccentSoft">#A2460A</item>
         <item name="appAccentContainer">#F4E6DD</item>
         <item name="appOnAccentContainer">#612A06</item>
@@ -100,6 +106,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Green" parent="">
         <item name="appAccent">#18803F</item>
+        <item name="appAccentOutline">#5918803F</item>
         <item name="appAccentSoft">#16763A</item>
         <item name="appAccentContainer">#DFEDE4</item>
         <item name="appOnAccentContainer">#0D4623</item>
@@ -116,6 +123,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Teal" parent="">
         <item name="appAccent">#0D7B77</item>
+        <item name="appAccentOutline">#590D7B77</item>
         <item name="appAccentSoft">#0C716D</item>
         <item name="appAccentContainer">#DDEDEC</item>
         <item name="appOnAccentContainer">#074441</item>
@@ -132,6 +140,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Cyan" parent="">
         <item name="appAccent">#0B72A8</item>
+        <item name="appAccentOutline">#590B72A8</item>
         <item name="appAccentSoft">#0A699B</item>
         <item name="appAccentContainer">#DDEBF3</item>
         <item name="appOnAccentContainer">#063F5C</item>
@@ -148,6 +157,7 @@
     </style>
     <style name="ThemeOverlay.Accent.Slate" parent="">
         <item name="appAccent">#4E5D73</item>
+        <item name="appAccentOutline">#594E5D73</item>
         <item name="appAccentSoft">#48566A</item>
         <item name="appAccentContainer">#E6E8EB</item>
         <item name="appOnAccentContainer">#2B333F</item>

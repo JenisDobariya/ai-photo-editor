@@ -48,33 +48,37 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLater"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_pill_dark"
-            android:backgroundTint="@color/lumina_surface_highest"
+            app:backgroundTint="@color/lumina_surface_highest"
             android:text="Later"
             android:textColor="@color/lumina_text_strong"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:cornerRadius="@dimen/radius_m" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUpdateNow"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:background="@drawable/bg_pill_dark"
-            android:backgroundTint="?attr/appAccentSoft"
+            app:backgroundTint="?attr/appAccent"
             android:text="Update Now"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:cornerRadius="@dimen/radius_m" />
     </LinearLayout>
 
 </LinearLayout>

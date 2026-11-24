@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Library size pill on the Profile card (dark: same as bg_badge_dark). Light: drawable-notnight/. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/lumina_scrim" />
+    <corners android:radius="@dimen/radius_m" />
+</shape>

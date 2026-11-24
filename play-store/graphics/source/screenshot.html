@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- Play Store phone screenshots, 1080x1920 (9:16). Rendered by render.py with ?s=1..8.
-     Slides 2 and 7 use real app screens (shots/). Slides 1, 3, 4, 5 and 6 are faithful
+     Slides 2 and 7 use real app screens (shots/; slide 7 shows light + dark themes). Slides 1, 3, 4, 5 and 6 are faithful
      recreations of the real screens (same layout, colours and text), with illustrated
      pictures drawn in code instead of personal photos. Slide 8 is a feature overview. -->
 <html><head><meta charset="utf-8">
@@ -195,10 +195,20 @@
   </div></div></div>
 </div>
 
-<!-- 7: create (real screen) -->
+<!-- 7: themes (real screens: light + Green accent, dark + Blue accent) -->
 <div class="s" id="s7">
-  <div class="cap"><h2>Create <em>collages</em>,<br>cutouts &amp; splits</h2><p>Pro-looking results in a few taps</p></div>
-  <div class="phone"><div class="screen"><img src="shots/studio_create.png"></div></div>
+  <div class="cap"><h2>Light or dark,<br><em>your colour</em></h2><p>Pick a theme and one of 10 accent colours</p></div>
+  <div class="phone" style="width:500px;height:1060px;margin-left:-490px;top:500px;border-radius:48px;padding:14px;transform:rotate(-5deg)">
+    <div class="screen" style="border-radius:40px"><img src="shots/studio_light.png"></div></div>
+  <div class="phone" style="width:500px;height:1060px;margin-left:-10px;top:450px;border-radius:48px;padding:14px;transform:rotate(5deg)">
+    <div class="screen" style="border-radius:40px"><img src="shots/studio_top.png"></div></div>
+  <div style="position:absolute;left:0;right:0;bottom:190px;display:flex;justify-content:center;gap:22px">
+    <i style="width:54px;height:54px;border-radius:50%;background:#3D8BFD"></i><i style="width:54px;height:54px;border-radius:50%;background:#6E7BFF"></i>
+    <i style="width:54px;height:54px;border-radius:50%;background:#A06BF5"></i><i style="width:54px;height:54px;border-radius:50%;background:#EC4D9A"></i>
+    <i style="width:54px;height:54px;border-radius:50%;background:#EF5350"></i><i style="width:54px;height:54px;border-radius:50%;background:#E2621C"></i>
+    <i style="width:54px;height:54px;border-radius:50%;background:#22A85C"></i><i style="width:54px;height:54px;border-radius:50%;background:#14A5A0"></i>
+    <i style="width:54px;height:54px;border-radius:50%;background:#1590CE"></i><i style="width:54px;height:54px;border-radius:50%;background:#7A8AA3"></i>
+  </div>
 </div>
 
 <!-- 8: everything in one gallery -->
@@ -211,7 +221,7 @@
     <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#FFB547" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg></div><b>Locked Folder</b><span>Hide private photos</span></div>
     <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#5AA9FF" d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></svg></div><b>Copy text</b><span>Select text in any photo</span></div>
     <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#FF5C8A" d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></svg></div><b>PDF &amp; scan</b><span>Documents to PDF, fast</span></div>
-    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#3DD6C4" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM10 17H5v-2h5v2zm0-4H5v-2h5v2zm0-4H5V7h5v2zm9 8h-7v-2h7v2zm0-4h-7v-2h7v2zm0-4h-7V7h7v2z"/></svg></div><b>Albums</b><span>Things, favourites, memories</span></div>
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#3DD6C4" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM10 17H5v-2h5v2zm0-4H5v-2h5v2zm0-4H5V7h5v2zm9 8h-7v-2h7v2zm0-4h-7v-2h7v2zm0-4h-7V7h7v2z"/></svg></div><b>Collage &amp; more</b><span>Collages, cutouts, splits</span></div>
     <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path fill="#FF5C8A" d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg></div><b>Video tools</b><span>Trim, mute, make GIFs</span></div>
   </div>
   <div class="foot">Your photos stay on your phone</div>

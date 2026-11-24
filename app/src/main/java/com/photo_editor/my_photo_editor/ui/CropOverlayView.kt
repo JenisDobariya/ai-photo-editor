@@ -80,6 +80,8 @@ class CropOverlayView @JvmOverloads constructor(
     }
 
     fun setImageRect(rect: RectF) {
+        // Same bounds as now (e.g. a re-sync after layout): keep the user's crop as it is.
+        if (rect == imageRect && !cropRect.isEmpty) return
         imageRect.set(rect)
         resetCropRect()
     }

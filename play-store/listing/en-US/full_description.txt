@@ -34,6 +34,11 @@ Gallerai is a fast, private gallery with smart AI tools built in. Browse photos 
 • Share photos without their location data
 • Photos and videos stay on your device: no cloud uploads
 
+🌗 YOUR LOOK
+• Light, dark or follow your phone's theme
+• 10 accent colours, from blue and purple to green and orange
+• Photo viewer, video player and editor stay dark, so your photos look their best
+
 🎨 EDITOR & STUDIO
 • Filters, adjustments, crop, rotate, straighten and perspective
 • Markup pens and text with fonts, colours and effects

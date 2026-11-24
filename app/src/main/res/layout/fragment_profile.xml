@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:clipToPadding="false"
             android:padding="16dp">
 
             <!-- Profile Header -->
@@ -106,7 +107,7 @@
                         android:id="@+id/tvStatStorage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_badge_dark"
+                        android:background="@drawable/bg_stat_pill"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
                         android:textColor="?attr/appAccentSoft"

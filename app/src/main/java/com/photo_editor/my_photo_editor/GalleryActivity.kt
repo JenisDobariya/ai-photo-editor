@@ -49,11 +49,13 @@ class GalleryActivity : BaseActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val selectionViewModel: MediaSelectionViewModel by viewModels()
 
-    private val photosFragment = PhotosFragment()
-    private val foldersFragment = FoldersFragment()
-    private val studioFragment = StudioFragment()
-    private val profileFragment = ProfileFragment()
-    private var activeFragment: Fragment = photosFragment
+    // Tab screens. On recreation (theme/accent change, process restore) the FragmentManager has
+    // already restored them, so the restored instances are reused instead of adding new copies.
+    private lateinit var photosFragment: PhotosFragment
+    private lateinit var foldersFragment: FoldersFragment
+    private lateinit var studioFragment: StudioFragment
+    private lateinit var profileFragment: ProfileFragment
+    private lateinit var activeFragment: Fragment
     private var isSearchMode = false
     private var pendingAction: MediaSelectionViewModel.PendingAction? = null
 
@@ -84,8 +86,8 @@ class GalleryActivity : BaseActivity() {
         setContentView(binding.root)
 
         setupBackPressHandler()
-        setupNavigation()
-        setupFragments()
+        setupFragments(savedInstanceState)
+        setupNavigation(savedInstanceState)
         setupTopBar()
         setupSelectionBars()
         observeSelection()
@@ -110,22 +112,47 @@ class GalleryActivity : BaseActivity() {
         })
     }
 
-    private fun setupFragments() {
-        supportFragmentManager.beginTransaction().apply {
-            add(R.id.fragment_container, profileFragment, "profile").hide(profileFragment)
-            add(R.id.fragment_container, studioFragment, "studio").hide(studioFragment)
-            add(R.id.fragment_container, foldersFragment, "folders").hide(foldersFragment)
-            add(R.id.fragment_container, photosFragment, "photos")
-        }.commit()
+    private fun setupFragments(savedInstanceState: Bundle?) {
+        val fm = supportFragmentManager
+        photosFragment = fm.findFragmentByTag("photos") as? PhotosFragment ?: PhotosFragment()
+        foldersFragment = fm.findFragmentByTag("folders") as? FoldersFragment ?: FoldersFragment()
+        studioFragment = fm.findFragmentByTag("studio") as? StudioFragment ?: StudioFragment()
+        profileFragment = fm.findFragmentByTag("profile") as? ProfileFragment ?: ProfileFragment()
 
-        binding.headerTitle.text = getString(R.string.nav_library)
+        if (savedInstanceState == null || !photosFragment.isAdded) {
+            fm.beginTransaction().apply {
+                add(R.id.fragment_container, profileFragment, "profile").hide(profileFragment)
+                add(R.id.fragment_container, studioFragment, "studio").hide(studioFragment)
+                add(R.id.fragment_container, foldersFragment, "folders").hide(foldersFragment)
+                add(R.id.fragment_container, photosFragment, "photos")
+            }.commitNow()
+        }
+        // The tab that was open before recreation (restored hidden/shown state), else Photos.
+        activeFragment = listOf(photosFragment, foldersFragment, studioFragment, profileFragment)
+            .firstOrNull { it.isAdded && !it.isHidden } ?: photosFragment
+        binding.headerTitle.text = titleFor(activeFragment)
     }
 
-    private fun setupNavigation() {
+    private fun titleFor(fragment: Fragment): String = when (fragment) {
+        foldersFragment -> getString(R.string.nav_folders)
+        studioFragment -> "Studio"
+        profileFragment -> "Profile"
+        else -> getString(R.string.nav_library)
+    }
+
+    private fun navIdFor(fragment: Fragment): Int = when (fragment) {
+        foldersFragment -> R.id.nav_folders
+        studioFragment -> R.id.nav_studio
+        profileFragment -> R.id.nav_profile
+        else -> R.id.nav_library
+    }
+
+    private fun setupNavigation(savedInstanceState: Bundle?) {
         binding.btnBackHeader.isVisible = false
         binding.btnSettings.isVisible = false
 
-        binding.bottomNav.selectedItemId = R.id.nav_library
+        // Bottom bar matches the visible tab (set before the listener, so nothing is re-shown).
+        binding.bottomNav.selectedItemId = navIdFor(activeFragment)
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_library -> {

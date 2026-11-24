@@ -4,8 +4,14 @@ Package: `com.photo_editor.my_photo_editor` (unchanged, so this ships as a norma
 
 ## Before upload
 - [ ] Build a **signed .aab** with the upload key `myphotoeditor.jks`. The APKs in `release-build/` are signed with the debug key for testing only.
-- [ ] versionCode 6 is higher than the live version (5).
-- [ ] Update the hosted **privacy policy** using `policy/privacy_policy.md`, and keep the same URL as the one in Play Console and in the app's Profile → Privacy Policy.
+- [ ] Version: Play currently has **1.0.5** (checked 24 Nov 2026). This release is **1.0.6, versionCode 6**, which is higher than the live versionCode 5. Next release after this: 1.0.7 / 7.
+- [ ] **Privacy policy:** publish `policy/privacy_policy.html` on the existing page
+      https://myaiphotoeditor.blogspot.com/2026/09/privacy-policy.html
+      (Blogger → edit that post → "HTML view" → select all → paste the file → Update). Keep the same URL,
+      because the app (Profile → Privacy Policy) and Play Console already link to it.
+      Then check Play Console → Policy → App content → Privacy policy shows that same URL.
+- [ ] **App-level trader status** (App content): confirm "Yes, my trader status applies to this app" (your account is a
+      trader account), unless this app is purely non-commercial. The Terms of Service URL is optional.
 
 ## App content
 - [ ] **Advertising ID:** No. The ad-ID permission is removed in 1.0.6.

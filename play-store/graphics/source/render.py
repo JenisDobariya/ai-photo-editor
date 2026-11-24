@@ -34,7 +34,7 @@ JOBS = [
     ("screenshot.html?s=4", "screenshots/phone/04_copy_text.png", 1080, 1920, False),
     ("screenshot.html?s=5", "screenshots/phone/05_clean_up.png", 1080, 1920, False),
     ("screenshot.html?s=6", "screenshots/phone/06_video_player.png", 1080, 1920, False),
-    ("screenshot.html?s=7", "screenshots/phone/07_create.png", 1080, 1920, False),
+    ("screenshot.html?s=7", "screenshots/phone/07_themes.png", 1080, 1920, False),
     ("screenshot.html?s=8", "screenshots/phone/08_all_in_one.png", 1080, 1920, False),
 ]
 

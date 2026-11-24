@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Card elevation. Light theme: flat cards with outlines (shadows look heavy on light grey).
+     Dark theme (values-night): the original elevations. -->
+<resources>
+    <dimen name="card_elevation_high">0dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
+</resources>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Highlighted Studio card (dark): accent container → surface, accent outline. Light: drawable-notnight/. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <corners android:radius="@dimen/radius_l" />
     <gradient
         android:angle="135"
-        android:startColor="#15305A"
-        android:centerColor="#18233A"
-        android:endColor="#181B20"
+        android:startColor="?attr/appAccentContainer"
+        android:endColor="@color/lumina_surface"
         android:type="linear" />
     <stroke
         android:width="1.5dp"
-        android:color="#3D8BFD" />
+        android:color="?attr/appAccent" />
 </shape>

@@ -33,6 +33,7 @@
         android:icon="@mipmap/logo_square"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
 

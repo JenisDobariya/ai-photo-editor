@@ -32,6 +32,8 @@ import com.photo_editor.my_photo_editor.utils.AnalyticsManager
 import com.photo_editor.my_photo_editor.utils.PdfMaker
 import com.photo_editor.my_photo_editor.utils.ShareHelper
 import kotlinx.coroutines.launch
+import com.photo_editor.my_photo_editor.utils.adaptiveColumns
+import com.photo_editor.my_photo_editor.utils.GRID_CELL_DP
 
 /** Photos → PDF: reorder pages, pick page options and save into Documents/PhotoEditor. */
 class PhotosToPdfActivity : BaseActivity(), PdfPagesAdapter.Listener {
@@ -106,7 +108,8 @@ class PhotosToPdfActivity : BaseActivity(), PdfPagesAdapter.Listener {
 
     private fun setupGrid() {
         adapter = PdfPagesAdapter(this)
-        binding.rvPages.layoutManager = GridLayoutManager(this, 3).apply {
+        binding.rvPages.layoutManager = GridLayoutManager(this, adaptiveColumns(3, GRID_CELL_DP)).apply {
+
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int) = if (adapter.isFullSpan(position)) spanCount else 1
             }

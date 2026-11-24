@@ -11,6 +11,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.format.Formatter
+import android.util.Log
+
 import androidx.annotation.RequiresApi
 import com.photo_editor.my_photo_editor.db.AppDatabase
 import com.photo_editor.my_photo_editor.db.FavoriteMedia
@@ -93,16 +95,21 @@ class MediaRepository(context: Context) {
         return MediaStore.createDeleteRequest(contentResolver, uris).intentSender
     }
 
-    /** Pre Android 11 fallback: permanent delete. Returns number of deleted rows. */
+    /**
+     * Pre Android 11 fallback: permanent delete. Returns number of deleted rows; callers compare it
+     * with the number requested and tell the user when some (or all) couldn't be deleted.
+     * Needs WRITE_EXTERNAL_STORAGE (+ requestLegacyExternalStorage on Android 10).
+     */
     suspend fun deleteLegacy(uris: List<Uri>): Int = withContext(Dispatchers.IO) {
         var count = 0
         uris.forEach { uri ->
             try {
                 count += contentResolver.delete(uri, null, null)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.w(TAG, "Couldn't delete $uri", e)
             }
         }
+        if (count < uris.size) Log.w(TAG, "deleteLegacy: deleted $count of ${uris.size}")
         count
     }
 
@@ -394,6 +401,8 @@ class MediaRepository(context: Context) {
     }
 
     companion object {
+        private const val TAG = "MediaRepository"
+
         fun formatDuration(durationMs: Long): String {
             val totalSeconds = durationMs / 1000
             val hours = totalSeconds / 3600

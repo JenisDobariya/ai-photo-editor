@@ -196,8 +196,24 @@ class CleanerViewModel(application: Application) : AndroidViewModel(application)
         pendingDelete = null
         viewModelScope.launch {
             val deleted = mediaRepository.deleteLegacy(pending.uris)
+            if (deleted <= 0) {
+                // Nothing was removed (usually missing storage permission): say so, keep the list.
+                AnalyticsManager.logEvent("Cleaner_delete_failed")
+                _events.tryEmit(
+                    CleanerEvent.Message(
+                        "Couldn't delete ${if (pending.uris.size == 1) "this item" else "these items"}. " +
+                            "Check that Gallerai has storage permission."
+                    )
+                )
+                reload()
+                return@launch
+            }
             AnalyticsManager.logEvent("Cleaner_delete_success")
             onDeleted(pending.uris, deleted, if (deleted == pending.uris.size) pending.bytes else -1L, recycleBin = false)
+            if (deleted < pending.uris.size) {
+                _events.tryEmit(CleanerEvent.Message("${pending.uris.size - deleted} item(s) couldn't be deleted"))
+            }
+
         }
     }
 

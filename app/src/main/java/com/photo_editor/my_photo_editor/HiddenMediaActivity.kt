@@ -33,6 +33,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.photo_editor.my_photo_editor.utils.adaptiveColumns
+import com.photo_editor.my_photo_editor.utils.GRID_CELL_DP
 
 /**
  * Locked Folder: media hidden from every gallery view, protected by the device
@@ -70,7 +72,7 @@ class HiddenMediaActivity : BaseActivity(), MediaGridAdapter.Listener {
         binding.btnUnlock.setOnClickListener { authenticate() }
 
         adapter = MediaGridAdapter(this)
-        binding.rvHidden.layoutManager = GridLayoutManager(this, 3).apply {
+        binding.rvHidden.layoutManager = GridLayoutManager(this, adaptiveColumns(3, GRID_CELL_DP)).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int) = if (adapter.isFullSpan(position)) spanCount else 1
             }
@@ -191,8 +193,9 @@ class HiddenMediaActivity : BaseActivity(), MediaGridAdapter.Listener {
             putExtra(PhotoDetailActivity.EXTRA_TITLE, "Locked")
             putStringArrayListExtra(
                 PhotoDetailActivity.EXTRA_URI_LIST,
-                ArrayList(viewModel.items.value.map { it.uri.toString() })
+                PhotoDetailActivity.cappedUriList(viewModel.items.value.map { it.uri.toString() }, file.uri.toString())
             )
+
         }
         startActivity(intent)
     }

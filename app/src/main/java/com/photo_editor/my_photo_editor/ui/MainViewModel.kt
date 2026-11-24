@@ -243,9 +243,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val dateFormat = SimpleDateFormat("d MMMM yyyy EEEE", Locale.getDefault())
         val dateCache = HashMap<Long, String>()
         return { file ->
-            val day = file.dateAdded / 86_400L
+            val seconds = file.displayDateSeconds
+            val day = seconds / 86_400L
             val dateText = dateCache.getOrPut(day) {
-                dateFormat.format(Date(file.dateAdded * 1000L)).lowercase(Locale.getDefault())
+                dateFormat.format(Date(seconds * 1000L)).lowercase(Locale.getDefault())
             }
             terms.all { term ->
                 if (file.name.lowercase(Locale.getDefault()).contains(term) ||
@@ -277,7 +278,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val byYear = HashMap<Int, MutableList<MediaFile>>()
         media.forEach { file ->
             if (file.type != MediaType.IMAGE) return@forEach
-            cal.timeInMillis = file.dateAdded * 1000L
+            cal.timeInMillis = file.displayDateSeconds * 1000L
+
             val year = cal.get(Calendar.YEAR)
             if (year >= currentYear) return@forEach
             val diff = kotlin.math.abs(cal.get(Calendar.DAY_OF_YEAR) - todayDoy)
@@ -332,8 +334,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val list = mutableListOf<MediaFile>()
         list.addAll(queryMedia(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaType.IMAGE))
         list.addAll(queryMedia(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, MediaType.VIDEO))
+        // Newest first by capture date (date taken, else date added), so restored / migrated
+        // photos sit on the day they were taken instead of the day they were copied.
         return list.sortedWith(
-            compareByDescending<MediaFile> { it.dateAdded }
+            compareByDescending<MediaFile> { it.displayDateSeconds }
                 .thenByDescending { it.uri.lastPathSegment?.toLongOrNull() ?: 0L }
         )
     }
@@ -386,8 +390,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         "Camera"
                     }
                     val date = cursor.getLong(dateColumn)
+                    // Duration can be 0/unknown (not yet scanned, some recorders): still show the video.
                     val duration = if (durationColumn != -1) cursor.getLong(durationColumn) else 0L
-                    if (type == MediaType.VIDEO && duration == 0L) continue
 
                     val contentUri = ContentUris.withAppendedId(uri, id)
                     list.add(

@@ -103,13 +103,22 @@ class MediaSelectionViewModel(application: Application) : AndroidViewModel(appli
         } else {
             viewModelScope.launch {
                 val deleted = repository.deleteLegacy(uris)
-                _events.emit(SelectionEvent.Message("Deleted $deleted items"))
+                _events.emit(SelectionEvent.Message(legacyDeleteMessage(deleted, uris.size)))
                 clear()
             }
         }
     }
 
+    private fun legacyDeleteMessage(deleted: Int, requested: Int): String = when {
+        deleted <= 0 -> if (requested == 1) "Couldn't delete this item. Check that Gallerai has storage permission."
+            else "Couldn't delete these items. Check that Gallerai has storage permission."
+        deleted < requested -> "Deleted $deleted items · ${requested - deleted} couldn't be deleted"
+        deleted == 1 -> "Deleted 1 item"
+        else -> "Deleted $deleted items"
+    }
+
     fun onIntentSenderResult(action: PendingAction, success: Boolean) {
+
         if (!success) {
             pendingMove = null
             pendingRename = null
@@ -161,7 +170,10 @@ class MediaSelectionViewModel(application: Application) : AndroidViewModel(appli
     /** Move and rename need Android 11's "allow editing" prompt; older versions can only copy. */
     val canEditInPlace: Boolean get() = organizer.canEditInPlace
 
-    suspend fun albumTargets(): List<MediaOrganizer.AlbumTarget> = organizer.albumTargets()
+    /** Albums that can hold every item in [items] (photos: DCIM/Pictures, videos: DCIM/Movies). */
+    suspend fun albumTargets(items: List<MediaFile> = emptyList()): List<MediaOrganizer.AlbumTarget> =
+        organizer.albumTargets(items)
+
 
     fun newAlbumTarget(name: String) = organizer.newAlbumTarget(name)
 

@@ -1,5 +1,6 @@
 package com.photo_editor.my_photo_editor.utils
 
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,6 +8,8 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.SystemClock
+
 import android.provider.MediaStore
 import java.io.File
 import java.io.FileOutputStream
@@ -41,7 +44,7 @@ object MediaStoreSaver {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             saveScoped(context, displayName, mimeType, kind, relativeDir, write)
         } else {
-            saveLegacy(context, displayName, mimeType, relativeDir, write)
+            saveLegacy(context, displayName, mimeType, kind, relativeDir, write)
         }
     }
 
@@ -131,26 +134,91 @@ object MediaStoreSaver {
         context: Context,
         displayName: String,
         mimeType: String,
+        kind: Kind,
         relativeDir: String,
         write: (OutputStream) -> Boolean
     ): Uri? {
         val dir = File(Environment.getExternalStorageDirectory(), relativeDir)
         if (!dir.exists() && !dir.mkdirs()) return null
-        val file = File(dir, displayName)
+        // Never write over an existing file: FileOutputStream would truncate it (e.g. "Copy to
+        // album" with a file of the same name already there). Android 10+ MediaStore renames
+        // clashes itself; here we pick "name (1).ext", "name (2).ext"… and claim it atomically.
+        val file = claimUniqueFile(dir, displayName) ?: return null
         return try {
             val ok = FileOutputStream(file).use { write(it) }
             if (!ok) throw java.io.IOException("Write failed")
-            var scanned: Uri? = null
-            val lock = Object()
-            MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), arrayOf(mimeType)) { _, uri ->
-                synchronized(lock) { scanned = uri; lock.notifyAll() }
-            }
-            synchronized(lock) { if (scanned == null) lock.wait(3000) }
-            scanned ?: Uri.fromFile(file)
+            // Only ever hand out a content:// Uri: a file:// Uri crashes (FileUriExposedException)
+            // as soon as it is shared with another app.
+            scanForContentUri(context, file, mimeType) ?: queryContentUri(context, file, kind)
         } catch (e: Exception) {
             e.printStackTrace()
             file.delete()
             null
+        } catch (e: OutOfMemoryError) {
+            file.delete()
+            null
         }
     }
+
+    /** First free "name.ext" / "name (n).ext" in [dir], created empty so nobody else takes it. */
+    private fun claimUniqueFile(dir: File, displayName: String): File? {
+        val dot = displayName.lastIndexOf('.')
+        val base = if (dot > 0) displayName.substring(0, dot) else displayName
+        val ext = if (dot > 0) displayName.substring(dot) else ""
+        var candidate = File(dir, displayName)
+        var i = 1
+        while (true) {
+            try {
+                if (candidate.createNewFile()) return candidate
+            } catch (e: java.io.IOException) {
+                e.printStackTrace()
+                return null
+            }
+            if (i > MAX_NAME_ATTEMPTS) return null
+            candidate = File(dir, "$base ($i)$ext")
+            i++
+        }
+    }
+
+    /** Waits (up to [SCAN_TIMEOUT_MS]) for the media scanner to index [file]. */
+    private fun scanForContentUri(context: Context, file: File, mimeType: String): Uri? {
+        var scanned: Uri? = null
+        var done = false
+        val lock = Object()
+        MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), arrayOf(mimeType)) { _, uri ->
+            synchronized(lock) { scanned = uri; done = true; lock.notifyAll() }
+        }
+        val deadline = SystemClock.uptimeMillis() + SCAN_TIMEOUT_MS
+        synchronized(lock) {
+            while (!done) {
+                val left = deadline - SystemClock.uptimeMillis()
+                if (left <= 0) break
+                try { lock.wait(left) } catch (_: InterruptedException) { break }
+            }
+        }
+        return scanned?.takeIf { it.scheme == "content" }
+    }
+
+    /** The scan didn't report back in time: look the file up in MediaStore by its path. */
+    @Suppress("DEPRECATION")
+    private fun queryContentUri(context: Context, file: File, kind: Kind): Uri? {
+        val collection = collectionFor(kind)
+        return try {
+            context.contentResolver.query(
+                collection,
+                arrayOf(MediaStore.MediaColumns._ID),
+                "${MediaStore.MediaColumns.DATA} = ?",
+                arrayOf(file.absolutePath),
+                null
+            )?.use { c ->
+                if (c.moveToFirst()) ContentUris.withAppendedId(collection, c.getLong(0)) else null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private const val SCAN_TIMEOUT_MS = 8000L
+    private const val MAX_NAME_ATTEMPTS = 9999
 }

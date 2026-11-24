@@ -57,7 +57,8 @@ class MediaGridAdapter(
         return try {
             when (val item = itemAt(position)) {
                 is GridItem.Header -> item.title
-                is GridItem.Media -> popupFormat.format(Date(item.file.dateAdded * 1000L))
+                is GridItem.Media -> popupFormat.format(Date(item.file.displayDateSeconds * 1000L))
+
                 else -> ""
             }
         } catch (_: Exception) {
@@ -131,7 +132,9 @@ class MediaGridAdapter(
             val isVideo = file.type == MediaType.VIDEO
             duration.isVisible = isVideo
             videoScrim.isVisible = isVideo || file.isFavorite
-            if (isVideo) duration.text = MediaRepository.formatDuration(file.duration)
+            // Unknown length (not scanned yet / unreadable header): keep the video badge.
+            if (isVideo) duration.text = if (file.duration > 0) MediaRepository.formatDuration(file.duration) else "--:--"
+
             favorite.isVisible = file.isFavorite
             image.contentDescription = file.name
 

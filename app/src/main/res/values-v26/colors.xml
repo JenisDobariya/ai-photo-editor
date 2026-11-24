@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 8+: dark navigation-bar icons work, so the light theme keeps a surface-coloured bar
+         under bottom sheets (values-night overrides this for the dark theme). -->
+    <color name="lumina_sheet_nav_bar">@color/lumina_surface</color>
+</resources>

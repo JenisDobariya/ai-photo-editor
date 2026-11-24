@@ -54,4 +54,5 @@
     <color name="logo_color">#3D8BFD</color>
     <color name="transparent">#00000000</color>
 
+    <color name="lumina_sheet_nav_bar">@color/lumina_surface</color>
 </resources>

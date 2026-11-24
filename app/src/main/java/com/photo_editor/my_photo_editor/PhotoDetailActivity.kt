@@ -10,7 +10,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Size
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -244,7 +246,7 @@ class PhotoDetailActivity : BaseActivity() {
                 val hidden = db.hiddenDao().getHiddenUris().toSet()
                 if (hidden.isNotEmpty()) list.removeAll { hidden.contains(it.uri.toString()) }
                 list.sortedWith(
-                    compareByDescending<MediaFile> { it.dateAdded }
+                    compareByDescending<MediaFile> { it.displayDateSeconds }
                         .thenByDescending { it.uri.lastPathSegment?.toLongOrNull() ?: 0L }
                 )
             }
@@ -292,7 +294,7 @@ class PhotoDetailActivity : BaseActivity() {
         list.addAll(queryMedia(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaType.IMAGE))
         list.addAll(queryMedia(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, MediaType.VIDEO))
         return list.sortedWith(
-            compareByDescending<MediaFile> { it.dateAdded }
+            compareByDescending<MediaFile> { it.displayDateSeconds }
                 .thenByDescending { it.uri.lastPathSegment?.toLongOrNull() ?: 0L }
         )
     }
@@ -303,7 +305,8 @@ class PhotoDetailActivity : BaseActivity() {
             MediaStore.MediaColumns._ID,
             MediaStore.MediaColumns.DISPLAY_NAME,
             "bucket_display_name",
-            MediaStore.MediaColumns.DATE_ADDED
+            MediaStore.MediaColumns.DATE_ADDED,
+            "datetaken"
         )
         if (type == MediaType.VIDEO) {
             projection.add(MediaStore.Video.Media.DURATION)
@@ -321,6 +324,7 @@ class PhotoDetailActivity : BaseActivity() {
                 val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
                 val albumColumn = cursor.getColumnIndex("bucket_display_name")
                 val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED)
+                val takenColumn = cursor.getColumnIndex("datetaken")
                 val durationColumn = if (type == MediaType.VIDEO) cursor.getColumnIndex(MediaStore.Video.Media.DURATION) else -1
 
                 while (cursor.moveToNext()) {
@@ -334,7 +338,12 @@ class PhotoDetailActivity : BaseActivity() {
                     val date = cursor.getLong(dateColumn)
                     val duration = if (durationColumn != -1) cursor.getLong(durationColumn) else 0L
                     val contentUri = ContentUris.withAppendedId(uri, id)
-                    list.add(MediaFile(contentUri, name, album, date, type, duration))
+                    list.add(
+                        MediaFile(
+                            contentUri, name, album, date, type, duration,
+                            dateTaken = if (takenColumn != -1) cursor.getLong(takenColumn) else 0L
+                        )
+                    )
                 }
             }
         } catch (e: Exception) {
@@ -349,7 +358,8 @@ class PhotoDetailActivity : BaseActivity() {
             MediaStore.MediaColumns._ID,
             MediaStore.MediaColumns.DISPLAY_NAME,
             "bucket_display_name",
-            MediaStore.MediaColumns.DATE_ADDED
+            MediaStore.MediaColumns.DATE_ADDED,
+            "datetaken"
         )
         if (type == MediaType.VIDEO) {
             projection.add(MediaStore.Video.Media.DURATION)
@@ -370,6 +380,7 @@ class PhotoDetailActivity : BaseActivity() {
                 val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
                 val albumColumn = cursor.getColumnIndex("bucket_display_name")
                 val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED)
+                val takenColumn = cursor.getColumnIndex("datetaken")
                 val durationColumn = if (type == MediaType.VIDEO) cursor.getColumnIndex(MediaStore.Video.Media.DURATION) else -1
 
                 while (cursor.moveToNext()) {
@@ -383,7 +394,12 @@ class PhotoDetailActivity : BaseActivity() {
                     val date = cursor.getLong(dateColumn)
                     val duration = if (durationColumn != -1) cursor.getLong(durationColumn) else 0L
                     val contentUri = ContentUris.withAppendedId(uri, id)
-                    list.add(MediaFile(contentUri, name, albumNameStr, date, type, duration))
+                    list.add(
+                        MediaFile(
+                            contentUri, name, albumNameStr, date, type, duration,
+                            dateTaken = if (takenColumn != -1) cursor.getLong(takenColumn) else 0L
+                        )
+                    )
                 }
             }
         } catch (e: Exception) {
@@ -650,65 +666,128 @@ class PhotoDetailActivity : BaseActivity() {
             .show()
     }
 
+    /** Item waiting for a system prompt (Recycle Bin on 11+, "allow delete" on Android 10). */
+    private var pendingDeleteUri: Uri? = null
+
+    @Suppress("DEPRECATION")
     private fun performDelete(position: Int, uri: Uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Move to the system Recycle Bin so it can be restored for 30 days
+            try {
+                val pendingIntent = MediaStore.createTrashRequest(contentResolver, listOf(uri), true)
+                pendingDeleteUri = uri
+                startIntentSenderForResult(pendingIntent.intentSender, DELETE_REQUEST_CODE, null, 0, 0, 0)
+            } catch (e: Exception) {
+                Log.w(TAG, "Trash request failed", e)
+                pendingDeleteUri = null
+                Toast.makeText(this, "Couldn't move to Recycle Bin", Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
+        // Android 7–10: permanent delete (needs WRITE_EXTERNAL_STORAGE; legacy storage on 10).
         lifecycleScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        // Move to the system Recycle Bin so it can be restored for 30 days
-                        val pendingIntent = MediaStore.createTrashRequest(contentResolver, listOf(uri), true)
-                        startIntentSenderForResult(pendingIntent.intentSender, DELETE_REQUEST_CODE, null, 0, 0, 0)
-                        true
-                    } else {
-                        val deletedRows = contentResolver.delete(uri, null, null)
-                        deletedRows > 0
-                    }
-                } catch (e: Exception) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && e is android.app.RecoverableSecurityException) {
-                        startIntentSenderForResult(e.userAction.actionIntent.intentSender, DELETE_REQUEST_CODE, null, 0, 0, 0)
-                        true
-                    } else {
-                        e.printStackTrace()
-                        false
+            val outcome = withContext(Dispatchers.IO) { deleteLegacy(uri) }
+            when (outcome) {
+                is LegacyDelete.Deleted -> onItemDeleted(uri, position, "Deleted")
+                is LegacyDelete.NeedsApproval -> {
+                    // Android 10 scoped storage: the user must allow deleting another app's file.
+                    // Launched here on the main thread; onActivityResult re-runs the delete.
+                    try {
+                        pendingDeleteUri = uri
+                        startIntentSenderForResult(outcome.sender, DELETE_APPROVAL_REQUEST_CODE, null, 0, 0, 0)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Delete approval request failed", e)
+                        pendingDeleteUri = null
+                        showDeleteFailed()
                     }
                 }
+                LegacyDelete.Failed -> showDeleteFailed()
             }
-            
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && result) {
-                Toast.makeText(this@PhotoDetailActivity, "Deleted successfully", Toast.LENGTH_SHORT).show()
-                adapter?.removeAt(position)
-                if (mediaList.isEmpty()) {
-                    finish()
-                } else {
-                    val newPos = position.coerceAtMost(mediaList.size - 1)
-                    binding.viewPager.setCurrentItem(newPos, false)
-                    playVideoAtPosition(newPos)
-                }
-            }
+        }
+    }
+
+    private sealed class LegacyDelete {
+        data object Deleted : LegacyDelete()
+        data object Failed : LegacyDelete()
+        class NeedsApproval(val sender: android.content.IntentSender) : LegacyDelete()
+    }
+
+    /** Runs on a background thread. */
+    private fun deleteLegacy(uri: Uri): LegacyDelete = try {
+        if (contentResolver.delete(uri, null, null) > 0) LegacyDelete.Deleted else LegacyDelete.Failed
+    } catch (e: Exception) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && e is android.app.RecoverableSecurityException) {
+            LegacyDelete.NeedsApproval(e.userAction.actionIntent.intentSender)
+        } else {
+            Log.w(TAG, "Delete failed for $uri", e)
+            LegacyDelete.Failed
+        }
+    }
+
+    private fun showDeleteFailed() {
+        Toast.makeText(this, "Couldn't delete this item. Check that Gallerai has storage permission.", Toast.LENGTH_LONG).show()
+    }
+
+    /** Removes the deleted item from the pager and moves to the next one. */
+    private fun onItemDeleted(uri: Uri, fallbackPosition: Int, message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        val position = mediaList.indexOfFirst { it.uri == uri }.takeIf { it >= 0 } ?: fallbackPosition
+        adapter?.removeAt(position)
+        if (mediaList.isEmpty()) {
+            finish()
+        } else {
+            val newPos = position.coerceAtMost(mediaList.size - 1)
+            binding.viewPager.setCurrentItem(newPos, false)
+            playVideoAtPosition(newPos)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
-            Toast.makeText(this, "Moved to Recycle Bin", Toast.LENGTH_SHORT).show()
-            val currentPosition = binding.viewPager.currentItem
-            adapter?.removeAt(currentPosition)
-            if (mediaList.isEmpty()) {
-                finish()
-            } else {
-                val newPos = currentPosition.coerceAtMost(mediaList.size - 1)
-                binding.viewPager.setCurrentItem(newPos, false)
-                playVideoAtPosition(newPos)
-            }
+        if (requestCode != DELETE_REQUEST_CODE && requestCode != DELETE_APPROVAL_REQUEST_CODE) return
+        val uri = pendingDeleteUri
+        pendingDeleteUri = null
+        if (resultCode != RESULT_OK) return
+        val currentPosition = binding.viewPager.currentItem
+        if (requestCode == DELETE_REQUEST_CODE) {
+            onItemDeleted(uri ?: mediaList.getOrNull(currentPosition)?.uri ?: return, currentPosition, "Moved to Recycle Bin")
+            return
+        }
+        // Android 10: access was granted, now delete for real (no Recycle Bin on this version).
+        if (uri == null) return
+        lifecycleScope.launch {
+            val outcome = withContext(Dispatchers.IO) { deleteLegacy(uri) }
+            if (outcome is LegacyDelete.Deleted) onItemDeleted(uri, currentPosition, "Deleted")
+            else showDeleteFailed()
         }
     }
 
     companion object {
+        private const val TAG = "PhotoDetail"
         private const val DELETE_REQUEST_CODE = 1001
+        private const val DELETE_APPROVAL_REQUEST_CODE = 1002
         private const val SLIDESHOW_INTERVAL_MS = 3000L
         private const val VIEWER_MAX_SIZE = 2048
         const val EXTRA_URI_LIST = "URI_LIST"
+        /**
+         * Most uris a screen passes in [EXTRA_URI_LIST]: bigger lists risk the Binder transaction
+         * limit (TransactionTooLargeException), so callers pass no list (the viewer then loads the
+         * album / library itself) or only the part around the tapped item.
+         */
+        const val MAX_URIS_IN_INTENT = 3000
+
+        /**
+         * [uris] limited to [MAX_URIS_IN_INTENT]: the window around [around] (the tapped item stays
+         * in it), or the first ones when nothing was tapped (lists are newest first).
+         */
+        fun cappedUriList(uris: List<String>, around: String? = null): ArrayList<String> {
+            if (uris.size <= MAX_URIS_IN_INTENT) return ArrayList(uris)
+            val index = if (around != null) uris.indexOf(around).coerceAtLeast(0) else 0
+            val start = (index - MAX_URIS_IN_INTENT / 2).coerceIn(0, uris.size - MAX_URIS_IN_INTENT)
+            return ArrayList(uris.subList(start, start + MAX_URIS_IN_INTENT))
+        }
+
+
         const val EXTRA_TITLE = "TITLE"
         const val EXTRA_SMART_ALBUM = "SMART_ALBUM"
         const val EXTRA_START_SLIDESHOW = "START_SLIDESHOW"
@@ -866,10 +945,11 @@ class PhotoDetailActivity : BaseActivity() {
                     videoController.pause()
                     startActivity(VideoToolsActivity.intent(this, media.uri, VideoToolsActivity.MODE_GIF))
                 }
-                MENU_COPY_TO -> SelectionMoreMenu.pickAlbum(this, selectionViewModel, "Copy to album") {
+                MENU_COPY_TO -> SelectionMoreMenu.pickAlbum(this, selectionViewModel, "Copy to album", listOf(media)) {
                     selectionViewModel.copyToAlbum(listOf(media), it)
                 }
-                MENU_MOVE_TO -> SelectionMoreMenu.pickAlbum(this, selectionViewModel, "Move to album") {
+                MENU_MOVE_TO -> SelectionMoreMenu.pickAlbum(this, selectionViewModel, "Move to album", listOf(media)) {
+
                     selectionViewModel.moveToAlbum(listOf(media), it)
                 }
                 MENU_RENAME -> SelectionMoreMenu.askRename(this, selectionViewModel, media)

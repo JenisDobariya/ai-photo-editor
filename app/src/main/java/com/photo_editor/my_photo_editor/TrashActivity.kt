@@ -37,6 +37,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.ceil
 import kotlin.math.max
+import com.photo_editor.my_photo_editor.utils.adaptiveColumns
+import com.photo_editor.my_photo_editor.utils.GRID_CELL_DP
 
 /** System Recycle Bin (Android 11+): restore or permanently delete trashed media. */
 class TrashActivity : BaseActivity() {
@@ -58,6 +60,12 @@ class TrashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // A system restore / delete prompt may still be open across a rotation.
+        savedInstanceState?.getString(STATE_PENDING_ACTION)?.let { name ->
+            TrashViewModel.Action.entries.firstOrNull { it.name == name }?.let { action ->
+                pending = action to savedInstanceState.getInt(STATE_PENDING_COUNT)
+            }
+        }
         binding = ActivityTrashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -67,7 +75,8 @@ class TrashActivity : BaseActivity() {
                 if (viewModel.selection.value.isNotEmpty()) viewModel.clearSelection() else finish()
             }
         })
-        binding.rvTrash.layoutManager = GridLayoutManager(this, 3)
+        binding.rvTrash.layoutManager = GridLayoutManager(this, adaptiveColumns(3, GRID_CELL_DP))
+
         binding.rvTrash.adapter = adapter
         binding.swipeRefresh.setColorSchemeColors(this.accentColor)
         binding.swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.lumina_surface_high)
@@ -106,10 +115,19 @@ class TrashActivity : BaseActivity() {
         observe()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        pending?.let { (action, count) ->
+            outState.putString(STATE_PENDING_ACTION, action.name)
+            outState.putInt(STATE_PENDING_COUNT, count)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         if (viewModel.isSupported) viewModel.load()
     }
+
 
     private fun showUnsupported() {
         binding.infoBanner.isVisible = false
@@ -210,5 +228,10 @@ class TrashActivity : BaseActivity() {
                 override fun areContentsTheSame(a: TrashRow, b: TrashRow) = a == b
             }
         }
+    }
+
+    private companion object {
+        const val STATE_PENDING_ACTION = "pending_action"
+        const val STATE_PENDING_COUNT = "pending_count"
     }
 }

@@ -56,4 +56,7 @@
     <color name="logo_color">#1A66D6</color>
     <color name="transparent">#00000000</color>
 
+    <!-- Bottom-sheet navigation bar. Black before Android 8 (API 26): those versions can't draw
+         dark navigation-bar icons, so the white buttons need a dark bar (values-v26 = surface). -->
+    <color name="lumina_sheet_nav_bar">#000000</color>
 </resources>

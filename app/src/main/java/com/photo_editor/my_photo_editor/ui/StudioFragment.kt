@@ -2,6 +2,7 @@ package com.photo_editor.my_photo_editor.ui
 
 import android.app.Activity
 import com.photo_editor.my_photo_editor.utils.appColor
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -39,6 +40,8 @@ import com.photo_editor.my_photo_editor.VideoToolsActivity
 import com.photo_editor.my_photo_editor.databinding.FragmentStudioBinding
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
 import com.photo_editor.my_photo_editor.utils.ShareHelper
+import com.photo_editor.my_photo_editor.utils.adaptiveColumns
+
 import kotlinx.coroutines.launch
 
 class StudioFragment : Fragment() {
@@ -154,7 +157,8 @@ class StudioFragment : Fragment() {
     // ------------------------------------------------------------------ smart tools
 
     private fun setupSmartTools() {
-        binding.rvSmartTools.layoutManager = GridLayoutManager(requireContext(), GRID_COLUMNS)
+        binding.rvSmartTools.layoutManager =
+            GridLayoutManager(requireContext(), requireContext().adaptiveColumns(GRID_COLUMNS, TOOL_CELL_DP))
         binding.rvSmartTools.adapter = ToolAdapter(viewModel.tools) { onToolClick(it.tool) }
 
         val openCleanup = View.OnClickListener { onToolClick(StudioViewModel.Tool.CLEAN_UP) }
@@ -250,12 +254,22 @@ class StudioFragment : Fragment() {
             .setPositiveButton("Open") { _, _ ->
                 try {
                     startActivity(ShareHelper.viewIntent(event.pdfUri, "application/pdf"))
-                } catch (e: Exception) {
+                } catch (e: ActivityNotFoundException) {
                     Toast.makeText(context, "No PDF viewer found", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(context, "Couldn't open this PDF", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNeutralButton("Share") { _, _ ->
-                ShareHelper.shareIntent(listOf(event.pdfUri), "application/pdf")?.let { startActivity(it) }
+                try {
+                    ShareHelper.shareIntent(listOf(event.pdfUri), "application/pdf")?.let { startActivity(it) }
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, "No app found to share with", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(context, "Couldn't share this PDF", Toast.LENGTH_SHORT).show()
+                }
             }
         if (event.pageUris.isNotEmpty()) {
             builder.setNegativeButton("Save as photos") { _, _ -> viewModel.savePagesAsPhotos(event.pageUris) }
@@ -299,5 +313,7 @@ class StudioFragment : Fragment() {
 
     private companion object {
         const val GRID_COLUMNS = 4
+        /** Smallest tool tile before another column is added (keeps 4 on phones). */
+        const val TOOL_CELL_DP = 110
     }
 }

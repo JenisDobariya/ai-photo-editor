@@ -49,6 +49,7 @@ import android.os.Handler
 import android.os.Looper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import com.photo_editor.my_photo_editor.utils.scaledGridColumns
 
 class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
 
@@ -91,6 +92,9 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // A system prompt (Recycle Bin / allow editing) may still be open across a rotation.
+        pendingAction = savedInstanceState?.getString(STATE_PENDING_ACTION)
+            ?.let { name -> MediaSelectionViewModel.PendingAction.entries.firstOrNull { it.name == name } }
         binding = ActivityAlbumDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -105,6 +109,11 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
 
         contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, observer)
         contentResolver.registerContentObserver(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, true, observer)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        pendingAction?.let { outState.putString(STATE_PENDING_ACTION, it.name) }
     }
 
     override fun onDestroy() {
@@ -145,7 +154,8 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
 
     private fun setupRecyclerView() {
         galleryAdapter = MediaGridAdapter(this)
-        layoutManager = GridLayoutManager(this, prefs.gridColumns).apply {
+        // User's "N per row" on phones; proportionally more columns on tablets / landscape.
+        layoutManager = GridLayoutManager(this, scaledGridColumns(prefs.gridColumns)).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return if (galleryAdapter.isFullSpan(position)) spanCount else 1
@@ -168,11 +178,12 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
         }
         dragSelect.attach(binding.photoRecycler)
         binding.photoRecycler.addOnItemTouchListener(PinchToZoomGridListener(this) { delta ->
-            val columns = (layoutManager.spanCount + delta)
+            // Pinch steps through the user's grid sizes (2–6); wide screens scale each size.
+            val columns = (prefs.gridColumns + delta)
                 .coerceIn(GalleryPreferences.MIN_COLUMNS, GalleryPreferences.MAX_COLUMNS)
-            if (columns != layoutManager.spanCount) {
+            if (columns != prefs.gridColumns) {
                 prefs.gridColumns = columns
-                layoutManager.spanCount = columns
+                layoutManager.spanCount = scaledGridColumns(columns)
                 galleryAdapter.notifyItemRangeChanged(0, galleryAdapter.itemCount)
             }
         })
@@ -245,7 +256,13 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
                         when (event) {
                             is MediaSelectionViewModel.SelectionEvent.Message ->
                                 Toast.makeText(this@AlbumDetailActivity, event.text, Toast.LENGTH_SHORT).show()
-                            is MediaSelectionViewModel.SelectionEvent.StartIntent -> startActivity(event.intent)
+                            is MediaSelectionViewModel.SelectionEvent.StartIntent -> try {
+                                startActivity(event.intent)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                Toast.makeText(this@AlbumDetailActivity, "Couldn't share. Try selecting fewer items.", Toast.LENGTH_SHORT).show()
+                            }
+
                             is MediaSelectionViewModel.SelectionEvent.LaunchIntentSender -> {
                                 pendingAction = event.action
                                 intentSenderLauncher.launch(IntentSenderRequest.Builder(event.sender).build())
@@ -309,7 +326,10 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
         if (uriFilter != null) {
             // Virtual album: page through exactly what this screen shows.
             putExtra(PhotoDetailActivity.EXTRA_TITLE, albumName)
-            putStringArrayListExtra(PhotoDetailActivity.EXTRA_URI_LIST, ArrayList(albumMedia.map { it.uri.toString() }))
+            putStringArrayListExtra(
+                PhotoDetailActivity.EXTRA_URI_LIST,
+                PhotoDetailActivity.cappedUriList(albumMedia.map { it.uri.toString() }, media.uri.toString())
+            )
         }
     }
 
@@ -354,7 +374,7 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
             }
         }
         return list.sortedWith(
-            compareByDescending<MediaFile> { it.dateAdded }
+            compareByDescending<MediaFile> { it.displayDateSeconds }
                 .thenByDescending { it.uri.lastPathSegment?.toLongOrNull() ?: 0L }
         )
     }
@@ -372,7 +392,8 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
             MediaStore.MediaColumns._ID,
             MediaStore.MediaColumns.DISPLAY_NAME,
             "bucket_display_name",
-            MediaStore.MediaColumns.DATE_ADDED
+            MediaStore.MediaColumns.DATE_ADDED,
+            "datetaken"
         )
         if (type == MediaType.VIDEO) {
             projection.add(MediaStore.Video.Media.DURATION)
@@ -390,6 +411,7 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
                 val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
                 val albumColumn = cursor.getColumnIndex("bucket_display_name")
                 val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED)
+                val takenColumn = cursor.getColumnIndex("datetaken")
                 val durationColumn = if (type == MediaType.VIDEO) cursor.getColumnIndex(MediaStore.Video.Media.DURATION) else -1
 
                 while (cursor.moveToNext()) {
@@ -403,7 +425,12 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
                     val date = cursor.getLong(dateColumn)
                     val duration = if (durationColumn != -1) cursor.getLong(durationColumn) else 0L
                     val contentUri = ContentUris.withAppendedId(uri, id)
-                    list.add(MediaFile(contentUri, fileName, albumNameStr, date, type, duration))
+                    list.add(
+                        MediaFile(
+                            contentUri, fileName, albumNameStr, date, type, duration,
+                            dateTaken = if (takenColumn != -1) cursor.getLong(takenColumn) else 0L
+                        )
+                    )
                 }
             }
         } catch (e: Exception) {
@@ -418,7 +445,8 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
             MediaStore.MediaColumns._ID,
             MediaStore.MediaColumns.DISPLAY_NAME,
             "bucket_display_name",
-            MediaStore.MediaColumns.DATE_ADDED
+            MediaStore.MediaColumns.DATE_ADDED,
+            "datetaken"
         )
         if (type == MediaType.VIDEO) {
             projection.add(MediaStore.Video.Media.DURATION)
@@ -445,6 +473,7 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
                 val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
                 val albumColumn = cursor.getColumnIndex("bucket_display_name")
                 val dateColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATE_ADDED)
+                val takenColumn = cursor.getColumnIndex("datetaken")
                 val durationColumn = if (type == MediaType.VIDEO) cursor.getColumnIndex(MediaStore.Video.Media.DURATION) else -1
 
                 while (cursor.moveToNext()) {
@@ -458,12 +487,21 @@ class AlbumDetailActivity : BaseActivity(), MediaGridAdapter.Listener {
                     val date = cursor.getLong(dateColumn)
                     val duration = if (durationColumn != -1) cursor.getLong(durationColumn) else 0L
                     val contentUri = ContentUris.withAppendedId(uri, id)
-                    list.add(MediaFile(contentUri, fileName, albumNameStr, date, type, duration))
+                    list.add(
+                        MediaFile(
+                            contentUri, fileName, albumNameStr, date, type, duration,
+                            dateTaken = if (takenColumn != -1) cursor.getLong(takenColumn) else 0L
+                        )
+                    )
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return list
+    }
+
+    private companion object {
+        const val STATE_PENDING_ACTION = "pending_action"
     }
 }

@@ -3,9 +3,13 @@ package com.photo_editor.my_photo_editor
 import com.photo_editor.my_photo_editor.ui.AppDialog
 import android.Manifest
 import android.content.Intent
+import android.content.ActivityNotFoundException
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -67,8 +71,12 @@ class GalleryActivity : BaseActivity() {
                 permissions[Manifest.permission.READ_EXTERNAL_STORAGE] == true
         if (granted) {
             viewModel.loadMedia()
+        } else if (!shouldShowRequestPermissionRationale(mainReadPermission())) {
+            // "Don't ask again" (or denied twice): the system won't show the prompt any more,
+            // so the only way back is the app's settings page.
+            showPermissionSettingsDialog()
         } else {
-            Toast.makeText(this, "Permissions required to show photos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Photo access is needed to show your photos", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -82,6 +90,9 @@ class GalleryActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // A system prompt (Recycle Bin / allow editing) may still be open across a rotation.
+        pendingAction = savedInstanceState?.getString(STATE_PENDING_ACTION)
+            ?.let { name -> MediaSelectionViewModel.PendingAction.entries.firstOrNull { it.name == name } }
         binding = ActivityGalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -284,6 +295,11 @@ class GalleryActivity : BaseActivity() {
                 isCheckable = true
                 isChecked = viewModel.showMemories.value
             }
+
+            // Android 14+ "Allow limited access": let the user pick more photos (or allow all).
+            if (hasOnlyPartialMediaAccess()) {
+                menu.add(0, MENU_SELECT_MORE, 5, "Select more photos")
+            }
         } else {
             val sort = menu.addSubMenu(0, 0, 1, "Sort albums")
             val current = viewModel.albumSort.value
@@ -311,6 +327,7 @@ class GalleryActivity : BaseActivity() {
                 MENU_ALBUM_COUNT -> viewModel.setAlbumSort(AlbumSort.COUNT)
                 MENU_TRASH -> startActivity(Intent(this, TrashActivity::class.java))
                 MENU_LOCKED -> startActivity(Intent(this, HiddenMediaActivity::class.java))
+                MENU_SELECT_MORE -> requestMorePhotos()
                 in (MENU_COLUMNS_BASE + 2)..(MENU_COLUMNS_BASE + 6) -> viewModel.setGridColumns(item.itemId - MENU_COLUMNS_BASE)
                 else -> return@setOnMenuItemClickListener false
             }
@@ -416,7 +433,7 @@ class GalleryActivity : BaseActivity() {
                             is MediaSelectionViewModel.SelectionEvent.Message ->
                                 Toast.makeText(this@GalleryActivity, event.text, Toast.LENGTH_SHORT).show()
                             is MediaSelectionViewModel.SelectionEvent.StartIntent ->
-                                startActivity(event.intent)
+                                startShareIntent(event.intent)
                             is MediaSelectionViewModel.SelectionEvent.LaunchIntentSender -> {
                                 pendingAction = event.action
                                 intentSenderLauncher.launch(IntentSenderRequest.Builder(event.sender).build())
@@ -427,6 +444,23 @@ class GalleryActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    /** Share sheet: too many items (TransactionTooLargeException) or no target app must not crash. */
+    private fun startShareIntent(intent: Intent) {
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, "No app found to share with", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Log.w("GalleryActivity", "Share failed", e)
+            Toast.makeText(this, "Couldn't share. Try selecting fewer items.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        pendingAction?.let { outState.putString(STATE_PENDING_ACTION, it.name) }
     }
 
     override fun onResume() {
@@ -449,20 +483,77 @@ class GalleryActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Android 7–10 need WRITE_EXTERNAL_STORAGE to delete, copy and save files (Android 10 with
+     * requestLegacyExternalStorage). Not needed (and not grantable) on Android 11+.
+     */
+    private fun hasLegacyWritePermission(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /** Android 14+: only "Select photos" access was granted (not "Allow all"). */
+    private fun hasOnlyPartialMediaAccess(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /** The permission that decides whether photos can be shown at all. */
+    private fun mainReadPermission(): String =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) Manifest.permission.READ_MEDIA_IMAGES
+        else Manifest.permission.READ_EXTERNAL_STORAGE
+
     private fun checkPermissions() {
-        if (hasMediaPermission()) {
+        if (hasMediaPermission() && hasLegacyWritePermission()) {
             viewModel.loadMedia()
         } else {
+            // On Android 7–10 READ and WRITE are one permission group: a single prompt, and none
+            // at all when READ was already granted by an older app version that never asked for
+            // WRITE (the system grants it straight away). The result callback loads the media.
             val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED, Manifest.permission.ACCESS_MEDIA_LOCATION)
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.ACCESS_MEDIA_LOCATION)
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_MEDIA_LOCATION)
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_MEDIA_LOCATION)
             } else {
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
             requestPermissionLauncher.launch(permissions)
+        }
+    }
+
+    /** Android 14+: re-opens the system photo picker so the user can change the selection. */
+    private fun requestMorePhotos() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return
+        requestPermissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+            )
+        )
+    }
+
+    private fun showPermissionSettingsDialog() {
+        AppDialog.Builder(this)
+            .setIcon(R.drawable.ic_g_photo, R.color.lumina_accent)
+            .setTitle("Allow photo access")
+            .setMessage("Gallerai needs access to your photos and videos to show them. Turn on the Photos and videos (or Storage) permission in the app settings.")
+            .setPositiveButton("Open settings") { _, _ -> openAppSettings() }
+            .setNegativeButton("Not now", null)
+            .show()
+    }
+
+    private fun openAppSettings() {
+        // onResume reloads the library when the user comes back with access granted.
+        try {
+            startActivity(
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+            )
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(this, "Couldn't open settings", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -510,5 +601,8 @@ class GalleryActivity : BaseActivity() {
         const val MENU_ALBUM_COUNT = 152
         const val MENU_TRASH = 160
         const val MENU_LOCKED = 161
+        const val MENU_SELECT_MORE = 170
+        const val STATE_PENDING_ACTION = "pending_action"
     }
+
 }

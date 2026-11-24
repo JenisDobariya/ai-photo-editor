@@ -475,7 +475,35 @@ class VideoPlayerController(
     /** True while the (normally translucent) viewer has been made opaque so it can rotate. */
     private var madeOpaque = false
 
+    /** Whether the quick tools currently include the rotate button. */
+    private var rotateShown = true
+
+    /**
+     * Whether asking for an orientation can work here. Android 16+ ignores orientation requests
+     * on large screens (smallest width ≥ 600dp), and split-screen windows can't rotate either.
+     */
+    private val canRotate: Boolean
+        get() = !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
+            activity.resources.configuration.smallestScreenWidthDp >= 600) &&
+            !activity.isInMultiWindowMode
+
+    /** The landscape request didn't rotate the screen: undo the opaque switch and the request. */
+    private val rotationTimeoutRunnable = Runnable {
+        if (activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) return@Runnable
+        orientationChanged = false
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        if (madeOpaque && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activity.setTranslucent(true)
+            madeOpaque = false
+        }
+        showCenterMessage("Rotation isn't available here", 1200)
+    }
+
     private fun toggleOrientation() {
+        if (!canRotate) {
+            showCenterMessage("Rotation isn't available here", 1200)
+            return
+        }
         val landscape = activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         // A translucent activity takes its orientation from the screen behind it, so the
         // viewer becomes opaque before it asks for landscape (Android 11+).
@@ -488,6 +516,10 @@ class VideoPlayerController(
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         }
         orientationChanged = true
+        // If the system ignores the request, don't leave the viewer opaque (drag-to-close
+        // would show black instead of the gallery).
+        handler.removeCallbacks(rotationTimeoutRunnable)
+        if (!landscape) handler.postDelayed(rotationTimeoutRunnable, ROTATION_TIMEOUT_MS)
     }
 
     /** Gives orientation back to the system once the user leaves the video. */
@@ -500,6 +532,9 @@ class VideoPlayerController(
 
     /** Back in portrait: become translucent again so drag-to-close shows the gallery. */
     fun onConfigurationChanged(config: Configuration) {
+        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) handler.removeCallbacks(rotationTimeoutRunnable)
+        // Quick tools depend on the screen (rotate is hidden where it can't work).
+        if (canRotate != rotateShown) buildQuickTools()
         if (madeOpaque && config.orientation == Configuration.ORIENTATION_PORTRAIT &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
         ) {
@@ -1232,21 +1267,25 @@ class VideoPlayerController(
             toggleOrientation()
         }
         val nightTool = Tool("Night Mode", R.drawable.ic_v_night, active = filterIndex == nightFilter) { toggleNightMode() }
+        // No rotate button where the system ignores orientation requests (Android 16+ tablets).
+        val rotate = rotateTool.takeIf { canRotate }
+        rotateShown = rotate != null
         return if (!toolsExpanded) {
-            listOf(
-                equalizerTool, speedTool, screenshotTool, rotateTool, nightTool,
+            listOfNotNull(
+                equalizerTool, speedTool, screenshotTool, rotate, nightTool,
                 Tool("More", R.drawable.ic_chevron_left, iconRotation = 180f) { toolsExpanded = true; buildQuickTools() }
             )
         } else {
-            listOf(
+            listOfNotNull(
                 nightTool,
                 Tool("Filters", R.drawable.ic_v_filter, active = filterIndex != 0 && filterIndex != nightFilter) { showFilterDialog() },
                 Tool("Loop", R.drawable.ic_v_loop, active = isLooping) { toggleLoop() },
                 Tool("Mute", if (isMuted) R.drawable.ic_v_volume_off else R.drawable.ic_v_volume, active = isMuted) { toggleMute() },
                 Tool("Sleep Timer", R.drawable.ic_v_timer, active = sleepMinutes > 0) { showSleepTimerDialog() },
                 Tool("A-B Repeat", text = "A-B", active = abStart >= 0) { toggleAbRepeat() },
-                equalizerTool, speedTool, screenshotTool, rotateTool,
+                equalizerTool, speedTool, screenshotTool, rotate,
                 Tool("Less", R.drawable.ic_chevron_left) { toolsExpanded = false; buildQuickTools() }
+
             )
         }
     }
@@ -1317,6 +1356,9 @@ class VideoPlayerController(
         private const val SUBTITLE_BOTTOM_FRACTION = 0.05f
         private val LANGUAGE_CODE = Regex("^[A-Za-z]{2,3}([-_][A-Za-z0-9]{2,8})*$")
         private const val AUTO_HIDE_MS = 3500L
+        /** How long a landscape request may take before it counts as ignored. */
+        private const val ROTATION_TIMEOUT_MS = 1500L
+
 
         fun formatTime(ms: Long): String {
             val totalSec = (ms / 1000).coerceAtLeast(0)

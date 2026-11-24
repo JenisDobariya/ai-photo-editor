@@ -29,6 +29,7 @@ import com.photo_editor.my_photo_editor.ui.gallery.MediaGridAdapter
 import com.photo_editor.my_photo_editor.ui.gallery.MediaGrouping
 import com.photo_editor.my_photo_editor.ui.gallery.PinchToZoomGridListener
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.scaledGridColumns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -68,7 +69,8 @@ class PhotosFragment : Fragment(), MediaGridAdapter.Listener {
 
     private fun setupRecyclerView() {
         galleryAdapter = MediaGridAdapter(this)
-        layoutManager = GridLayoutManager(requireContext(), viewModel.gridColumns.value).apply {
+        // User's "N per row" on phones; proportionally more columns on tablets / landscape.
+        layoutManager = GridLayoutManager(requireContext(), requireContext().scaledGridColumns(viewModel.gridColumns.value)).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return if (galleryAdapter.isFullSpan(position)) spanCount else 1
@@ -145,8 +147,9 @@ class PhotosFragment : Fragment(), MediaGridAdapter.Listener {
                 }
                 launch {
                     viewModel.gridColumns.collectLatest { columns ->
-                        if (layoutManager.spanCount != columns) {
-                            layoutManager.spanCount = columns
+                        val span = requireContext().scaledGridColumns(columns)
+                        if (layoutManager.spanCount != span) {
+                            layoutManager.spanCount = span
                             galleryAdapter.notifyItemRangeChanged(0, galleryAdapter.itemCount)
                         }
                     }
@@ -256,7 +259,7 @@ class PhotosFragment : Fragment(), MediaGridAdapter.Listener {
             putExtra("IMAGE_URI", file.uri.toString())
             putExtra("IS_VIDEO", file.type == MediaType.VIDEO)
             val visible = viewModel.visibleMedia.value
-            if (viewModel.isFilterActive && visible.size <= MAX_URIS_IN_INTENT) {
+            if (viewModel.isFilterActive && visible.size <= PhotoDetailActivity.MAX_URIS_IN_INTENT) {
                 putStringArrayListExtra(PhotoDetailActivity.EXTRA_URI_LIST, ArrayList(visible.map { it.uri.toString() }))
             }
         }
@@ -295,9 +298,5 @@ class PhotosFragment : Fragment(), MediaGridAdapter.Listener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private companion object {
-        const val MAX_URIS_IN_INTENT = 3000
     }
 }

@@ -3,6 +3,8 @@ package com.photo_editor.my_photo_editor
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +49,12 @@ abstract class BaseActivity : AppCompatActivity() {
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = !isNight
         insetsController.isAppearanceLightNavigationBars = !isNight
+        // Android 7.x can't draw dark navigation-bar icons (that needs API 26), so a light
+        // navigation bar would hide the white system buttons: keep it dark there.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O && !isNight) {
+            @Suppress("DEPRECATION")
+            window.navigationBarColor = Color.BLACK
+        }
     }
 
 
@@ -69,9 +77,13 @@ abstract class BaseActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
             val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
             val displayCutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            // Sides also clear the navigation bar (3-button nav sits on the side in landscape).
+            val sides = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
             val topInset = maxOf(statusBars.top, displayCutout.top)
-            val leftInset = maxOf(statusBars.left, displayCutout.left)
-            val rightInset = maxOf(statusBars.right, displayCutout.right)
+            val leftInset = sides.left
+            val rightInset = sides.right
 
             v.updatePadding(
                 left = leftInset,

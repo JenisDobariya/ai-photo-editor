@@ -105,7 +105,7 @@
     <!-- Bottom sheets: rounded top, surface colored -->
     <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/Widget.App.BottomSheet</item>
-        <item name="android:navigationBarColor">@color/lumina_surface</item>
+        <item name="android:navigationBarColor">@color/lumina_sheet_nav_bar</item>
     </style>
 
     <style name="Widget.App.BottomSheet" parent="Widget.Material3.BottomSheet">

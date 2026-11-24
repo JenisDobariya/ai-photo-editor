@@ -46,8 +46,8 @@ object SelectionMoreMenu {
         popup.setOnMenuItemClickListener { item ->
             AnalyticsManager.logEvent("Selection_more_${item.itemId}")
             when (item.itemId) {
-                COPY -> pickAlbum(activity, viewModel, "Copy to album") { viewModel.copyToAlbum(items, it) }
-                MOVE -> pickAlbum(activity, viewModel, "Move to album") { viewModel.moveToAlbum(items, it) }
+                COPY -> pickAlbum(activity, viewModel, "Copy to album", items) { viewModel.copyToAlbum(items, it) }
+                MOVE -> pickAlbum(activity, viewModel, "Move to album", items) { viewModel.moveToAlbum(items, it) }
                 SHARE_NO_LOCATION -> viewModel.shareWithoutLocation(photos)
                 PDF -> {
                     activity.startActivity(PhotosToPdfActivity.intent(activity, photos.map { it.uri }))
@@ -63,15 +63,20 @@ object SelectionMoreMenu {
         popup.show()
     }
 
-    /** Album chooser: "New album" first, then existing albums (newest activity first). */
+    /**
+     * Album chooser: "New album" first, then existing albums (newest activity first).
+     * Only albums that can hold [items] are listed (e.g. no Movies/ albums for photos).
+     */
     fun pickAlbum(
         activity: AppCompatActivity,
         viewModel: MediaSelectionViewModel,
         title: String,
+        items: List<MediaFile>,
         onPicked: (MediaOrganizer.AlbumTarget) -> Unit
     ) {
         activity.lifecycleScope.launch {
-            val targets = viewModel.albumTargets()
+            val targets = viewModel.albumTargets(items)
+
             val labels = arrayOf("+  New album") + targets.map { it.name }.toTypedArray()
             AppDialog.Builder(activity)
                 .setIcon(R.drawable.ic_g_folder, R.color.lumina_accent)

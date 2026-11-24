@@ -42,6 +42,8 @@ import java.util.*
 
 import coil.request.videoFrameMicros
 import com.photo_editor.my_photo_editor.ui.gallery.loadThumbnail
+import com.photo_editor.my_photo_editor.utils.adaptiveColumns
+import com.photo_editor.my_photo_editor.utils.ALBUM_CELL_DP
 
 class FoldersFragment : Fragment() {
 
@@ -81,22 +83,29 @@ class FoldersFragment : Fragment() {
                 startActivity(
                     Intent(requireContext(), AlbumDetailActivity::class.java)
                         .putExtra("ALBUM_NAME", thing.title)
-                        .putStringArrayListExtra(PhotoDetailActivity.EXTRA_URI_LIST, ArrayList(thing.uris.map { it.toString() }))
+                        .putStringArrayListExtra(
+                            PhotoDetailActivity.EXTRA_URI_LIST,
+                            PhotoDetailActivity.cappedUriList(thing.uris.map { it.toString() })
+                        )
                 )
             }
         )
 
         binding.fastScroller.isVisible = false
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2).apply {
+            // 2 album cards per row on phones, more on tablets / landscape.
+            val columns = requireContext().adaptiveColumns(2, ALBUM_CELL_DP)
+            layoutManager = GridLayoutManager(requireContext(), columns).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int =
-                        if (albumAdapter.getItemViewType(position) == AlbumAdapter.TYPE_ALBUM) 1 else 2
+                        if (albumAdapter.getItemViewType(position) == AlbumAdapter.TYPE_ALBUM) 1 else columns
                 }
             }
             adapter = albumAdapter
             clipToPadding = false
-            setPadding(10, 0, 10, 24)
+            val dp = resources.displayMetrics.density
+            setPadding((4 * dp).toInt(), 0, (4 * dp).toInt(), (8 * dp).toInt())
+
             setItemViewCacheSize(20)
         }
     }

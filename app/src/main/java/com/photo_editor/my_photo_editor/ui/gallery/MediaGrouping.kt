@@ -36,14 +36,16 @@ object MediaGrouping {
         var currentKey = Long.MIN_VALUE
         var currentGroup = ArrayList<MediaFile>()
         var currentTitle = ""
+        // Same date the list is sorted by (MainViewModel): date taken, else date added.
         media.forEach { file ->
-            val key = groupKey(keyCal, file.dateAdded, groupBy)
+            val key = groupKey(keyCal, file.displayDateSeconds, groupBy)
             if (key != currentKey) {
                 if (currentGroup.isNotEmpty()) {
                     addSection(items, currentKey.toString(), currentTitle, currentGroup, selection, selectionMode)
                 }
                 currentKey = key
-                currentTitle = groupTitle(file.dateAdded, groupBy)
+                currentTitle = groupTitle(file.displayDateSeconds, groupBy)
+
                 currentGroup = ArrayList()
             }
             currentGroup.add(file)

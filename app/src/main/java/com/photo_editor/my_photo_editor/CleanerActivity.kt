@@ -33,6 +33,8 @@ import com.photo_editor.my_photo_editor.ui.cleaner.CleanerUiState
 import com.photo_editor.my_photo_editor.ui.cleaner.CleanerViewModel
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
 import kotlinx.coroutines.launch
+import com.photo_editor.my_photo_editor.utils.adaptiveColumns
+import com.photo_editor.my_photo_editor.utils.GRID_CELL_DP
 
 /**
  * Storage cleaner ("Clean up"): duplicates, similar shots, blurry photos, screenshots and
@@ -102,7 +104,7 @@ class CleanerActivity : BaseActivity(), CleanerAdapter.Listener {
 
     private fun setupList() {
         adapter = CleanerAdapter(this)
-        val spanCount = 3
+        val spanCount = adaptiveColumns(3, GRID_CELL_DP)
         binding.rvCleaner.layoutManager = GridLayoutManager(this, spanCount).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int) = if (adapter.isFullSpan(position)) spanCount else 1
@@ -278,8 +280,9 @@ class CleanerActivity : BaseActivity(), CleanerAdapter.Listener {
             putExtra(PhotoDetailActivity.EXTRA_TITLE, lastState.category.title)
             putStringArrayListExtra(
                 PhotoDetailActivity.EXTRA_URI_LIST,
-                ArrayList(lastState.categoryUris.map { it.toString() })
+                PhotoDetailActivity.cappedUriList(lastState.categoryUris.map { it.toString() }, row.media.uri.toString())
             )
+
         }
         startActivity(intent)
     }

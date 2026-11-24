@@ -36,8 +36,12 @@ class MediaOrganizer(context: Context) {
     /** Move and rename need the system "allow editing" prompt, available from Android 11. */
     val canEditInPlace: Boolean get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
-    /** Existing albums in folders MediaStore accepts photos and videos in. */
-    suspend fun albumTargets(): List<AlbumTarget> = withContext(Dispatchers.IO) {
+    /**
+     * Existing albums in folders MediaStore accepts photos and videos in. With [items], only
+     * albums that can hold every one of them are returned (Android 10+ MediaStore only takes
+     * photos in DCIM/Pictures and videos in DCIM/Movies).
+     */
+    suspend fun albumTargets(items: List<MediaFile> = emptyList()): List<AlbumTarget> = withContext(Dispatchers.IO) {
         val targets = LinkedHashMap<String, AlbumTarget>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             listOf(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).forEach { collection ->
@@ -79,7 +83,20 @@ class MediaOrganizer(context: Context) {
                 }
             }
         }
-        targets.values.sortedBy { it.name.lowercase(Locale.getDefault()) }
+        targets.values
+            .filter { target -> items.all { accepts(target, it.type) } }
+            .sortedBy { it.name.lowercase(Locale.getDefault()) }
+    }
+
+    /** Whether MediaStore lets an item of [type] live in [target]. */
+    fun accepts(target: AlbumTarget, type: MediaType): Boolean {
+        // Before Android 10 files are written directly, so any folder works.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return true
+        val root = target.relativePath.substringBefore('/').lowercase(Locale.ROOT)
+        return when (type) {
+            MediaType.VIDEO -> root == "dcim" || root == "movies"
+            else -> root == "dcim" || root == "pictures"
+        }
     }
 
     /** A new album the user named. DCIM accepts both photos and videos on every Android version. */
@@ -92,6 +109,9 @@ class MediaOrganizer(context: Context) {
     suspend fun copyToAlbum(items: List<MediaFile>, target: AlbumTarget): Int = withContext(Dispatchers.IO) {
         var copied = 0
         items.forEach { item ->
+            // Wrong folder type for this item (e.g. a photo into Movies/): MediaStore would
+            // refuse it, so skip it; the caller reports it as "couldn't be copied".
+            if (!accepts(target, item.type)) return@forEach
             val mime = item.mimeType ?: resolver.getType(item.uri) ?: if (item.type == MediaType.VIDEO) "video/mp4" else "image/jpeg"
             val kind = if (item.type == MediaType.VIDEO) MediaStoreSaver.Kind.VIDEO else MediaStoreSaver.Kind.IMAGE
             val saved = MediaStoreSaver.save(appContext, displayName(item), mime, kind, target.relativePath.trimEnd('/')) { out ->
@@ -113,7 +133,10 @@ class MediaOrganizer(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@withContext 0
         var moved = 0
         uris.forEach { uri ->
+            val type = resolver.getType(uri)
+            if (type != null && !accepts(target, if (type.startsWith("video/")) MediaType.VIDEO else MediaType.IMAGE)) return@forEach
             try {
+
                 val values = ContentValues().apply { put(MediaStore.MediaColumns.RELATIVE_PATH, target.relativePath) }
                 if (resolver.update(uri, values, null, null) > 0) moved++
             } catch (e: Exception) {

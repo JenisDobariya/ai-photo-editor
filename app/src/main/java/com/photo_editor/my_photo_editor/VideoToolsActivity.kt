@@ -1,6 +1,7 @@
 package com.photo_editor.my_photo_editor
 
 import com.photo_editor.my_photo_editor.ui.AppDialog
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import com.photo_editor.my_photo_editor.utils.appColor
 import android.content.Context
 import android.content.Intent
@@ -568,6 +569,7 @@ class VideoToolsActivity : BaseActivity() {
     }
 
     private fun showSavedDialog(event: VideoToolsEvent.Saved) {
+        ReviewPrompter.recordSuccess(this, "VideoTools")
         resultDialog?.dismiss()
         resultDialog = AppDialog.Builder(this)
             .setIcon(R.drawable.ic_g_check_circle, R.color.lumina_teal)

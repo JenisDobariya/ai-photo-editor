@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Selected Recycle Bin thumbnail: accent tint + accent outline, same 12dp corners as the photo -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="?attr/appSelectionOverlay" />
+    <stroke android:width="2.5dp" android:color="?attr/appAccent" />
+    <corners android:radius="12dp" />
+</shape>

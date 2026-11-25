@@ -30,6 +30,7 @@ import com.photo_editor.my_photo_editor.databinding.ActivityCollageBinding
 import com.photo_editor.my_photo_editor.model.CollageLayoutRepository
 import com.photo_editor.my_photo_editor.model.CollageTemplate
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import com.photo_editor.my_photo_editor.utils.ImageSaver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -448,6 +449,7 @@ class CollageActivity : BaseActivity() {
     }
 
     private fun showSaveSuccessDialog(savedUri: Uri) {
+        ReviewPrompter.recordSuccess(this, "Collage")
         val dialog = AppDialog.Builder(this)
             .setIcon(R.drawable.ic_g_check_circle, R.color.lumina_teal)
             .setTitle("Collage saved")

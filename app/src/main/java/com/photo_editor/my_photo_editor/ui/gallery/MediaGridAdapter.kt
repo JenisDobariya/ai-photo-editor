@@ -2,6 +2,7 @@ package com.photo_editor.my_photo_editor.ui.gallery
 
 import android.view.LayoutInflater
 import com.photo_editor.my_photo_editor.utils.appColor
+import com.photo_editor.my_photo_editor.utils.accentColor
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -107,10 +108,8 @@ class MediaGridAdapter(
             count.text = item.subtitle
             select.isVisible = item.selectionMode
             select.setImageResource(if (item.allSelected) R.drawable.ic_g_check_circle else R.drawable.ic_g_circle_outline)
-            select.setColorFilter(
-                itemView.context.appColor(if (item.allSelected) R.color.lumina_accent else R.color.lumina_text_secondary
-                )
-            )
+            val ctx = itemView.context
+            select.setColorFilter(if (item.allSelected) ctx.accentColor else ctx.appColor(R.color.lumina_text_secondary))
             itemView.setOnClickListener {
                 if (item.selectionMode) listener.onHeaderClick(item)
             }
@@ -153,9 +152,9 @@ class MediaGridAdapter(
         fun bindSelection(item: GridItem.Media, animate: Boolean) {
             select.isVisible = item.selectionMode
             select.setImageResource(if (item.selected) R.drawable.ic_g_check_circle else R.drawable.ic_g_circle_outline)
-            select.setColorFilter(
-                itemView.context.appColor(if (item.selected) R.color.lumina_accent else R.color.white)
-            )
+            val ctx = itemView.context
+            select.setColorFilter(if (item.selected) ctx.accentColor else ctx.appColor(R.color.white))
+            select.setBackgroundResource(if (item.selected) R.drawable.bg_select_check else 0)
             selectionBg.visibility = if (item.selected) View.VISIBLE else View.INVISIBLE
             val scale = if (item.selected) 0.84f else 1f
             image.shapeAppearanceModel = ShapeAppearanceModel.builder()

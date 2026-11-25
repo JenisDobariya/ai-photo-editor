@@ -22,7 +22,7 @@
         android:id="@+id/trashSelectedOverlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?attr/appSelectionOverlay"
+        android:background="@drawable/bg_trash_selected"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/ivTrash"
         app:layout_constraintEnd_toEndOf="@id/ivTrash"

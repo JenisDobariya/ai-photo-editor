@@ -25,6 +25,7 @@ import com.google.android.material.card.MaterialCardView
 import com.photo_editor.my_photo_editor.databinding.ActivityAiCutoutBinding
 import com.photo_editor.my_photo_editor.utils.AiCutoutManager
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import com.photo_editor.my_photo_editor.utils.BitmapLoader
 import com.photo_editor.my_photo_editor.utils.ImageSaver
 import kotlinx.coroutines.CancellationException
@@ -456,6 +457,7 @@ class AiCutoutActivity : BaseActivity() {
     }
 
     private fun showSaveSuccessDialog(savedUri: Uri, isPng: Boolean) {
+        ReviewPrompter.recordSuccess(this, "AiCutout")
         val formatDesc = if (isPng) "transparent PNG sticker" else "high-resolution photo"
         val dialog = AppDialog.Builder(this)
             .setIcon(R.drawable.ic_g_check_circle, R.color.lumina_teal)

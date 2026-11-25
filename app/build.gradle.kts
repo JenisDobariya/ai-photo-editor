@@ -109,6 +109,9 @@ dependencies {
     implementation("androidx.media3:media3-transformer:1.2.0")
     implementation("androidx.media3:media3-effect:1.2.0")
 
+    // Google Play in-app review (rating prompt after a successful task)
+    implementation("com.google.android.play:review:2.0.2")
+
     // Print a photo
     implementation("androidx.print:print:1.0.0")
 

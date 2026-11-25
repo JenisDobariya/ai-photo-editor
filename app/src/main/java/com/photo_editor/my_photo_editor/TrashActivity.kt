@@ -215,9 +215,9 @@ class TrashActivity : BaseActivity() {
             holder.days.isVisible = daysLeft >= 0
             holder.days.text = if (daysLeft == 1) "1 day" else "$daysLeft days"
             holder.select.setImageResource(if (row.selected) R.drawable.ic_g_check_circle else R.drawable.ic_g_circle_outline)
-            holder.select.setColorFilter(
-                holder.itemView.context.appColor(if (row.selected) R.color.lumina_accent else R.color.white)
-            )
+            val ctx = holder.itemView.context
+            holder.select.setColorFilter(if (row.selected) ctx.accentColor else ctx.appColor(R.color.white))
+            holder.select.setBackgroundResource(if (row.selected) R.drawable.bg_select_check else 0)
             holder.overlay.isVisible = row.selected
             holder.itemView.setOnClickListener { onClick(row.item) }
         }

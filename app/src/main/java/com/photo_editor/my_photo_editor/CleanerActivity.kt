@@ -32,6 +32,7 @@ import com.photo_editor.my_photo_editor.ui.cleaner.CleanerRow
 import com.photo_editor.my_photo_editor.ui.cleaner.CleanerUiState
 import com.photo_editor.my_photo_editor.ui.cleaner.CleanerViewModel
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import kotlinx.coroutines.launch
 import com.photo_editor.my_photo_editor.utils.adaptiveColumns
 import com.photo_editor.my_photo_editor.utils.GRID_CELL_DP
@@ -57,7 +58,9 @@ class CleanerActivity : BaseActivity(), CleanerAdapter.Listener {
     private val trashLauncher = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
-        viewModel.onTrashResult(result.resultCode == RESULT_OK)
+        val trashed = result.resultCode == RESULT_OK
+        viewModel.onTrashResult(trashed)
+        if (trashed) ReviewPrompter.recordSuccess(this, "Cleaner")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -261,7 +264,10 @@ class CleanerActivity : BaseActivity(), CleanerAdapter.Listener {
                         "Delete $items and free ${viewModel.formatSize(event.bytes)}? " +
                             "This can't be undone on this version of Android."
                     )
-                    .setPositiveButton("Delete") { _, _ -> viewModel.confirmPermanentDelete() }
+                    .setPositiveButton("Delete") { _, _ ->
+                        viewModel.confirmPermanentDelete()
+                        ReviewPrompter.recordSuccess(this, "Cleaner")
+                    }
                     .setDestructive()
                     .setNegativeButton("Cancel") { _, _ -> viewModel.cancelPendingDelete() }
                     .setOnCancelListener { viewModel.cancelPendingDelete() }

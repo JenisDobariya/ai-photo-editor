@@ -29,6 +29,7 @@ import com.photo_editor.my_photo_editor.databinding.ItemPdfRenameBinding
 import com.photo_editor.my_photo_editor.ui.pdf.PdfPagesAdapter
 import com.photo_editor.my_photo_editor.ui.pdf.PhotosToPdfViewModel
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import com.photo_editor.my_photo_editor.utils.PdfMaker
 import com.photo_editor.my_photo_editor.utils.ShareHelper
 import kotlinx.coroutines.launch
@@ -305,6 +306,7 @@ class PhotosToPdfActivity : BaseActivity(), PdfPagesAdapter.Listener {
 
     private fun showDoneDialog(done: PhotosToPdfViewModel.Done) {
         if (doneDialog?.isShowing == true) return
+        ReviewPrompter.recordSuccess(this, "PhotosToPdf")
         val builder = AppDialog.Builder(this)
             .setIcon(R.drawable.ic_g_check_circle, R.color.lumina_teal)
             .setTitle("PDF created")

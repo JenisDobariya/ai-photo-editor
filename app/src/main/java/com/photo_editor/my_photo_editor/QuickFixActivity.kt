@@ -29,6 +29,7 @@ import com.photo_editor.my_photo_editor.ui.quickfix.QuickFixMode
 import com.photo_editor.my_photo_editor.ui.quickfix.QuickFixUiState
 import com.photo_editor.my_photo_editor.ui.quickfix.QuickFixViewModel
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import com.photo_editor.my_photo_editor.utils.FaceBlurrer
 import com.photo_editor.my_photo_editor.utils.ShareHelper
 import kotlinx.coroutines.launch
@@ -257,6 +258,7 @@ class QuickFixActivity : BaseActivity() {
     }
 
     private fun showSavedDialog(savedUri: Uri) {
+        ReviewPrompter.recordSuccess(this, "QuickFix")
         if (isFinishing) return
         dialogShowing = true
         AppDialog.Builder(this)

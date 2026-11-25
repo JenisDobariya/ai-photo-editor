@@ -42,6 +42,7 @@ import com.photo_editor.my_photo_editor.ui.ProfileFragment
 import com.photo_editor.my_photo_editor.ui.SelectionMoreMenu
 import com.photo_editor.my_photo_editor.ui.StudioFragment
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import com.photo_editor.my_photo_editor.utils.AppUpdateManager
 import kotlinx.coroutines.launch
 
@@ -470,6 +471,7 @@ class GalleryActivity : BaseActivity() {
                 viewModel.loadMedia()
             }
         }
+        ReviewPrompter.maybeAsk(this)
     }
 
     private fun hasMediaPermission(): Boolean {

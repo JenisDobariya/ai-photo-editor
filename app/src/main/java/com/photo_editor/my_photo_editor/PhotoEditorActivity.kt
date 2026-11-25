@@ -55,6 +55,7 @@ import com.photo_editor.my_photo_editor.ui.DrawingView
 import com.photo_editor.my_photo_editor.model.LayerContent
 import com.photo_editor.my_photo_editor.ui.PhotoEditorViewModel
 import com.photo_editor.my_photo_editor.utils.AnalyticsManager
+import com.photo_editor.my_photo_editor.utils.ReviewPrompter
 import com.photo_editor.my_photo_editor.utils.ColorMatrixBuilder
 import com.photo_editor.my_photo_editor.utils.FilterPresets
 import kotlinx.coroutines.Dispatchers
@@ -1646,6 +1647,7 @@ class PhotoEditorActivity : BaseActivity() {
                     viewModel.saveResultUri.collectLatest { uri ->
                         uri?.let {
                             Toast.makeText(this@PhotoEditorActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
+                            ReviewPrompter.recordSuccess(this@PhotoEditorActivity, "Editor")
                             finish()
                         }
                     }
